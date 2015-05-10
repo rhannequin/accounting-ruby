@@ -37,6 +37,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport
-  sinatra
-  sinatra-contrib
+  activesupport (= 4.2.1)
+  sinatra (= 1.4.6)
+  sinatra-contrib (= 1.4.2)
