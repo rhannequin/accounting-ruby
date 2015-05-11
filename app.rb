@@ -1,6 +1,6 @@
 require 'sinatra/base'
 require 'sinatra/reloader'
-require 'active_support'
+require 'active_support/all'
 require 'smarter_csv'
 require 'i18n'
 
@@ -14,15 +14,38 @@ module Accounting
     end
 
     get '/' do
-      SmarterCSV.process('data.csv',  headers_in_file: true,
+      data = nil
+      SmarterCSV.process('data.csv',  chunk_size: 10000,
+                                      headers_in_file: true,
                                       file_encoding: 'utf-8',
                                       col_sep: ';',
-                                      row_sep: "\n") do |chunk|
-        chunk.each do |c|
-          date = Date.strptime(c[:date], '%d/%m/%y')
+                                      row_sep: "\n",
+                                      remove_empty_values: false,
+                                      remove_zero_values: false,
+                                      remove_unmapped_keys: false,
+                                      remove_empty_hashes: false,
+                                      strip_whitespace: true,
+                                      key_mapping: {
+                                        date: :date,
+                                        objet: :object,
+                                        prix: :price,
+                                        moyen: :way,
+                                        catégories: :categories,
+                                      }) do |chunk|
+        data = chunk
+        data.map! do |c|
+          c[:date] = Date.strptime(c[:date], '%d/%m/%y')
+          c[:categories] = c[:categories].split(',').map(&:strip) unless c[:categories].nil?
+          c
         end
       end
-      '<h1>Hello World!</h1>'
+      data = data.group_by { |x| x[:date].beginning_of_month }
+      "
+        <h1>Accounting</h1>
+        <p>
+          #{data.inspect}
+        </p>
+      "
     end
   end
 end
