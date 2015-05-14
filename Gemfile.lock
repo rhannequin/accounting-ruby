@@ -8,6 +8,8 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     backports (3.6.4)
+    haml (4.0.6)
+      tilt
     i18n (0.7.0)
     json (1.8.2)
     minitest (5.6.1)
@@ -39,6 +41,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport (= 4.2.1)
+  haml
   sinatra (= 1.4.6)
   sinatra-contrib (= 1.4.2)
   smarter_csv (= 1.0.19)

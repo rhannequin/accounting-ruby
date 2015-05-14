@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'sinatra/reloader'
 require 'active_support/all'
 require 'smarter_csv'
+require 'haml'
 require 'i18n'
 
 module Accounting
@@ -39,13 +40,8 @@ module Accounting
           c
         end
       end
-      data = data.group_by { |x| x[:date].beginning_of_month }
-      "
-        <h1>Accounting</h1>
-        <p>
-          #{data.inspect}
-        </p>
-      "
+      data = data.group_by { |x| x[:date].beginning_of_month }.sort.reverse
+      haml :index, locals: { data: data }
     end
   end
 end
