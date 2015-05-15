@@ -4,7 +4,7 @@
     %title Accounting
   %body
     %h1 Accounting
-    %h2 Current money: #{current_money}€
+    %h2 Current money: #{Money.euro(current_money*100).format(symbol_position: :after, thousands_separator: false)}
     - data.each do |month, expenses|
       %table
         %caption= I18n.l(month, format: :long)
@@ -21,6 +21,6 @@
               %td= I18n.l(expense[:date], format: :short)
               %td= expense[:way]
               %td= expense[:reason]
-              %td= expense[:price]
+              %td= Money.euro(expense[:price]*100).format(symbol_position: :after, thousands_separator: false)
               %td= expense[:categories].join(', ')
       %br

@@ -3,6 +3,7 @@ require 'sinatra/reloader'
 require 'active_support/all'
 require 'smarter_csv'
 require 'haml'
+require 'money'
 require 'i18n'
 
 module Accounting
@@ -39,6 +40,7 @@ module Accounting
           c
         end
       end
+      puts Money.methods.sort
       data = data.group_by { |x| x[:date].beginning_of_month }.sort.reverse
       data.each do |_, exps|
         exps.sort_by! { |exp| exp[:date] }.reverse!
