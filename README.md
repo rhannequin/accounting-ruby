@@ -2,7 +2,7 @@
 
     bundle install
     cp config.example.csv config.csv
-    cp data.example.csv data.csv
+    cp data/data.example.csv data/data.csv
     bundle exec rackup
 
 Open [localhost:9292](http://localhost:9292).

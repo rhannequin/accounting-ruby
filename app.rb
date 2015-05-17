@@ -21,9 +21,9 @@ module Accounting
     end
 
     get '/' do
-      parsed = parse_data settings.start_amount
-      data = prepare_data parsed[:data]
-      haml :index, locals: { data: data, current_money: parsed[:current_money] }
+      data = prepare_data parse_data
+      current_money = calculate_current_money data, settings.start_amount
+      haml :index, locals: { data: data, current_money: current_money }
     end
   end
 end
@@ -40,40 +40,60 @@ def csv_options
   }
 end
 
-def parse_data(current_money)
+def parse_data
   improved = nil
-  SmarterCSV.process('data.csv',  csv_options) do |chunk|
-    improved = improve_chunk(chunk, current_money)
+  SmarterCSV.process('data.csv', csv_options) do |chunk|
+    improved = improve_chunk chunk
   end
-  {
-    data: improved[:chunk],
-    current_money: improved[:current_money]
-  }
+  improved
 end
 
-def improve_chunk(chunk, current_money)
+def improve_chunk(chunk)
   chunk.map! do |c|
-    current_money += c[:price]
     c[:date] = Date.strptime(c[:date], '%d/%m/%y')
     c[:categories] = c[:categories].nil? ? [] : c[:categories].split(',').map(&:strip)
     c
   end
-  {
-    chunk: chunk,
-    current_money: current_money
-  }
 end
 
 def prepare_data(data)
-  sort_by_date group_by_month(data)
+  data = sort_by_date data
+  data = group_by_month data
+  data = add_debits data
 end
 
 def group_by_month(data)
-  data.group_by { |x| x[:date].beginning_of_month }.sort.reverse
+  groups = {}
+  data.each do |exp|
+    (groups[exp[:date].beginning_of_month] ||= []) << exp
+  end
+  groups
 end
 
 def sort_by_date(data)
-  data.each do |_, exps|
-    exps.sort_by! { |exp| exp[:date] }.reverse!
+  data.sort_by { |exp| exp[:date] }.reverse
+end
+
+def add_debits(data)
+  months_involved = data.keys.map(&:to_date).sort
+  settings.debits.each do |debit|
+    start_date = debit['start_date']
+    end_date = debit['end_date']
+    months_involved.each do |month|
+      if month >= start_date && (end_date.is_a?(Date) ? month <= end_date : true)
+        expense = { date: month, reason: debit['reason'], price: debit['price'], way: debit['way'], categories: (debit['categories'].nil? ? [] : debit['categories'].split(',').map(&:strip)) }
+        data[month] << expense
+      end
+    end
   end
+  data
+end
+
+def calculate_current_money(data, current_money)
+  data.each do |month, expenses|
+    expenses.each do |expense|
+      current_money += expense[:price]
+    end
+  end
+  current_money
 end
