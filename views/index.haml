@@ -3,21 +3,34 @@
 %h2 Current money: #{Money.euro(current_money*100).format(symbol_position: :after, thousands_separator: false)}
 
 - data.each do |month, expenses|
-  %table.table
-    %caption= I18n.l(month, format: :long)
-    %thead
-      %tr
-        %th Date
-        %th Way
-        %th Reason
-        %th Price
-        %th Categories
-    %tbody
-      - expenses.each do |expense|
-        %tr
-          %td= I18n.l(expense[:date], format: :short)
-          %td= expense[:way]
-          %td= expense[:reason]
-          %td= Money.euro(expense[:price]*100).format(symbol_position: :after, thousands_separator: false)
-          %td= expense[:categories].join(', ')
-  %br
+  - time = month.to_time.to_i
+
+  %div{ role: :tabpanel }
+    %ul.nav.nav-tabs{ role: :tablist }
+      %li.active{ role: :presentation }
+        %a{ href: "#expenses-#{time}", 'aria-controls' => "expenses-#{time}", role: :tab, 'data-toggle' => :tab } Expenses
+      %li{ role: :presentation }
+        %a{ href: "#statistics-#{time}", 'aria-controls' => "statistics-#{time}", role: :tab, 'data-toggle' => :tab } Statistics
+
+    .tab-content
+      .tab-pane.active{ id: "expenses-#{time}", role: :tabpanel }
+        %table.table
+          %caption= I18n.l(month, format: :long)
+          %thead
+            %tr
+              %th Date
+              %th Way
+              %th Reason
+              %th Price
+              %th Categories
+          %tbody
+            - expenses.each do |expense|
+              %tr
+                %td= I18n.l(expense[:date], format: :short)
+                %td= expense[:way]
+                %td= expense[:reason]
+                %td= Money.euro(expense[:price]*100).format(symbol_position: :after, thousands_separator: false)
+                %td= expense[:categories].join(', ')
+
+      .tab-pane{ id: "statistics-#{time}", role: :tabpanel }
+        %p Statistics
