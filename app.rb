@@ -5,7 +5,7 @@ require 'active_support/all'
 require 'smarter_csv'
 require 'haml'
 require 'money'
-require 'i18n'
+require 'sinatra/i18n'
 
 module Accounting
   class App < Sinatra::Base
@@ -15,6 +15,17 @@ module Accounting
 
     set :environments, %w(production development test)
     set :environment, (ENV['RACK_ENV'] || ENV['ACCOUNTING_APP_ENV'] || :development).to_sym
+    set :locales, Dir[File.join(settings.root, 'locales', '*.yml')]
+
+    configure do
+      register Sinatra::I18n
+      I18n.locale = settings.locale
+      Money.default_formatting_rules = {
+        symbol_position: :after,
+        thousands_separator: false,
+        decimal_mark: ','
+      }
+    end
 
     configure :development do
       register Sinatra::Reloader
@@ -42,7 +53,7 @@ end
 
 def parse_data
   improved = nil
-  SmarterCSV.process('data.csv', csv_options) do |chunk|
+  SmarterCSV.process(File.join(settings.root, 'data.csv'), csv_options) do |chunk|
     improved = improve_chunk chunk
   end
   improved

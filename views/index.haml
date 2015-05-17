@@ -1,36 +1,39 @@
-%h1 Accounting
+%h1= t(:title)
 
-%h2 Current money: #{Money.euro(current_money*100).format(symbol_position: :after, thousands_separator: false)}
+%h2= t(:current_amount, amount: Money.new(current_money*100, 'EUR').format)
 
 - data.each do |month, expenses|
   - time = month.to_time.to_i
 
+  %h3= I18n.l(month, format: :month).capitalize
+
   %div{ role: :tabpanel }
     %ul.nav.nav-tabs{ role: :tablist }
       %li.active{ role: :presentation }
-        %a{ href: "#expenses-#{time}", 'aria-controls' => "expenses-#{time}", role: :tab, 'data-toggle' => :tab } Expenses
+        %a{ href: "#expenses-#{time}", 'aria-controls' => "expenses-#{time}", role: :tab, 'data-toggle' => :tab }
+          = t(:expenses)
       %li{ role: :presentation }
-        %a{ href: "#statistics-#{time}", 'aria-controls' => "statistics-#{time}", role: :tab, 'data-toggle' => :tab } Statistics
+        %a{ href: "#statistics-#{time}", 'aria-controls' => "statistics-#{time}", role: :tab, 'data-toggle' => :tab }
+          = t(:statistics)
 
     .tab-content
       .tab-pane.active{ id: "expenses-#{time}", role: :tabpanel }
-        %table.table
-          %caption= I18n.l(month, format: :long)
+        %table.table.table-hover.table-striped
           %thead
             %tr
-              %th Date
-              %th Way
-              %th Reason
-              %th Price
-              %th Categories
+              %th= t(:'table.date')
+              %th= t(:'table.way')
+              %th= t(:'table.reason')
+              %th= t(:'table.price')
+              %th= t(:'table.categories')
           %tbody
             - expenses.each do |expense|
-              %tr
+              %tr{ class: ('success' if expense[:price] > 0) }
                 %td= I18n.l(expense[:date], format: :short)
                 %td= expense[:way]
                 %td= expense[:reason]
-                %td= Money.euro(expense[:price]*100).format(symbol_position: :after, thousands_separator: false)
+                %td= Money.euro(expense[:price]*100).format
                 %td= expense[:categories].join(', ')
 
       .tab-pane{ id: "statistics-#{time}", role: :tabpanel }
-        %p Statistics
+        %p= t(:statistics)

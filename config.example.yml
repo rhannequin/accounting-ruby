@@ -1,4 +1,5 @@
 start_amount: 100
+locale: en
 debits:
   -
     start_date: 2015-05-01
