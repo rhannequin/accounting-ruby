@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require 'sinatra/reloader'
+require 'sinatra/config_file'
 require 'active_support/all'
 require 'smarter_csv'
 require 'haml'
@@ -8,16 +9,19 @@ require 'i18n'
 
 module Accounting
   class App < Sinatra::Base
+    register Sinatra::ConfigFile
+
+    config_file 'config.yml'
+
     set :environments, %w(production development test)
-    set :environment, (ENV['RACK_ENV'] || ENV['SPACEAPI_APPLICATION_ENV'] || :development).to_sym
-    set :initial_money, 100
+    set :environment, (ENV['RACK_ENV'] || ENV['ACCOUNTING_APP_ENV'] || :development).to_sym
 
     configure :development do
       register Sinatra::Reloader
     end
 
     get '/' do
-      parsed = parse_data settings.initial_money
+      parsed = parse_data settings.start_amount
       data = prepare_data parsed[:data]
       haml :index, locals: { data: data, current_money: parsed[:current_money] }
     end
