@@ -33,8 +33,14 @@ module Accounting
 
     get '/' do
       data = prepare_data parse_data
+      statistics = get_statistics data
       current_money = calculate_current_money data, settings.start_amount
-      haml :index, locals: { data: data, current_money: current_money }
+      haml :index, locals: {
+        data: data,
+        current_money: current_money,
+        statistics: statistics,
+        tabs: tabs
+      }
     end
   end
 end
@@ -92,7 +98,13 @@ def add_debits(data)
     end_date = debit['end_date']
     months_involved.each do |month|
       if month >= start_date && (end_date.is_a?(Date) ? month <= end_date : true)
-        expense = { date: month, reason: debit['reason'], price: debit['price'], way: debit['way'], categories: (debit['categories'].nil? ? [] : debit['categories'].split(',').map(&:strip)) }
+        expense = {
+          date: month,
+          reason: debit['reason'],
+          price: debit['price'],
+          way: debit['way'],
+          categories: (debit['categories'].nil? ? [] : debit['categories'].split(',').map(&:strip))
+        }
         data[month] << expense
       end
     end
@@ -107,4 +119,33 @@ def calculate_current_money(data, current_money)
     end
   end
   current_money
+end
+
+def get_statistics(data)
+  statistics = {}
+  data.each do |month, expenses|
+    statistics[month] = tabs.map{|tab| [tab, {}] }.to_h # Init statistics hashes and arrays
+    expenses.each do |expense|
+      tabs_conditionals(expense).each do |tab|
+        if tab[:conditional]
+          statistics[month][tab[:name]][:total] ||= 0
+          statistics[month][tab[:name]][:total] += expense[:price]
+          (statistics[month][tab[:name]][:expenses] ||= []) << expense
+        end
+      end
+    end
+  end
+  statistics
+end
+
+def tabs_conditionals(expense)
+  [
+    { conditional: (expense[:categories].include? 'lunch'), name: :lunch },
+    { conditional: (expense[:categories].include? 'shopping'), name: :shopping }
+  ]
+end
+
+def tabs
+  tabs = tabs_conditionals categories: [] # Fake expense to get array
+  tabs.map{ |tab| tab[:name] }
 end

@@ -2,7 +2,13 @@ en:
   title: Accounting
   current_amount: "Current amount : %{amount}"
   expenses: Expenses
-  statistics: Statistics
+  tabs:
+    lunch:
+      tab_name: Lunch
+      tab_title: "Monthly lunch expenses: %{amount}"
+    shopping:
+      tab_name: Shopping
+      tab_title: "Monthly shopping expenses: %{amount}"
   table:
     date: Date
     way: Way

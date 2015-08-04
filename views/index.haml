@@ -12,9 +12,10 @@
       %li.active{ role: :presentation }
         %a{ href: "#expenses-#{time}", 'aria-controls' => "expenses-#{time}", role: :tab, 'data-toggle' => :tab }
           = t(:expenses)
-      %li{ role: :presentation }
-        %a{ href: "#statistics-#{time}", 'aria-controls' => "statistics-#{time}", role: :tab, 'data-toggle' => :tab }
-          = t(:statistics)
+      - tabs.each do |tab|
+        %li{ role: :presentation }
+          %a{ href: "##{tab}-#{time}", 'aria-controls' => "#{tab}-#{time}", role: :tab, 'data-toggle' => :tab }
+            = t(:"tabs.#{tab}.tab_name")
 
     .tab-content
       .tab-pane.active{ id: "expenses-#{time}", role: :tabpanel }
@@ -35,5 +36,19 @@
                 %td= Money.euro(expense[:price]*100).format
                 %td= expense[:categories].join(', ')
 
-      .tab-pane{ id: "statistics-#{time}", role: :tabpanel }
-        %p= t(:statistics)
+      - tabs.each do |tab|
+        .tab-pane{ id: "#{tab}-#{time}", role: :tabpanel }
+          - unless statistics[month][tab].empty?
+            %h4= t(:"tabs.#{tab}.tab_title", amount: Money.new(statistics[month][tab][:total] * 100 * -1, 'EUR').format)
+            %table.table.table-hover.table-striped
+              %thead
+                %tr
+                  %th= t(:'table.date')
+                  %th= t(:'table.reason')
+                  %th= t(:'table.price')
+              %tbody
+                - statistics[month][tab][:expenses].each do |expense|
+                  %tr{ class: ('success' if expense[:price] > 0) }
+                    %td= I18n.l(expense[:date], format: :short)
+                    %td= expense[:reason]
+                    %td= Money.euro(expense[:price]*100).format

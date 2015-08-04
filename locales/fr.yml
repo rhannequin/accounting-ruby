@@ -2,7 +2,13 @@ fr:
   title: Comptes
   current_amount: "Montant actuel : %{amount}"
   expenses: Dépenses
-  statistics: Statistiques
+  tabs:
+    lunch:
+      tab_name: Déjeûner
+      tab_title: "Dépenses mensuelles en déjeûner : %{amount}"
+    shopping:
+      tab_name: Courses
+      tab_title: "Dépenses mensuelles en courses : %{amount}"
   table:
     date: Date
     way: Moyen
