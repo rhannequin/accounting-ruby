@@ -1,11 +1,4 @@
-require 'sinatra/base'
-require 'sinatra/reloader'
-require 'sinatra/config_file'
-require 'active_support/all'
-require 'smarter_csv'
-require 'haml'
-require 'money'
-require 'sinatra/i18n'
+require_relative 'init'
 
 module Accounting
   class App < Sinatra::Base
