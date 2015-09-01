@@ -1,11 +1,24 @@
 module Accounting
   class App
     module PrepareHelper
+
+      # Main method
+
       def prepare_data(data)
         data = sort_by_date data
         data = group_by_month data
         data = add_debits data
       end
+
+
+      # Sort all expenses by date DESC
+
+      def sort_by_date(data)
+        data.sort_by { |exp| exp[:date] }.reverse
+      end
+
+
+      # Split expenses in groups of months
 
       def group_by_month(data)
         groups = {}
@@ -15,9 +28,8 @@ module Accounting
         groups
       end
 
-      def sort_by_date(data)
-        data.sort_by { |exp| exp[:date] }.reverse
-      end
+
+      # Add monthly expenses from config file
 
       def add_debits(data)
         months_involved = data.keys.map(&:to_date).sort
@@ -39,6 +51,9 @@ module Accounting
         end
         data
       end
+
+
+      # Calculate current amiunt of money on account
 
       def calculate_current_money(data, current_money)
         data.each do |month, expenses|

@@ -22,6 +22,7 @@ module Accounting
 
     configure :development do
       register Sinatra::Reloader
+      also_reload 'helpers/*.rb'
     end
 
     get '/' do
