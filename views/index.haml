@@ -1,6 +1,7 @@
 %h1= t(:title)
 
-%h2= t(:current_amount, amount: Money.new(current_money*100, 'EUR').format)
+%h2{ class: ('under-zero' unless current_money > 0) }
+  =t(:current_amount, amount: Money.new(current_money*100, 'EUR').format)
 
 - data.each do |month, expenses|
   - time = month.to_time.to_i
