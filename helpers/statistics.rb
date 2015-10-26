@@ -21,6 +21,7 @@ module Accounting
       def tabs_conditionals(expense)
         [
           { conditional: (expense[:categories].include? 'lunch'), name: :lunch },
+          { conditional: (expense[:categories].include? 'fastfood'), name: :fastfood },
           { conditional: (expense[:categories].include? 'shopping'), name: :shopping }
         ]
       end
