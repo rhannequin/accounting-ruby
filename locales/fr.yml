@@ -3,12 +3,18 @@ fr:
   current_amount: "Montant actuel : %{amount}"
   expenses: Dépenses
   tabs:
+    cinema:
+      tab_name: Cinéma
+      tab_title: "Dépenses mensuelles en cinéma : %{amount}"
     fastfood:
       tab_name: Fastfood
       tab_title: "Dépenses mensuelles en fastfood : %{amount}"
     lunch:
       tab_name: Déjeûner
       tab_title: "Dépenses mensuelles en déjeûner : %{amount}"
+    restaurant:
+      tab_name: Restaurant
+      tab_title: "Dépenses mensuelles en restaurant : %{amount}"
     shopping:
       tab_name: Courses
       tab_title: "Dépenses mensuelles en courses : %{amount}"

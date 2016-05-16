@@ -3,12 +3,18 @@ en:
   current_amount: "Current amount : %{amount}"
   expenses: Expenses
   tabs:
+    cinema:
+      tab_name: Cinéma
+      tab_title: "Monthly cinema expenses: %{amount}"
     fastfood:
       tab_name: Fastfood
       tab_title: "Monthly fastfood expenses: %{amount}"
     lunch:
       tab_name: Lunch
       tab_title: "Monthly lunch expenses: %{amount}"
+    restaurant:
+      tab_name: Restaurant
+      tab_title: "Monthly restaurant expenses: %{amount}"
     shopping:
       tab_name: Shopping
       tab_title: "Monthly shopping expenses: %{amount}"
