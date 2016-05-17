@@ -13,8 +13,9 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*
+/tmp/*
 !/log/.keep
-/tmp
+!/tmp/.keep
 
-# Ignore uploaded files
-/public/system
+# Ignore Byebug command history file.
+.byebug_history
