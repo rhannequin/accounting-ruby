@@ -1,0 +1,17 @@
+.page-header
+  = link_to expenses_path, class: 'btn btn-default' do
+    %span.glyphicon.glyphicon-list-alt
+    = t :'scaffold.back'
+  = link_to edit_expense_path(@expense), class: 'btn btn-primary' do
+    %span.glyphicon.glyphicon-pencil
+    = t :'scaffold.edit'
+  %h1= t :'.title'
+%dl.dl-horizontal
+  %dt= t :'activerecord.attributes.expense.date'
+  %dd= l @expense.date
+  %dt= t :'activerecord.attributes.expense.reason'
+  %dd= @expense.reason
+  %dt= t :'activerecord.attributes.expense.price'
+  %dd= @expense.price
+  %dt= t :'activerecord.attributes.expense.way'
+  %dd= @expense.way
