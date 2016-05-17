@@ -3,10 +3,9 @@
     .alert.alert-danger.alert-dismissable{role: 'alert'}
       %button.close{'data-dismiss' => 'alert', type: 'button'}
         %span{'aria-hidden' => true} ×
-        %span.sr-only Close
+        %span.sr-only= t :'layouts.flash.close'
       %h4
-        = pluralize(@expense.errors.count, 'error')
-        prohibited this expense from being saved:
+        = t :'scaffold.form.errors', count: @expense.errors.count
       %ul
         - @expense.errors.full_messages.each do |msg|
           %li= msg

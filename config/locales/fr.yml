@@ -61,3 +61,7 @@ fr:
     destroy: Supprimer
     edit: Modifier
     show: Afficher
+    form:
+      errors:
+        one: "1 erreur empêche d'enregistrer cet objet :"
+        other: "%{count} erreurs empêchent d'enregistrer cet objet :"
