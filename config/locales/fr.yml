@@ -28,6 +28,12 @@ fr:
         price: Prix
         way: Moyen
   expenses:
+    create:
+      flash:
+        success: La dépense a bien été ajoutée.
+    destroy:
+      flash:
+        success: La dépense a bien été supprimée.
     edit:
       title: "Édition d'une dépense"
     index:
@@ -37,6 +43,9 @@ fr:
       title: "Ajout d'une dépense"
     show:
       title: "Affichage d'une dépense"
+    update:
+      flash:
+        success: La dépense a bien été mise à jour.
   helpers:
     submit:
       create: Ajouter
