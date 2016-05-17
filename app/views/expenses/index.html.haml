@@ -17,7 +17,7 @@
         %tr
           %td= l expense.date
           %td= expense.reason
-          %td= expense.price
+          %td= currency expense.price
           %td= expense.way
           %td.action= link_to t(:'scaffold.show'), expense, class: 'btn btn-info'
           %td.action= link_to t(:'scaffold.edit'), edit_expense_path(expense), class: 'btn btn-warning'
