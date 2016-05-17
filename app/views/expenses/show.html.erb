@@ -1,26 +1,26 @@
 <div class="page-header">
   <%= link_to expenses_path, class: 'btn btn-default' do %>
     <span class="glyphicon glyphicon-list-alt"></span>
-    Back
+    <%= t :'scaffold.back' %>
   <% end %>
   <%= link_to edit_expense_path(@expense), class: 'btn btn-primary' do %>
     <span class="glyphicon glyphicon-pencil"></span>
-    Edit
+    <%= t :'scaffold.edit' %>
   <% end %>
-  <h1>Show expense</h1>
+  <h1><%= t :'.title'%></h1>
 </div>
 
 <dl class="dl-horizontal">
-  <dt>Date:</dt>
-  <dd><%= @expense.date %></dd>
+  <dt><%= t :'activerecord.attributes.expense.date' %></dt>
+  <dd><%= l @expense.date %></dd>
 
-  <dt>Reason:</dt>
+  <dt><%= t :'activerecord.attributes.expense.reason' %></dt>
   <dd><%= @expense.reason %></dd>
 
-  <dt>Price:</dt>
+  <dt><%= t :'activerecord.attributes.expense.price' %></dt>
   <dd><%= @expense.price %></dd>
 
-  <dt>Way:</dt>
+  <dt><%= t :'activerecord.attributes.expense.way' %></dt>
   <dd><%= @expense.way %></dd>
 
 </dl>
