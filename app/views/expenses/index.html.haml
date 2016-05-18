@@ -16,6 +16,7 @@
           %th= t :'activerecord.attributes.expense.reason'
           %th= t :'activerecord.attributes.expense.price'
           %th= t :'activerecord.attributes.expense.way'
+          %th= t :'activerecord.attributes.expense.tags'
           %th{colspan: 3}
       %tbody
         - month_expenses.last.each do |expense|
@@ -24,6 +25,7 @@
             %td= expense.reason
             %td= currency expense.price
             %td= expense.way
+            %td= expense.tags.join(', ')
             %td.action= link_to t(:'scaffold.show'), expense, class: 'btn btn-info'
             %td.action= link_to t(:'scaffold.edit'), edit_expense_path(expense), class: 'btn btn-warning'
             %td.action= link_to t(:'scaffold.destroy'), expense, method: :delete, data: { confirm: t(:'scaffold.are_you_sure') }, class: 'btn btn-danger'

@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/cireficc/acts-as-taggable-on.git
+  revision: a02f8fdf85952894f74779c80fa891af6415fefe
+  specs:
+    acts-as-taggable-on (3.5.0)
+      activerecord (>= 3.2, < 5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -194,6 +201,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
+  acts-as-taggable-on!
   bootstrap-generators
   bootstrap-sass
   byebug

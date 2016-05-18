@@ -11,16 +11,20 @@ task csv_to_db: :environment do
     col_sep: ';',
     row_sep: "\n",
     strip_whitespace: true,
-    key_mapping: { date: :date, objet: :reason, prix: :price, moyen: :way, catégories: :categories }
+    key_mapping: { date: :date, objet: :reason, prix: :price, moyen: :way, catégories: :tag_list }
   }) do |array|
     array.each do |hash|
-      hash.delete(:categories)
       hash[:date] = Date.strptime hash[:date], '%d/%m/%y'
       expenses << Expense.new(hash)
     end
   end
   puts 'Inserting data...'
   Expense.import expenses
+  expenses.each do |expense|
+    e = Expense.where(reason: expense.reason, date: expense.date, price: expense.price, way: expense.way).take
+    e.tag_list.add *expense.tag_list
+    e.save
+  end
   puts '... done.'
   puts Expense.count
 end
