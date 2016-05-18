@@ -6,6 +6,10 @@ class ExpensesController < ApplicationController
   def index
     @expenses = Expense.order(date: :desc)
                        .group_by { |e| e.date.beginning_of_month }
+    @extended_values = {}
+    @expenses.each do |month, expenses|
+      @extended_values[month] = expenses.map(&:price).sum
+    end
   end
 
   # GET /expenses/1

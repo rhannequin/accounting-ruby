@@ -4,7 +4,10 @@
     = t :'.new_expense'
   %h1= t :'.title'
 - @expenses.each do |month_expenses|
-  %h2= l(month_expenses.first, format: :year_and_month).capitalize
+  - month = month_expenses.first
+  - expenses = month_expenses.last
+  %h2= l(month, format: :year_and_month).capitalize
+  %h3 #{currency @extended_values[month]} spent
   .table-responsive
     %table.table.table-striped.table-bordered.table-hover
       %thead
