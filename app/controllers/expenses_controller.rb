@@ -4,7 +4,8 @@ class ExpensesController < ApplicationController
   # GET /expenses
   # GET /expenses.json
   def index
-    @expenses = Expense.all
+    @expenses = Expense.order(date: :desc)
+                       .group_by { |e| e.date.beginning_of_month }
   end
 
   # GET /expenses/1

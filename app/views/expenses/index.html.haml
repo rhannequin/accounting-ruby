@@ -3,22 +3,24 @@
     %span.glyphicon.glyphicon-plus
     = t :'.new_expense'
   %h1= t :'.title'
-.table-responsive
-  %table.table.table-striped.table-bordered.table-hover
-    %thead
-      %tr
-        %th= t :'activerecord.attributes.expense.date'
-        %th= t :'activerecord.attributes.expense.reason'
-        %th= t :'activerecord.attributes.expense.price'
-        %th= t :'activerecord.attributes.expense.way'
-        %th{:colspan => "3"}
-    %tbody
-      - @expenses.each do |expense|
+- @expenses.each do |month_expenses|
+  %h2= l(month_expenses.first, format: :year_and_month).capitalize
+  .table-responsive
+    %table.table.table-striped.table-bordered.table-hover
+      %thead
         %tr
-          %td= l expense.date
-          %td= expense.reason
-          %td= currency expense.price
-          %td= expense.way
-          %td.action= link_to t(:'scaffold.show'), expense, class: 'btn btn-info'
-          %td.action= link_to t(:'scaffold.edit'), edit_expense_path(expense), class: 'btn btn-warning'
-          %td.action= link_to t(:'scaffold.destroy'), expense, method: :delete, data: { confirm: t(:'scaffold.are_you_sure') }, class: 'btn btn-danger'
+          %th= t :'activerecord.attributes.expense.date'
+          %th= t :'activerecord.attributes.expense.reason'
+          %th= t :'activerecord.attributes.expense.price'
+          %th= t :'activerecord.attributes.expense.way'
+          %th{colspan: 3}
+      %tbody
+        - month_expenses.last.each do |expense|
+          %tr
+            %td= l expense.date
+            %td= expense.reason
+            %td= currency expense.price
+            %td= expense.way
+            %td.action= link_to t(:'scaffold.show'), expense, class: 'btn btn-info'
+            %td.action= link_to t(:'scaffold.edit'), edit_expense_path(expense), class: 'btn btn-warning'
+            %td.action= link_to t(:'scaffold.destroy'), expense, method: :delete, data: { confirm: t(:'scaffold.are_you_sure') }, class: 'btn btn-danger'

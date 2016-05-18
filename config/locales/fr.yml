@@ -27,6 +27,9 @@ fr:
         reason: Objet
         price: Prix
         way: Moyen
+  date:
+    formats:
+      year_and_month: "%B %Y"
   expenses:
     create:
       flash:
