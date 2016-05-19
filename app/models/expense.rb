@@ -1,3 +1,7 @@
 class Expense < ApplicationRecord
   acts_as_taggable
+
+  scope :with_tags, -> { includes(:tags) }
+  scope :date_desc_order, -> { order(date: :desc) }
+  scope :all_ordered, -> { with_tags.date_desc_order }
 end

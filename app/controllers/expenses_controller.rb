@@ -1,12 +1,17 @@
 class ExpensesController < ApplicationController
+  include ExpensesHelper
   before_action :set_expense, only: [:show, :edit, :update, :destroy]
 
   # GET /expenses
   # GET /expenses.json
   def index
-    @expenses = Expense.includes(:tags)
-                       .order(date: :desc)
+    current_page = (params[:page] || 1).to_i
+    months_per_page = 3
+    range = expenses_pagination(current_page, months_per_page)
+    @expenses = Expense.all_ordered
+                       .where(date: range)
                        .group_by { |e| e.date.beginning_of_month }
+    @months_count = @expenses.size
     @extended_values = {}
     @expenses.each do |month, expenses|
       @extended_values[month] = expenses.map(&:price).sum
