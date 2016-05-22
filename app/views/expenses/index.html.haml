@@ -3,6 +3,9 @@
     %span.glyphicon.glyphicon-plus
     = t :'.new_expense'
   %h1= t :'.title'
+
+= render partial: 'layouts/paginate', locals: { paginate: @paginate }
+
 - @expenses.each do |month_expenses|
   - month = month_expenses.first
   - expenses = month_expenses.last

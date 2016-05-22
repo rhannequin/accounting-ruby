@@ -1,13 +1,15 @@
 class ExpensesController < ApplicationController
+  include ApplicationHelper
   include ExpensesHelper
-  before_action :set_expense, only: [:show, :edit, :update, :destroy]
+  before_action :set_expense, only: %i( show edit update destroy )
 
   # GET /expenses
   # GET /expenses.json
   def index
-    current_page = (params[:page] || 1).to_i
-    months_per_page = 3
-    range = expenses_pagination(current_page, months_per_page)
+    months_per_page = 2
+    first_date = Expense.select(:date).order(:date).first.date
+    @paginate = paginate_params(params[:page], first_date, months_per_page)
+    range = expenses_pagination(@paginate[:current_page], months_per_page)
     @expenses = Expense.all_ordered
                        .where(date: range)
                        .group_by { |e| e.date.beginning_of_month }
