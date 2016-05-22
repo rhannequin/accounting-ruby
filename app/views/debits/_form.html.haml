@@ -1,0 +1,34 @@
+= simple_form_for(@debit, html: { class: 'form-horizontal', role: 'form' }) do |f|
+  - if @debit.errors.any?
+    .alert.alert-danger.alert-dismissable{role: 'alert'}
+      %button.close{'data-dismiss' => 'alert', type: 'button'}
+        %span{'aria-hidden' => true} ×
+        %span.sr-only= t :'layouts.flash.close'
+      %h4
+        = t :'scaffold.form.errors', count: @debit.errors.count
+      %ul
+        - @debit.errors.full_messages.each do |msg|
+          %li= msg
+  .form-group
+    = f.label :reason, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.input :reason, label: false, input_html: { class: 'form-control' }
+  .form-group
+    = f.label :price, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.input :price, label: false, input_html: { class: 'form-control' }
+  .form-group
+    = f.label :way, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.input :way, label: false, input_html: { class: 'form-control' }
+  .form-group
+    = f.label :start_date, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.input :start_date, label: false, input_html: { class: 'form-control' }
+  .form-group
+    = f.label :end_date, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.input :end_date, label: false, include_blank: true, input_html: { class: 'form-control' }
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      = f.submit class: 'btn btn-primary'

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :debits
   resources :expenses
   root to: 'expenses#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

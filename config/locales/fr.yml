@@ -22,15 +22,48 @@
 fr:
   activerecord:
     attributes:
+      debit:
+        end_date: Date de fin
+        price: Prix
+        reason: Objet
+        start_date: Date de début
+        tags: Catégories
+        way: Moyen
       expense:
         date: Date
         reason: Objet
         price: Prix
         tags: Catégories
         way: Moyen
+    models:
+      debit:
+        one: Prélèvement
+        other: Prélèvements
+      expense:
+        one: Dépense
+        other: Dépenses
   date:
     formats:
       year_and_month: "%B %Y"
+  debits:
+    create:
+      flash:
+        success: Le prélèvement a bien été ajouté.
+    destroy:
+      flash:
+        success: Le prélèvement a bien été supprimé.
+    edit:
+      title: "Édition d'un prélèvement"
+    index:
+      new_debit: Ajouter un prélèvement
+      title: Liste des prélèvements
+    new:
+      title: "Ajout d'un prélèvement"
+    show:
+      title: "Affichage d'un prélèvement"
+    update:
+      flash:
+        success: Le prélèvement a bien été mis à jour.
   expenses:
     create:
       flash:
