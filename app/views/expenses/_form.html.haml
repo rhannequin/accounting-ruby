@@ -12,7 +12,7 @@
   .form-group
     = f.label :date, class: 'col-sm-2 control-label'
     .col-sm-10
-      = f.input :date, label: false, input_html: { class: 'form-control' }
+      = render partial: 'shared/datepicker_input', locals: { f: f, date_input: :date }
   .form-group
     = f.label :reason, class: 'col-sm-2 control-label'
     .col-sm-10

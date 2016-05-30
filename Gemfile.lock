@@ -50,6 +50,8 @@ GEM
     arel (7.0.0)
     autoprefixer-rails (6.3.6)
       execjs
+    bootstrap-datepicker-rails (1.6.1.1)
+      railties (>= 3.0)
     bootstrap-generators (3.3.4)
       railties (>= 3.1.0)
     bootstrap-sass (3.3.6)
@@ -202,6 +204,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-import
   acts-as-taggable-on!
+  bootstrap-datepicker-rails
   bootstrap-generators
   bootstrap-sass
   byebug

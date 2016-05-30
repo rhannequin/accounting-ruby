@@ -38,6 +38,7 @@ gem 'haml-rails'
 gem 'smarter_csv'
 gem 'activerecord-import'
 gem 'acts-as-taggable-on', git: 'https://github.com/cireficc/acts-as-taggable-on.git'
+gem 'bootstrap-datepicker-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
