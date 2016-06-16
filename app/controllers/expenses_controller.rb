@@ -18,6 +18,20 @@ class ExpensesController < ApplicationController
     @expenses.each do |month, expenses|
       @extended_values[month] = expenses.map(&:price).sum
     end
+
+    @current_amount = Expense.select(:price).map(&:price).sum
+    Debit.find_each do |debit|
+      all_months = (first_date..Date.today).to_a.map { |d| d.beginning_of_month }.uniq
+      all_months.each do |month|
+        cond = (
+          (month.beginning_of_month..month.end_of_month).cover?(debit.start_date) ||
+          (month.beginning_of_month..month.end_of_month).cover?(debit.end_date)
+        ) || (debit.start_date < month && (debit.end_date ? debit.end_date > month : true))
+        @current_amount += debit.price if cond
+      end
+    end
+    start_amount = 0
+    @current_amount += start_amount
   end
 
   # GET /expenses/1

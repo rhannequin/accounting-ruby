@@ -76,6 +76,7 @@ fr:
     index:
       new_expense: Ajouter une dépense
       title: Liste des dépenses
+      current_amount: 'Montant actuel : %{amount}'
     new:
       title: "Ajout d'une dépense"
     show:
