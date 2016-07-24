@@ -34,9 +34,8 @@ task csv_to_db: :environment do
   debits = YAML.load_file('tmp/config.yml')['debits']
   data = []
   debits.each do |debit|
-    debit.delete('categories')
-    data << Debit.new(debit)
+    debit[:tag_list] = debit.delete('categories')
+    Debit.create(debit)
   end
-  Debit.import data
   puts "... done. (#{Debit.count})"
 end
