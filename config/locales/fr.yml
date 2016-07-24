@@ -74,9 +74,10 @@ fr:
     edit:
       title: "Édition d'une dépense"
     index:
+      current_amount: 'Montant actuel : %{amount}'
       new_expense: Ajouter une dépense
       title: Liste des dépenses
-      current_amount: 'Montant actuel : %{amount}'
+      spent: "%{spent} dépensés"
     new:
       title: "Ajout d'une dépense"
     show:

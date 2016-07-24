@@ -6,32 +6,53 @@ class ExpensesController < ApplicationController
   # GET /expenses
   # GET /expenses.json
   def index
+    # Initiate params to get expenses
     months_per_page = 2
     first_date = Expense.select(:date).order(:date).first.date
     @paginate = paginate_params(params[:page], first_date, months_per_page)
     range = expenses_pagination(@paginate[:current_page], months_per_page)
-    @expenses = Expense.all_ordered
-                       .where(date: range)
-                       .group_by { |e| e.date.beginning_of_month }
-    @months_count = @expenses.size
-    @extended_values = {}
-    @expenses.each do |month, expenses|
-      @extended_values[month] = expenses.map(&:price).sum
-    end
 
+    @expenses = Expense.all_ordered.where(date: range)
+
+    # Order expenses by month
+    tmp = {}
+    @expenses.each do |expense|
+      date = expense.date.beginning_of_month
+      tmp[date] ||= { expenses: [], total: 0 }
+      tmp[date][:expenses] << expense
+      tmp[date][:total] += expense.price if expense.price > 0
+    end
+    @expenses = tmp
+
+    # Add debits to each month and calculate currnt_amount
     @current_amount = Expense.select(:price).map(&:price).sum
+    all_months = (first_date..Date.today).to_a.map { |d| d.beginning_of_month }.uniq
     Debit.find_each do |debit|
-      all_months = (first_date..Date.today).to_a.map { |d| d.beginning_of_month }.uniq
       all_months.each do |month|
+        beginning_of_month = month.beginning_of_month
         cond = (
-          (month.beginning_of_month..month.end_of_month).cover?(debit.start_date) ||
-          (month.beginning_of_month..month.end_of_month).cover?(debit.end_date)
+          (beginning_of_month..month.end_of_month).cover?(debit.start_date) ||
+          (beginning_of_month..month.end_of_month).cover?(debit.end_date)
         ) || (debit.start_date < month && (debit.end_date ? debit.end_date > month : true))
-        @current_amount += debit.price if cond
+        if cond
+          @current_amount += debit.price
+          if range.cover?(month)
+            date = beginning_of_month
+            new_values = debit.attributes
+                              .slice('reason', 'price', 'way')
+                              .merge({ date: date })
+            @expenses[date][:expenses] << Expense.new(new_values)
+          end
+        end
       end
     end
     start_amount = 0
     @current_amount += start_amount
+
+    # Sort expenses by date
+    @expenses.each do |month, arr|
+      arr[:expenses].sort_by!(&:date)
+    end
   end
 
   # GET /expenses/1
