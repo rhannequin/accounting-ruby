@@ -37,7 +37,6 @@ gem 'bootstrap-generators'
 gem 'haml-rails'
 gem 'smarter_csv'
 gem 'activerecord-import'
-gem 'acts-as-taggable-on', git: 'https://github.com/cireficc/acts-as-taggable-on.git'
 gem 'bootstrap-datepicker-rails'
 gem 'seed_dump'
 

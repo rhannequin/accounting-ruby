@@ -1,3 +1,4 @@
 class Debit < ApplicationRecord
-  acts_as_taggable
+  has_many :taggings, as: :taggable
+  has_many :tags, through: :taggings
 end
