@@ -23,6 +23,7 @@ fr:
   activerecord:
     attributes:
       debit:
+        day: Jour
         end_date: Date de fin
         price: Prix
         reason: Objet

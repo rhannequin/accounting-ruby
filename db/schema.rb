@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20160522183557) do
   create_table "debits", force: :cascade do |t|
     t.string   "reason"
     t.decimal  "price"
+    t.integer  "day"
     t.string   "way"
     t.date     "start_date"
     t.date     "end_date"

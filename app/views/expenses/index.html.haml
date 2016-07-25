@@ -10,7 +10,7 @@
   .col-md-6
     = render partial: 'layouts/paginate', locals: { paginate: @paginate }
 
-- @expenses.reverse_each do |month_expenses|
+- @expenses.each do |month_expenses|
   - month = month_expenses.first
   - expenses = month_expenses.last
   %h2= l(month, format: :year_and_month).capitalize

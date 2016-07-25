@@ -3,6 +3,7 @@ class CreateDebits < ActiveRecord::Migration[5.0]
     create_table :debits do |t|
       t.string :reason
       t.decimal :price
+      t.integer :day
       t.string :way
       t.date :start_date
       t.date :end_date

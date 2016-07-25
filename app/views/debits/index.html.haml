@@ -10,6 +10,7 @@
       %tr
         %th= t :'activerecord.attributes.debit.reason'
         %th= t :'activerecord.attributes.debit.price'
+        %th= t :'activerecord.attributes.debit.day'
         %th= t :'activerecord.attributes.debit.way'
         %th= t :'activerecord.attributes.debit.tags'
         %th= t :'activerecord.attributes.debit.start_date'
@@ -20,6 +21,7 @@
       %tr
         %td= debit.reason
         %td= currency debit.price
+        %td= debit.day
         %td= debit.way
         %td= debit.tags.join(', ')
         %td= l debit.start_date

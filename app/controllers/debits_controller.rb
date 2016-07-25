@@ -69,6 +69,6 @@ class DebitsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def debit_params
-      params.require(:debit).permit(:reason, :price, :way, :start_date, :end_date)
+      params.require(:debit).permit(:reason, :price, :day, :way, :start_date, :end_date)
     end
 end
