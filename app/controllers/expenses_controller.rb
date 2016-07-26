@@ -27,7 +27,7 @@ class ExpensesController < ApplicationController
     # Add debits to each month and calculate currnt_amount
     @current_amount = Expense.select(:price).map(&:price).sum
     all_months = (first_date..Date.today).to_a.map { |d| d.beginning_of_month }.uniq
-    Debit.find_each do |debit|
+    Debit.with_tags.find_each do |debit|
       all_months.each do |month|
         beginning_of_month = month.beginning_of_month
         cond = (
@@ -39,7 +39,7 @@ class ExpensesController < ApplicationController
           if range.cover?(month)
             new_values = debit.attributes
                               .slice('reason', 'price', 'way')
-                              .merge({ date: month.change(day: debit.day), tag_list: debit.tag_list })
+                              .merge({ date: month.change(day: debit.day), tags: debit.tags })
             @expenses[beginning_of_month][:expenses] << Expense.new(new_values)
           end
         end

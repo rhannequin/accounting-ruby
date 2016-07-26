@@ -33,7 +33,7 @@
             %td= expense.reason
             %td= currency expense.price
             %td= expense.way
-            %td= expense.tag_list.any? ? expense.tag_list.join(', ') : '&empty;'.html_safe
+            %td= expense.tags.any? ? expense.tags.map(&:name).join(', ') : '&empty;'.html_safe
             - if expense.id
               %td.action= link_to t(:'scaffold.show'), expense, class: 'btn btn-info'
               %td.action= link_to t(:'scaffold.edit'), edit_expense_path(expense), class: 'btn btn-warning'
