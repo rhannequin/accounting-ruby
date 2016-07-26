@@ -4,9 +4,12 @@ task csv_to_db: :environment do
   puts 'Emptying database...'
   Expense.delete_all
   Debit.delete_all
+  Tagging.delete_all
+  Tag.delete_all
   puts '... done.'
   expenses_file = 'tmp/data.csv'
   expenses = []
+  tags = []
 
   SmarterCSV.process(expenses_file, {
     chunk_size: 10000,
@@ -20,20 +23,29 @@ task csv_to_db: :environment do
     array.each do |hash|
       hash[:date] = Date.strptime hash[:date], '%d/%m/%y'
       hash[:tags] ||= ''
-      tags = hash[:tags].split(',').map { |t| { name: t.strip } }
+      expense_tags = hash[:tags].split(',').map do |t|
+        tag = { name: t.strip }
+        tags << tag unless tags.include? tag
+        tag
+      end
       hash.delete(:tags)
       expense = Expense.new(hash)
-      tags.each { |t| expense.tags.build t }
+      expense_tags.each { |t| expense.tags.build t }
       expenses << expense
     end
   end
+
+  puts 'Inserting expenses...'
+  Tag.import tags.map { |t| Tag.new t }
+  puts "... done. (#{Tag.count})"
+  puts
 
   puts 'Inserting expenses...'
   Expense.import expenses
   ActiveRecord::Base.transaction do
     expenses.each do |expense|
       e = Expense.where(reason: expense.reason, date: expense.date, price: expense.price, way: expense.way).take
-      e.tags << expense.tags
+      e.tags << expense.tags.map { |t| Tag.where(name: t.name).take }
       e.save
     end
   end
@@ -42,13 +54,14 @@ task csv_to_db: :environment do
 
   puts 'Inserting debits...'
   debits = YAML.load_file('tmp/config.yml')['debits']
-  data = []
   debits.each do |debit|
-    tags = debit['categories'].split(&:strip).map { |c| Tag.new(name: c) } unless debit['categories'].nil?
+    unless debit['categories'].nil?
+      debit_tags = debit['categories'].split(&:strip).map { |c| Tag.find_or_create_by(name: c) }
+    end
     debit.delete('categories')
     d = Debit.create(debit)
-    if tags
-      d.tags = tags
+    if debit_tags
+      d.tags = debit_tags
       d.save
     end
   end
