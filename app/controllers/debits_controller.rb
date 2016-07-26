@@ -1,15 +1,16 @@
 class DebitsController < ApplicationController
-  before_action :set_debit, only: [:show, :edit, :update, :destroy]
+  before_action :set_debit, only: [:edit, :update, :destroy]
 
   # GET /debits
   # GET /debits.json
   def index
-    @debits = Debit.all
+    @debits = Debit.with_tags.order(start_date: :desc)
   end
 
   # GET /debits/1
   # GET /debits/1.json
   def show
+    @debit = Debit.with_tags.find(params[:id])
   end
 
   # GET /debits/new

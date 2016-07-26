@@ -23,7 +23,7 @@
         %td= currency debit.price
         %td= debit.day
         %td= debit.way
-        %td= debit.tags.join(', ')
+        %td= render partial: 'tags/list', locals: { tags: debit.tags }
         %td= l debit.start_date
         %td= debit.end_date ? l(debit.end_date) : '&empty;'.html_safe
         %td.action= link_to t(:'scaffold.show'), debit, class: 'btn btn-info'

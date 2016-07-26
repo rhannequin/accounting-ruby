@@ -1,7 +1,7 @@
 class ExpensesController < ApplicationController
   include ApplicationHelper
   include ExpensesHelper
-  before_action :set_expense, only: %i( show edit update destroy )
+  before_action :set_expense, only: [:edit, :update, :destroy]
 
   # GET /expenses
   # GET /expenses.json
@@ -57,6 +57,7 @@ class ExpensesController < ApplicationController
   # GET /expenses/1
   # GET /expenses/1.json
   def show
+    @expense = Expense.with_tags.find(params[:id])
   end
 
   # GET /expenses/new

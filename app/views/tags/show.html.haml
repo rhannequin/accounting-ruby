@@ -1,0 +1,18 @@
+.page-header
+  = link_to edit_tag_path(@tag), class: 'btn btn-primary' do
+    %span.glyphicon.glyphicon-pencil
+    = t :'scaffold.edit'
+  %h1= t :'.title'
+
+%h3= t :'activerecord.attributes.tag.name'
+
+%h4= @tag.name
+
+%h3= t :'.use'
+
+%p= t :'.use_count',
+    { count: @expenses_count + @debits_count,
+      expenses: @expenses_count,
+      expense_model: Expense.model_name.human(count: @expenses_count),
+      debits: @debits_count,
+      debit_model: Debit.model_name.human(count: @debits_count) }

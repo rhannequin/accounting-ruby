@@ -40,14 +40,16 @@ fr:
         name: Nom
     models:
       debit:
-        one: Prélèvement
-        other: Prélèvements
+        zero: prélèvement
+        one: prélèvement
+        other: prélèvements
       expense:
-        one: Dépense
-        other: Dépenses
+        zero: dépense
+        one: dépense
+        other: dépenses
       tags:
-        one: Catégorie
-        other: Catégories
+        one: patégorie
+        other: patégories
   date:
     formats:
       year_and_month: "%B %Y"
@@ -94,6 +96,10 @@ fr:
   tags:
     edit:
       title: "Édition d'une catégorie"
+    show:
+      title: "Affichage d'une catégorie"
+      use: Utilisation
+      use_count: "%{count} fois (%{expenses} %{expense_model}, %{debits} %{debit_model})."
     update:
       flash:
         success: La catégorie a bien été mise à jour.

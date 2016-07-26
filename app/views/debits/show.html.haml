@@ -18,3 +18,5 @@
   %dd= l @debit.start_date
   %dt= t :'activerecord.attributes.debit.end_date'
   %dd= @debit.end_date ? l(@debit.end_date) : '&empty;'.html_safe
+  %dt= t :'activerecord.attributes.debit.tags'
+  %dd= render partial: 'tags/list', locals: { tags: @debit.tags }

@@ -16,3 +16,5 @@
   %dd= currency @expense.price
   %dt= t :'activerecord.attributes.expense.way'
   %dd= @expense.way
+  %dt= t :'activerecord.attributes.expense.tags'
+  %dd= render partial: 'tags/list', locals: { tags: @expense.tags }
