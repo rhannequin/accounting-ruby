@@ -33,7 +33,7 @@
             %td= expense.reason
             %td= currency expense.price
             %td= expense.way
-            %td= expense.tags.any? ? expense.tags.map(&:name).join(', ') : '&empty;'.html_safe
+            %td= render partial: 'tags/list', locals: { tags: expense.tags }
             - if expense.id
               %td.action= link_to t(:'scaffold.show'), expense, class: 'btn btn-info'
               %td.action= link_to t(:'scaffold.edit'), edit_expense_path(expense), class: 'btn btn-warning'
