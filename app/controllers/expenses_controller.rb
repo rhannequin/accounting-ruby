@@ -50,7 +50,7 @@ class ExpensesController < ApplicationController
 
     # Sort expenses by date
     @expenses.each do |month, arr|
-      arr[:expenses].sort_by!(&:date)
+      arr[:expenses].sort_by!(&:date).reverse!
     end
   end
 
