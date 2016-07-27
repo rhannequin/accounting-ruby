@@ -72,10 +72,13 @@ class ExpensesController < ApplicationController
   # POST /expenses
   # POST /expenses.json
   def create
-    @expense = Expense.new(expense_params)
+    params = expense_params
+    tags = params['tag_ids']
+    params.delete('tag_ids')
+    @expense = Expense.new(params)
 
     respond_to do |format|
-      if @expense.save
+      if @expense.save && (@expense.tag_ids = tags)
         format.html { redirect_to @expense, notice: t(:'expenses.create.flash.success') }
         format.json { render :show, status: :created, location: @expense }
       else
@@ -117,6 +120,6 @@ class ExpensesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def expense_params
-      params.require(:expense).permit(:date, :reason, :price, :way)
+      params.require(:expense).permit(:date, :reason, :price, :way, tag_ids: [])
     end
 end
