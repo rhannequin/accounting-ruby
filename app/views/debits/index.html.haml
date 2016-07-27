@@ -17,15 +17,15 @@
         %th= t :'activerecord.attributes.debit.end_date'
         %th{colspan: 3}
     %tbody
-    - @debits.each do |debit|
-      %tr
-        %td= debit.reason
-        %td= currency debit.price
-        %td= debit.day
-        %td= debit.way
-        %td= render partial: 'tags/list', locals: { tags: debit.tags }
-        %td= l debit.start_date
-        %td= debit.end_date ? l(debit.end_date) : '&empty;'.html_safe
-        %td.action= link_to t(:'scaffold.show'), debit, class: 'btn btn-info'
-        %td.action= link_to t(:'scaffold.edit'), edit_debit_path(debit), class: 'btn btn-warning'
-        %td.action= link_to t(:'scaffold.destroy'), debit, method: :delete, data: { confirm: t(:'scaffold.are_you_sure') }, class: 'btn btn-danger'
+      - @debits.each do |debit|
+        %tr
+          %td= debit.reason
+          %td= currency debit.price
+          %td= debit.day
+          %td= debit.way
+          %td= render partial: 'tags/list', locals: { tags: debit.tags }
+          %td= l debit.start_date
+          %td= debit.end_date ? l(debit.end_date) : '&empty;'.html_safe
+          %td.action= link_to t(:'scaffold.show'), debit, class: 'btn btn-info'
+          %td.action= link_to t(:'scaffold.edit'), edit_debit_path(debit), class: 'btn btn-warning'
+          %td.action= link_to t(:'scaffold.destroy'), debit, method: :delete, data: { confirm: t(:'scaffold.are_you_sure') }, class: 'btn btn-danger'
