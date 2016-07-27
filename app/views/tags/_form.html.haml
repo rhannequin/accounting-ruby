@@ -1,0 +1,18 @@
+= simple_form_for(@tag, html: { class: 'form-horizontal', role: 'form' }) do |f|
+  - if @tag.errors.any?
+    .alert.alert-danger.alert-dismissable{role: 'alert'}
+      %button.close{'data-dismiss' => 'alert', type: 'button'}
+        %span{'aria-hidden' => true} ×
+        %span.sr-only= t :'layouts.flash.close'
+      %h4
+        = t :'scaffold.form.errors', count: @tag.errors.count
+      %ul
+        - @tag.errors.full_messages.each do |msg|
+          %li= msg
+  .form-group
+    = f.label :name, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.input :name, label: false, input_html: { class: 'form-control' }
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      = f.submit class: 'btn btn-primary'

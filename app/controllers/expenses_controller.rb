@@ -1,7 +1,7 @@
 class ExpensesController < ApplicationController
   include ApplicationHelper
   include ExpensesHelper
-  before_action :set_expense, only: %i( show edit update destroy )
+  before_action :set_expense, only: [:edit, :update, :destroy]
 
   # GET /expenses
   # GET /expenses.json
@@ -27,7 +27,7 @@ class ExpensesController < ApplicationController
     # Add debits to each month and calculate currnt_amount
     @current_amount = Expense.select(:price).map(&:price).sum
     all_months = (first_date..Date.today).to_a.map { |d| d.beginning_of_month }.uniq
-    Debit.find_each do |debit|
+    Debit.with_tags.find_each do |debit|
       all_months.each do |month|
         beginning_of_month = month.beginning_of_month
         cond = (
@@ -39,7 +39,7 @@ class ExpensesController < ApplicationController
           if range.cover?(month)
             new_values = debit.attributes
                               .slice('reason', 'price', 'way')
-                              .merge({ date: month.change(day: debit.day), tag_list: debit.tag_list })
+                              .merge({ date: month.change(day: debit.day), tags: debit.tags })
             @expenses[beginning_of_month][:expenses] << Expense.new(new_values)
           end
         end
@@ -57,6 +57,7 @@ class ExpensesController < ApplicationController
   # GET /expenses/1
   # GET /expenses/1.json
   def show
+    @expense = Expense.with_tags.find(params[:id])
   end
 
   # GET /expenses/new
@@ -71,10 +72,13 @@ class ExpensesController < ApplicationController
   # POST /expenses
   # POST /expenses.json
   def create
-    @expense = Expense.new(expense_params)
+    params = expense_params
+    tags = params['tag_ids']
+    params.delete('tag_ids')
+    @expense = Expense.new(params)
 
     respond_to do |format|
-      if @expense.save
+      if @expense.save && (@expense.tag_ids = tags)
         format.html { redirect_to @expense, notice: t(:'expenses.create.flash.success') }
         format.json { render :show, status: :created, location: @expense }
       else
@@ -116,6 +120,6 @@ class ExpensesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def expense_params
-      params.require(:expense).permit(:date, :reason, :price, :way)
+      params.require(:expense).permit(:date, :reason, :price, :way, tag_ids: [])
     end
 end

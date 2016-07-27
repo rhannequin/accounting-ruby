@@ -1,15 +1,16 @@
 class DebitsController < ApplicationController
-  before_action :set_debit, only: [:show, :edit, :update, :destroy]
+  before_action :set_debit, only: [:edit, :update, :destroy]
 
   # GET /debits
   # GET /debits.json
   def index
-    @debits = Debit.all
+    @debits = Debit.with_tags.order(start_date: :desc)
   end
 
   # GET /debits/1
   # GET /debits/1.json
   def show
+    @debit = Debit.with_tags.find(params[:id])
   end
 
   # GET /debits/new
@@ -24,10 +25,13 @@ class DebitsController < ApplicationController
   # POST /debits
   # POST /debits.json
   def create
-    @debit = Debit.new(debit_params)
+    params = debit_params
+    tags = params['tag_ids']
+    params.delete('tag_ids')
+    @debit = Debit.new(params)
 
     respond_to do |format|
-      if @debit.save
+      if @debit.save && (@debit.tag_ids = tags)
         format.html { redirect_to @debit, notice: t(:'debits.create.flash.success') }
         format.json { render :show, status: :created, location: @debit }
       else
@@ -69,6 +73,6 @@ class DebitsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def debit_params
-      params.require(:debit).permit(:reason, :price, :day, :way, :start_date, :end_date)
+      params.require(:debit).permit(:reason, :price, :day, :way, :start_date, :end_date, tag_ids: [])
     end
 end

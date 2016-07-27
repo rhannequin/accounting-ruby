@@ -1,7 +1,11 @@
 %nav.navbar.navbar-inverse.navbar-fixed-top{role: 'navigation'}
   .container
     .navbar-header
-      %button.navbar-toggle.collapsed{'aria-controls' => 'navbar', 'aria-expanded' => false, 'data-target' => '#navbar', 'data-toggle' => 'collapse', type: 'button'}
+      %button.navbar-toggle.collapsed{'aria-controls' => 'navbar',
+                                      'aria-expanded' => false,
+                                      'data-target' => '#navbar',
+                                      'data-toggle' => 'collapse',
+                                      type: 'button'}
         %span.sr-only= t :'layouts.toggle_navigation'
         %span.icon-bar
         %span.icon-bar
@@ -16,4 +20,4 @@
       %ul.nav.navbar-nav
         - uris.each do |uri|
           %li{ class: ('active' if uri[:checks].include?(request.fullpath)) }
-            = link_to uri[:resource].model_name.human.pluralize, uri[:path]
+            = link_to uri[:resource].model_name.human.pluralize.capitalize, uri[:path]

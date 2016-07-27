@@ -36,13 +36,20 @@ fr:
         price: Prix
         tags: Catégories
         way: Moyen
+      tag:
+        name: Nom
     models:
       debit:
-        one: Prélèvement
-        other: Prélèvements
+        zero: prélèvement
+        one: prélèvement
+        other: prélèvements
       expense:
-        one: Dépense
-        other: Dépenses
+        zero: dépense
+        one: dépense
+        other: dépenses
+      tags:
+        one: patégorie
+        other: patégories
   date:
     formats:
       year_and_month: "%B %Y"
@@ -86,7 +93,24 @@ fr:
     update:
       flash:
         success: La dépense a bien été mise à jour.
+  tags:
+    edit:
+      title: "Édition d'une catégorie"
+    show:
+      title: "Affichage d'une catégorie"
+      use: Utilisation
+      use_count: "%{count} fois (%{expenses} %{expense_model}, %{debits} %{debit_model})."
+    update:
+      flash:
+        success: La catégorie a bien été mise à jour.
   helpers:
+    placeholder:
+      debit:
+        price: '230.50'
+        reason: Prélèvement mensuel
+      expense:
+        price: 10.24
+        reason: Courses primeur
     submit:
       create: Ajouter
       update: Mettre à jour
