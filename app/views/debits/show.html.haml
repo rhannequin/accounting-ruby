@@ -1,0 +1,22 @@
+.page-header
+  = link_to debits_path, class: 'btn btn-default' do
+    %span.glyphicon.glyphicon-list-alt
+    = t :'scaffold.back'
+  = link_to edit_debit_path(@debit), class: 'btn btn-primary' do
+    %span.glyphicon.glyphicon-pencil
+    = t :'scaffold.edit'
+  %h1= t :'.title'
+
+%dl.dl-horizontal
+  %dt= t :'activerecord.attributes.debit.reason'
+  %dd= @debit.reason
+  %dt= t :'activerecord.attributes.debit.price'
+  %dd= currency @debit.price
+  %dt= t :'activerecord.attributes.debit.way'
+  %dd= @debit.way
+  %dt= t :'activerecord.attributes.debit.start_date'
+  %dd= l @debit.start_date
+  %dt= t :'activerecord.attributes.debit.end_date'
+  %dd= @debit.end_date ? l(@debit.end_date) : '&empty;'.html_safe
+  %dt= t :'activerecord.attributes.debit.tags'
+  %dd= render partial: 'tags/list', locals: { tags: @debit.tags }

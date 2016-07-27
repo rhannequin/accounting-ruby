@@ -1,0 +1,3 @@
+= f.input_field date_input, as: :string,
+                            class: 'form-control datepicker',
+                            value: (f.object.try(date_input) ? l(f.object.try(date_input)) : '')

@@ -1,0 +1,27 @@
+= simple_form_for(@expense, html: { class: 'form-horizontal', role: 'form' }, wrapper: :horizontal_form) do |f|
+
+  = f.error_notification
+
+  = f.input :date, wrapper: :horizontal_input_group do
+    %span.input-group-addon
+      %span.glyphicon.glyphicon-calendar{ 'aria-hidden' => true }
+    = render partial: 'shared/datepicker_input', locals: { f: f, date_input: :date }
+
+  = f.input :reason, wrapper: :horizontal_input_group do
+    %span.input-group-addon
+      %span.glyphicon.glyphicon-pencil{ 'aria-hidden' => true }
+    = f.text_field :reason, class: 'form-control', placeholder: true
+
+  = f.input :price, wrapper: :horizontal_input_group do
+    %span.input-group-addon
+      %span.glyphicon.glyphicon-euro{ 'aria-hidden' => true }
+    = f.text_field :price, as: :string, class: 'form-control', placeholder: true
+
+  = f.input :way
+
+  = f.association :tags, as: :check_boxes,
+                         wrapper: :horizontal_radio_and_checkboxes,
+                         item_wrapper_class: 'col-sm-3'
+
+  .form-group.text-right
+    = f.submit class: 'btn btn-primary'

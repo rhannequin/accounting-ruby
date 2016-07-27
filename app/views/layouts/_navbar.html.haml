@@ -1,0 +1,23 @@
+%nav.navbar.navbar-inverse.navbar-fixed-top{role: 'navigation'}
+  .container
+    .navbar-header
+      %button.navbar-toggle.collapsed{'aria-controls' => 'navbar',
+                                      'aria-expanded' => false,
+                                      'data-target' => '#navbar',
+                                      'data-toggle' => 'collapse',
+                                      type: 'button'}
+        %span.sr-only= t :'layouts.toggle_navigation'
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      = link_to t(:'layouts.project'), root_path, class: 'navbar-brand'
+    #navbar.collapse.navbar-collapse
+      :ruby
+        uris = [
+          { resource: Expense, path: expenses_path, checks: [expenses_path, root_path] },
+          { resource: Debit, path: debits_path, checks: [debits_path] },
+        ]
+      %ul.nav.navbar-nav
+        - uris.each do |uri|
+          %li{ class: ('active' if uri[:checks].include?(request.fullpath)) }
+            = link_to uri[:resource].model_name.human.pluralize.capitalize, uri[:path]

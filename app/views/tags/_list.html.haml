@@ -1,0 +1,4 @@
+- if tags.any?
+  = tags.map { |t| link_to t.name, t }.join(', ').html_safe
+- else
+  &empty;
