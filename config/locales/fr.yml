@@ -104,6 +104,13 @@ fr:
       flash:
         success: La catégorie a bien été mise à jour.
   helpers:
+    placeholder:
+      debit:
+        price: '230.50'
+        reason: Prélèvement mensuel
+      expense:
+        price: 10.24
+        reason: Courses primeur
     submit:
       create: Ajouter
       update: Mettre à jour

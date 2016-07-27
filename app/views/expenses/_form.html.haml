@@ -10,12 +10,12 @@
   = f.input :reason, wrapper: :horizontal_input_group do
     %span.input-group-addon
       %span.glyphicon.glyphicon-pencil{ 'aria-hidden' => true }
-    = f.input_field :reason, class: 'form-control'
+    = f.text_field :reason, class: 'form-control', placeholder: true
 
   = f.input :price, wrapper: :horizontal_input_group do
     %span.input-group-addon
       %span.glyphicon.glyphicon-euro{ 'aria-hidden' => true }
-    = f.input_field :price, as: :string, class: 'form-control'
+    = f.text_field :price, as: :string, class: 'form-control', placeholder: true
 
   = f.input :way
 
