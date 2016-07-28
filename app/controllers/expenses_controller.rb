@@ -112,6 +112,74 @@ class ExpensesController < ApplicationController
     end
   end
 
+  def test
+    data = {
+      period: { months: 6 },
+      global: { months: 12 }
+    }
+    ignore_tag = Tag.select(:id).where(name: 'ignore').take
+
+    data.each do |key, value|
+      until_date = (Date.today - (value[:months] - 1).month).beginning_of_month
+      expenses = Expense.joins(:taggings)
+                        .where(['date > ?', until_date])
+                        .where.not(taggings: { tag_id: ignore_tag.id })
+      tmp = {}
+      expenses.each do |expense|
+        date = expense.date.beginning_of_month
+        tmp[date] ||= []
+        tmp[date] << expense.price.to_f unless expense.tags.include?(ignore_tag)
+      end
+      values = tmp.map { |_, v| v.sum.round * (-1) }
+      data[key][:categories] = tmp.map { |k, _| I18n.l k }
+      data[key][:values] = values
+      data[key][:average] = values.sum / values.size
+    end
+
+    @chart_global = LazyHighCharts::HighChart.new('graph') do |f|
+      f.title({ text: 'Dépenses globales'})
+      f.options[:xAxis][:categories] = data[:period][:categories]
+      f.series(type: 'spline', name: 'Dépenses mensuelles', data: data[:period][:values])
+      f.series(type: 'spline', name: 'Moyenne sur 6 mois', data: Array.new(data[:period][:months], data[:period][:average]))
+      f.series(type: 'spline', name: 'Moyenne totale 1 an', data: Array.new(data[:period][:months], data[:global][:average]))
+    end
+
+
+
+    data = {
+      period: { months: 6 },
+      global: { months: 12 }
+    }
+    ignore_tag = Tag.select(:id).where(name: 'ignore').take
+    lunch_tag = Tag.select(:id).where(name: 'lunch').take
+
+    data.each do |key, value|
+      until_date = (Date.today - (value[:months] - 1).month).beginning_of_month
+      expenses = Expense.joins(:taggings)
+                        .where(['date > ?', until_date])
+                        .where.not(taggings: { tag_id: ignore_tag.id })
+                        .where(taggings: { tag_id: lunch_tag.id })
+      tmp = {}
+      expenses.each do |expense|
+        date = expense.date.beginning_of_month
+        tmp[date] ||= []
+        tmp[date] << expense.price.to_f unless expense.tags.include?(ignore_tag)
+      end
+      values = tmp.map { |_, v| v.sum.round * (-1) }
+      data[key][:categories] = tmp.map { |k, _| I18n.l k }
+      data[key][:values] = values
+      data[key][:average] = values.sum / values.size
+    end
+
+    @chart_lunch = LazyHighCharts::HighChart.new('graph') do |f|
+      f.title({ text: 'Dépenses déjeuner'})
+      f.options[:xAxis][:categories] = data[:period][:categories]
+      f.series(type: 'spline', name: 'Dépenses mensuelles', data: data[:period][:values])
+      f.series(type: 'spline', name: 'Moyenne sur 6 mois', data: Array.new(data[:period][:months], data[:period][:average]))
+      f.series(type: 'spline', name: 'Moyenne totale 1 an', data: Array.new(data[:period][:months], data[:global][:average]))
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_expense
