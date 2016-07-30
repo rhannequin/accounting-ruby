@@ -113,70 +113,40 @@ class ExpensesController < ApplicationController
   end
 
   def test
-    data = {
-      period: { months: 6 },
-      global: { months: 12 }
-    }
-    ignore_tag = Tag.select(:id).where(name: 'ignore').take
+    @charts = []
 
-    data.each do |key, value|
-      until_date = (Date.today - (value[:months] - 1).month).beginning_of_month
-      expenses = Expense.joins(:taggings)
-                        .where(['date > ?', until_date])
-                        .where.not(taggings: { tag_id: ignore_tag.id })
-      tmp = {}
-      expenses.each do |expense|
-        date = expense.date.beginning_of_month
-        tmp[date] ||= []
-        tmp[date] << expense.price.to_f unless expense.tags.include?(ignore_tag)
-      end
-      values = tmp.map { |_, v| v.sum.round * (-1) }
-      data[key][:categories] = tmp.map { |k, _| I18n.l k }
-      data[key][:values] = values
-      data[key][:average] = values.sum / values.size
-    end
+    ignore_tag_id = Tag.select(:id).find_by(name: 'ignore').id
+    lunch_tag_id = Tag.select(:id).find_by(name: 'lunch').id
 
-    @chart_global = LazyHighCharts::HighChart.new('graph') do |f|
-      f.title({ text: 'Dépenses globales'})
-      f.options[:xAxis][:categories] = data[:period][:categories]
-      f.series(type: 'spline', name: 'Dépenses mensuelles', data: data[:period][:values])
-      f.series(type: 'spline', name: 'Moyenne sur 6 mois', data: Array.new(data[:period][:months], data[:period][:average]))
-      f.series(type: 'spline', name: 'Moyenne totale 1 an', data: Array.new(data[:period][:months], data[:global][:average]))
-    end
+    charts = [
+      {
+        lines: [
+          { type: :curve, name: 'Dépenses mensuelles', covers: 6 },
+          { type: :average, name: 'Moyenne sur 6 mois', covers: 6 },
+          { type: :average, name: 'Moyenne sur 1 an', covers: 12 },
+        ],
+        name: 'Dépenses mensuelles',
+        months: 6,
+        expenses_lb: -> (u) { Expense.joins(:taggings)
+                                     .where.not(taggings: { tag_id: ignore_tag_id })
+                                     .where(['date > ?', u]) }
+      }, {
+        lines: [
+          { type: :curve, name: 'Dépenses mensuelles', covers: 6 },
+          { type: :average, name: 'Moyenne sur 6 mois', covers: 6 },
+          { type: :average, name: 'Moyenne sur 1 an', covers: 12 },
+        ],
+        name: 'Dépenses mensuelles',
+        months: 6,
+        expenses_lb: -> (u) { Expense.joins(:taggings)
+                                     .where.not(taggings: { tag_id: ignore_tag_id })
+                                     .where(['date > ?', u])
+                                     .where(taggings: { tag_id: lunch_tag_id }) }
+      }
+    ]
 
-
-
-    data = {
-      period: { months: 6 },
-      global: { months: 12 }
-    }
-    ignore_tag = Tag.select(:id).where(name: 'ignore').take
-    lunch_tag = Tag.select(:id).where(name: 'lunch').take
-
-    data.each do |key, value|
-      until_date = (Date.today - (value[:months] - 1).month).beginning_of_month
-      expenses = Expense.joins(:taggings)
-                        .where(['date > ?', until_date])
-                        .where.not(taggings: { tag_id: ignore_tag.id })
-                        .where(taggings: { tag_id: lunch_tag.id })
-      tmp = {}
-      expenses.each do |expense|
-        date = expense.date.beginning_of_month
-        tmp[date] ||= []
-        tmp[date] << expense.price.to_f unless expense.tags.include?(ignore_tag)
-      end
-      values = tmp.map { |_, v| v.sum.round * (-1) }
-      data[key][:categories] = tmp.map { |k, _| I18n.l k }
-      data[key][:values] = values
-      data[key][:average] = values.sum / values.size
-    end
-
-    @chart_lunch = LazyHighCharts::HighChart.new('graph') do |f|
-      f.title({ text: 'Dépenses déjeuner'})
-      f.options[:xAxis][:categories] = data[:period][:categories]
-      f.series(type: 'spline', name: 'Dépenses mensuelles', data: data[:period][:values])
-      f.series(type: 'spline', name: 'Moyenne sur 6 mois', data: Array.new(data[:period][:months], data[:period][:average]))
-      f.series(type: 'spline', name: 'Moyenne totale 1 an', data: Array.new(data[:period][:months], data[:global][:average]))
+    @charts = charts.map do |chart|
+      build_chart chart
     end
   end
 
@@ -189,5 +159,66 @@ class ExpensesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def expense_params
       params.require(:expense).permit(:date, :reason, :price, :way, tag_ids: [])
+    end
+
+    def order_by_month(list)
+      tmp = {}
+      list.each do |item|
+        date = item.date.beginning_of_month
+        tmp[date] ||= []
+        tmp[date] << item.price.to_f
+      end
+      tmp
+    end
+
+    def build_chart(chart)
+      lines = []
+      chart[:lines].each do |line|
+        lines << build_line(line, chart[:months], chart[:expenses_lb])
+      end
+      new_chart(chart[:name], lines.first[:categories], lines)
+    end
+
+    def build_line(line, months, lb)
+      until_date = (Date.today - (line[:covers] - 1).month).beginning_of_month
+      expenses = order_by_month lb.call(until_date)
+      values = expenses.map { |_, v| v.sum.round * (-1) }
+      {
+        type: 'spline',
+        name: line[:name],
+        data: calculate_figures(expenses, months, line[:type]),
+        categories: get_categories(expenses)
+      }
+    end
+
+    def calculate_figures(expenses, months, type)
+      values = expenses.map { |_, v| v.sum.round * (-1) }.last(months)
+      case type
+      when :curve then values
+      when :average then array_of_average(values)
+      end
+    end
+
+    def get_categories(expenses)
+      expenses.map { |k, _| I18n.l k }
+    end
+
+    def array_of_average(values)
+      size = values.size
+      Array.new(size, calculate_average(values, size))
+    end
+
+    def calculate_average(values, size)
+      (values.sum / size).round
+    end
+
+    def new_chart(title, categories, series)
+      LazyHighCharts::HighChart.new('graph') do |f|
+        f.title({ text: title})
+        f.options[:xAxis][:categories] = categories
+        series.each do |serie|
+          f.series serie
+        end
+      end
     end
 end

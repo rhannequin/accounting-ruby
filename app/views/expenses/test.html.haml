@@ -1,2 +1,2 @@
-= high_chart('global', @chart_global)
-= high_chart('lunch', @chart_lunch)
+- @charts.each_with_index do |chart, i|
+  = high_chart("chart-#{i}", chart)
