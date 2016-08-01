@@ -127,9 +127,11 @@ class ExpensesController < ApplicationController
         ],
         name: 'Dépenses mensuelles',
         months: 6,
-        expenses_lb: -> (u) { Expense.joins(:taggings)
-                                     .where.not(taggings: { tag_id: ignore_tag_id })
-                                     .where(['date > ?', u]) }
+        expenses_lb: -> (u) { Expense.where(['date > ?', u])
+                                     .where.not(
+                                        id: Expense.joins(:taggings)
+                                                   .where(taggings: { tag_id: ignore_tag_id })
+                                      ) }
       }, {
         lines: [
           { type: :curve, name: 'Dépenses mensuelles', covers: 6 },
@@ -139,9 +141,12 @@ class ExpensesController < ApplicationController
         name: 'Dépenses mensuelles',
         months: 6,
         expenses_lb: -> (u) { Expense.joins(:taggings)
-                                     .where.not(taggings: { tag_id: ignore_tag_id })
                                      .where(['date > ?', u])
-                                     .where(taggings: { tag_id: lunch_tag_id }) }
+                                     .where(taggings: { tag_id: lunch_tag_id })
+                                     .where.not(
+                                        id: Expense.joins(:taggings)
+                                                   .where(taggings: { tag_id: ignore_tag_id })
+                                      ) }
       }
     ]
 
@@ -180,7 +185,7 @@ class ExpensesController < ApplicationController
     end
 
     def build_line(line, months, lb)
-      until_date = (Date.today - (line[:covers] - 1).month).beginning_of_month
+      until_date = (Date.today - (line[:covers]).month).beginning_of_month
       expenses = order_by_month lb.call(until_date)
       values = expenses.map { |_, v| v.sum.round * (-1) }
       {
