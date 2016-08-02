@@ -4,9 +4,13 @@
     = t :'scaffold.edit'
   %h1= t :'.title'
 
-%h3= t :'activerecord.attributes.tag.name'
+%h3= Tag.human_attribute_name(:name)
 
 %h4= @tag.name
+
+%h3= Tag.human_attribute_name(:ignored)
+
+%h4= t(@tag.ignored?.to_s).capitalize
 
 %h3= t :'.use'
 

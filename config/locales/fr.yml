@@ -37,6 +37,7 @@ fr:
         tags: Catégories
         way: Moyen
       tag:
+        ignored: À ignorer
         name: Nom
     models:
       debit:
@@ -93,16 +94,7 @@ fr:
     update:
       flash:
         success: La dépense a bien été mise à jour.
-  tags:
-    edit:
-      title: "Édition d'une catégorie"
-    show:
-      title: "Affichage d'une catégorie"
-      use: Utilisation
-      use_count: "%{count} fois (%{expenses} %{expense_model}, %{debits} %{debit_model})."
-    update:
-      flash:
-        success: La catégorie a bien été mise à jour.
+  'false': non
   helpers:
     placeholder:
       debit:
@@ -129,3 +121,14 @@ fr:
       errors:
         one: "1 erreur empêche d'enregistrer cet objet :"
         other: "%{count} erreurs empêchent d'enregistrer cet objet :"
+  tags:
+    edit:
+      title: "Édition d'une catégorie"
+    show:
+      title: "Affichage d'une catégorie"
+      use: Utilisation
+      use_count: "%{count} fois (%{expenses} %{expense_model}, %{debits} %{debit_model})."
+    update:
+      flash:
+        success: La catégorie a bien été mise à jour.
+  'true': oui

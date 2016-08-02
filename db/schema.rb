@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160725152625) do
+ActiveRecord::Schema.define(version: 20160802105335) do
 
   create_table "debits", force: :cascade do |t|
     t.string   "reason"
@@ -45,8 +45,9 @@ ActiveRecord::Schema.define(version: 20160725152625) do
 
   create_table "tags", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "ignored",    default: false, null: false
   end
 
 end
