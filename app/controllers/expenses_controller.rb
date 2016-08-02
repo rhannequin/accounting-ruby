@@ -37,6 +37,8 @@ class ExpensesController < ApplicationController
         if cond
           @current_amount += debit.price
           if range.cover?(month)
+            @expenses[beginning_of_month] ||= { expenses: [], total: 0 }
+            @expenses[beginning_of_month][:total] += debit.price
             new_values = debit.attributes
                               .slice('reason', 'price', 'way')
                               .merge({ date: month.change(day: debit.day), tags: debit.tags })
