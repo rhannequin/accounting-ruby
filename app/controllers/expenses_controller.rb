@@ -148,7 +148,7 @@ class ExpensesController < ApplicationController
           { type: :average, name: 'Moyenne sur 6 mois', covers: 6 },
           { type: :average, name: 'Moyenne sur 1 an', covers: 12 },
         ],
-        name: 'Dépenses mensuelles',
+        name: 'Dépenses déjeuner',
         months: 6,
         expenses_lb: -> (u) { Expense.includes(:taggings)
                                      .where(['date > ?', u])
@@ -159,7 +159,11 @@ class ExpensesController < ApplicationController
                                       ) },
         debits_lb: -> (u) { Debit.where(['end_date > ?', u])
                                  .or(Debit.where(end_date: nil))
-                                 .where(['start_date < ?', Date.today]) }
+                                 .where(['start_date < ?', Date.today])
+                                 .where(
+                                    id: Debit.joins(:taggings)
+                                             .where(taggings: { tag_id: lunch_tag_id })
+                                  ) }
       }
     ]
 
@@ -225,10 +229,10 @@ class ExpensesController < ApplicationController
     end
 
     def calculate_figures(expenses, months, type)
-      values = expenses.map { |_, v| v.sum.round(2) * (-1) }.last(months)
+      values = expenses.map { |_, v| v.sum.round(2) * (-1) }
       case type
-      when :curve then values
-      when :average then array_of_average(values)
+      when :curve then values.last(months)
+      when :average then array_of_average(values, months)
       end
     end
 
@@ -236,9 +240,9 @@ class ExpensesController < ApplicationController
       expenses.map { |k, _| I18n.l k }
     end
 
-    def array_of_average(values)
+    def array_of_average(values, months)
       size = values.size
-      Array.new(size, calculate_average(values, size))
+      Array.new(size, calculate_average(values, size)).last(months)
     end
 
     def calculate_average(values, size)
