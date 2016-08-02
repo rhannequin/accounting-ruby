@@ -14,7 +14,7 @@
   - month = month_expenses.first
   - expenses = month_expenses.last
   %h2= l(month, format: :year_and_month).capitalize
-  %h3= t :'.spent', spent: currency(month_expenses.last[:total])
+  %h3= t :'.spent', spent: currency(month_expenses.last[:total] * -1)
 
   .table-responsive
     %table.table.table-striped.table-bordered.table-hover

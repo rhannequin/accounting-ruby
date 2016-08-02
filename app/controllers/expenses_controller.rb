@@ -13,9 +13,8 @@ class ExpensesController < ApplicationController
     range = expenses_pagination(@paginate[:current_page], months_per_page)
 
     @expenses = Expense.all_ordered.where(date: range)
-    ignored_tags = Tag.select(:id).where(ignored: true)
-    expenses_to_ignore = Expense.where(id: Expense.joins(:taggings)
-                                                  .where(taggings: { tag_id: ignored_tags.map(&:id) }))
+    ignored_tags = Tag.select(:id).ignored
+    expenses_to_ignore = Expense.with_these_tags ignored_tags
 
     # Order expenses by month
     tmp = {}
@@ -30,8 +29,7 @@ class ExpensesController < ApplicationController
     # Add debits to each month and calculate currnt_amount
     @current_amount = Expense.select(:price).map(&:price).sum
     all_months = (first_date..Date.today).to_a.map { |d| d.beginning_of_month }.uniq
-    debits_to_ignore = Debit.where({ id: Debit.joins(:taggings)
-                                              .where(taggings: { tag_id: ignored_tags.map(&:id) }) })
+    debits_to_ignore = Debit.with_these_tags ignored_tags
     Debit.with_tags.find_each do |debit|
       all_months.each do |month|
         beginning_of_month = month.beginning_of_month
