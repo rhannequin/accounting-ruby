@@ -120,7 +120,7 @@ class ExpensesController < ApplicationController
   def test
     @charts = []
 
-    ignore_tag_id = Tag.select(:id).find_by(name: 'ignore').id
+    ignore_tag_ids = Tag.select(:id).ignored
     lunch_tag_id = Tag.select(:id).find_by(name: 'lunch').id
 
     charts = [
@@ -134,9 +134,14 @@ class ExpensesController < ApplicationController
         months: 6,
         expenses_lb: -> (u) { Expense.where(['date > ?', u])
                                      .where.not(
-                                        id: Expense.joins(:taggings)
-                                                   .where(taggings: { tag_id: ignore_tag_id })
-                                      ) }
+                                        id: Expense.with_these_tags(ignore_tag_ids)
+                                      ) },
+        debits_lb: -> (u) { Debit.where(['end_date > ?', u])
+                                 .or(Debit.where(end_date: nil))
+                                 .where(['start_date < ?', Date.today])
+                                 .where.not(
+                                    id: Debit.with_these_tags(ignore_tag_ids)
+                                 ) }
       }, {
         lines: [
           { type: :curve, name: 'Dépenses mensuelles', covers: 6 },
@@ -145,13 +150,16 @@ class ExpensesController < ApplicationController
         ],
         name: 'Dépenses mensuelles',
         months: 6,
-        expenses_lb: -> (u) { Expense.joins(:taggings)
+        expenses_lb: -> (u) { Expense.includes(:taggings)
                                      .where(['date > ?', u])
                                      .where(taggings: { tag_id: lunch_tag_id })
                                      .where.not(
                                         id: Expense.joins(:taggings)
-                                                   .where(taggings: { tag_id: ignore_tag_id })
-                                      ) }
+                                                   .where(taggings: { tag_id: ignore_tag_ids })
+                                      ) },
+        debits_lb: -> (u) { Debit.where(['end_date > ?', u])
+                                 .or(Debit.where(end_date: nil))
+                                 .where(['start_date < ?', Date.today]) }
       }
     ]
 
@@ -184,15 +192,16 @@ class ExpensesController < ApplicationController
     def build_chart(chart)
       lines = []
       chart[:lines].each do |line|
-        lines << build_line(line, chart[:months], chart[:expenses_lb])
+        lines << build_line(line, chart[:months], chart[:expenses_lb], chart[:debits_lb])
       end
       new_chart(chart[:name], lines.first[:categories], lines)
     end
 
-    def build_line(line, months, lb)
+    def build_line(line, months, e_lb, d_lb)
       until_date = (Date.today - (line[:covers]).month).beginning_of_month
-      expenses = order_by_month lb.call(until_date)
-      values = expenses.map { |_, v| v.sum.round * (-1) }
+      expenses = order_by_month e_lb.call(until_date)
+      debits = d_lb.call(until_date)
+      expenses = add_debits_to_expenses(expenses, debits)
       {
         type: 'spline',
         name: line[:name],
@@ -201,8 +210,22 @@ class ExpensesController < ApplicationController
       }
     end
 
+    def add_debits_to_expenses(expenses, debits)
+      today = Date.today
+      tmp = expenses.clone
+      expenses.map do |k, _|
+        debits.each do |debit|
+          range = (debit.start_date..(debit.end_date || today))
+          if range.include?(k)
+            tmp[k] << debit.price.to_f
+          end
+        end
+      end
+      tmp
+    end
+
     def calculate_figures(expenses, months, type)
-      values = expenses.map { |_, v| v.sum.round * (-1) }.last(months)
+      values = expenses.map { |_, v| v.sum.round(2) * (-1) }.last(months)
       case type
       when :curve then values
       when :average then array_of_average(values)
