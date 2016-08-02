@@ -35,7 +35,7 @@ task csv_to_db: :environment do
     end
   end
 
-  puts 'Inserting expenses...'
+  puts 'Inserting tags...'
   Tag.import tags.map { |t| Tag.new t }
   puts "... done. (#{Tag.count})"
   puts
