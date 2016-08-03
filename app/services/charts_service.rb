@@ -13,7 +13,8 @@ class ChartsService
     lines = []
     @lines.each do |line|
       line = LineService.new(line, months, expenses_lb, debits_lb)
-      lines << line.build
+      line.build
+      lines << line.publish
     end
     new_chart(lines.first[:categories], lines)
   end

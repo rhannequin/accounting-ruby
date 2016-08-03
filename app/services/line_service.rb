@@ -1,5 +1,6 @@
 class LineService
-  attr_accessor :type, :name, :covers, :months, :expenses_lb, :debits_lb
+  attr_accessor :type, :name, :covers, :months, :expenses_lb, :debits_lb,
+                :expenses, :debits, :data, :categories
 
   def initialize(line, months, expenses_lb, debits_lb)
     @type = line[:type]
@@ -8,21 +9,30 @@ class LineService
     @months = months
     @expenses_lb = expenses_lb
     @debits_lb = debits_lb
+    init
   end
 
   def build
-    until_date = (Date.today - covers.month).beginning_of_month
-    debits = debits_lb.call(until_date)
-    expenses = ExpensesService.new expenses_lb.call(until_date), debits
+    @data = calculate_figures expenses.data, months, type
+    @categories = expenses.get_categories.last(months)
+  end
+
+  def publish
     {
       type: 'spline',
       name: name,
-      data: calculate_figures(expenses.data, months, type),
-      categories: expenses.get_categories.last(months)
+      data: data,
+      categories: categories
     }
   end
 
   private
+
+  def init
+    until_date = (Date.today - covers.month).beginning_of_month
+    @debits = debits_lb.call(until_date)
+    @expenses = ExpensesService.new expenses_lb.call(until_date), @debits
+  end
 
   def calculate_figures(expenses, months, type)
     values = expenses.map { |_, v| v.sum.round(2) * (-1) }
