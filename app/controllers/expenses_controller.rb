@@ -168,7 +168,7 @@ class ExpensesController < ApplicationController
     ]
 
     @charts = charts.map do |chart|
-      build_chart chart
+      ChartsService.new(chart).build_chart
     end
   end
 
@@ -181,81 +181,5 @@ class ExpensesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def expense_params
       params.require(:expense).permit(:date, :reason, :price, :way, tag_ids: [])
-    end
-
-    def order_by_month(list)
-      tmp = {}
-      list.each do |item|
-        date = item.date.beginning_of_month
-        tmp[date] ||= []
-        tmp[date] << item.price.to_f
-      end
-      tmp
-    end
-
-    def build_chart(chart)
-      lines = []
-      chart[:lines].each do |line|
-        lines << build_line(line, chart[:months], chart[:expenses_lb], chart[:debits_lb])
-      end
-      new_chart(chart[:name], lines.first[:categories], lines)
-    end
-
-    def build_line(line, months, e_lb, d_lb)
-      until_date = (Date.today - (line[:covers]).month).beginning_of_month
-      expenses = order_by_month e_lb.call(until_date)
-      debits = d_lb.call(until_date)
-      expenses = add_debits_to_expenses(expenses, debits)
-      {
-        type: 'spline',
-        name: line[:name],
-        data: calculate_figures(expenses, months, line[:type]),
-        categories: get_categories(expenses).last(months)
-      }
-    end
-
-    def add_debits_to_expenses(expenses, debits)
-      today = Date.today
-      tmp = expenses.clone
-      expenses.map do |k, _|
-        debits.each do |debit|
-          range = (debit.start_date..(debit.end_date || today))
-          if range.include?(k)
-            tmp[k] << debit.price.to_f
-          end
-        end
-      end
-      tmp
-    end
-
-    def calculate_figures(expenses, months, type)
-      values = expenses.map { |_, v| v.sum.round(2) * (-1) }
-      case type
-      when :curve then values.last(months)
-      when :average then array_of_average(values, months)
-      end
-    end
-
-    def get_categories(expenses)
-      expenses.map { |k, _| I18n.l k }
-    end
-
-    def array_of_average(values, months)
-      size = values.size
-      Array.new(size, calculate_average(values, size)).last(months)
-    end
-
-    def calculate_average(values, size)
-      (values.sum / size).round
-    end
-
-    def new_chart(title, categories, series)
-      LazyHighCharts::HighChart.new('graph') do |f|
-        f.title({ text: title})
-        f.options[:xAxis][:categories] = categories
-        series.each do |serie|
-          f.series serie
-        end
-      end
     end
 end
