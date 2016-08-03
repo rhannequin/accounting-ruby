@@ -210,7 +210,7 @@ class ExpensesController < ApplicationController
         type: 'spline',
         name: line[:name],
         data: calculate_figures(expenses, months, line[:type]),
-        categories: get_categories(expenses)
+        categories: get_categories(expenses).last(months)
       }
     end
 
