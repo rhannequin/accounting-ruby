@@ -26,18 +26,14 @@ class ExpensesController < ApplicationController
     end
     @expenses = tmp
 
-    # Add debits to each month and calculate currnt_amount
+    # Add debits to each month and calculate current_amount
     @current_amount = Expense.select(:price).map(&:price).sum
     all_months = (first_date..Date.today).to_a.map { |d| d.beginning_of_month }.uniq
     debits_to_ignore = Debit.with_these_tags ignored_tags
-    Debit.with_tags.find_each do |debit|
+    Debit.include_tags.find_each do |debit|
       all_months.each do |month|
         beginning_of_month = month.beginning_of_month
-        cond = (
-          (beginning_of_month..month.end_of_month).cover?(debit.start_date) ||
-          (beginning_of_month..month.end_of_month).cover?(debit.end_date)
-        ) || (debit.start_date < month && (debit.end_date ? debit.end_date > month : true))
-        if cond
+        if debit.applies_this_month(month)
           @current_amount += debit.price
           if range.cover?(month)
             @expenses[beginning_of_month] ||= { expenses: [], total: 0 }
@@ -62,7 +58,7 @@ class ExpensesController < ApplicationController
   # GET /expenses/1
   # GET /expenses/1.json
   def show
-    @expense = Expense.with_tags.find(params[:id])
+    @expense = Expense.include_tags.find(params[:id])
   end
 
   # GET /expenses/new

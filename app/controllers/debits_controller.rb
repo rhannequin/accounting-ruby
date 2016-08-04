@@ -4,13 +4,13 @@ class DebitsController < ApplicationController
   # GET /debits
   # GET /debits.json
   def index
-    @debits = Debit.with_tags.order(start_date: :desc)
+    @debits = Debit.include_tags.order(start_date: :desc)
   end
 
   # GET /debits/1
   # GET /debits/1.json
   def show
-    @debit = Debit.with_tags.find(params[:id])
+    @debit = Debit.include_tags.find(params[:id])
   end
 
   # GET /debits/new
