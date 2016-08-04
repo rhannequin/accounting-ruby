@@ -13,8 +13,7 @@ class ChartsService
     lines = []
     @lines.each do |line|
       line = LineService.new(line, months, expenses_lb, debits_lb)
-      line.build
-      lines << line.publish
+      lines << line.build.publish
     end
     new_chart(lines.first[:categories], lines)
   end
@@ -23,7 +22,7 @@ class ChartsService
 
   def new_chart(categories, series)
     LazyHighCharts::HighChart.new('graph') do |f|
-      f.title({ text: name})
+      f.title text: name
       f.options[:xAxis][:categories] = categories
       series.each do |serie|
         f.series serie

@@ -21,6 +21,37 @@ class TagsController < ApplicationController
     end
   end
 
+  def chart
+    ignore_tag_ids = Tag.select(:id).ignored
+    tag_id = @tag.id
+
+    settings = {
+      lines: [
+        { type: :curve, name: I18n.t(:'tags.chart.monthly'), covers: 6 },
+        { type: :average, name: I18n.t(:'tags.chart.monthly_average'), covers: 6 },
+        { type: :average, name: I18n.t(:'tags.chart.yearly_average'), covers: 12 },
+      ],
+      name: I18n.t(:'tags.chart.chart_title', tag: @tag.name),
+      months: 6,
+      expenses_lb: -> (u) { Expense.includes(:taggings)
+                                   .where(['date > ?', u])
+                                   .where(taggings: { tag_id: tag_id })
+                                   .where.not(
+                                      id: Expense.joins(:taggings)
+                                                 .where(taggings: { tag_id: ignore_tag_ids })
+                                    ) },
+      debits_lb: -> (u) { Debit.where(['end_date > ?', u])
+                               .or(Debit.where(end_date: nil))
+                               .where(['start_date < ?', Date.today])
+                               .where(
+                                  id: Debit.joins(:taggings)
+                                           .where(taggings: { tag_id: tag_id })
+                                ) }
+    }
+
+    @chart = ChartsService.new(settings).build_chart
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_tag

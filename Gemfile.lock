@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/michelson/lazy_high_charts.git
+  revision: f7d4d1614816c98d81d9d7d387d4b6e0a9901d05
+  specs:
+    lazy_high_charts (1.5.5)
+      hash-deep-merge
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -89,8 +96,6 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (1.8.3)
-    lazy_high_charts (1.5.5)
-      hash-deep-merge
     libv8 (3.16.14.15)
     listen (3.0.7)
       rb-fsevent (>= 0.9.3)
@@ -210,7 +215,7 @@ DEPENDENCIES
   haml-rails
   jbuilder (~> 2.0)
   jquery-rails
-  lazy_high_charts
+  lazy_high_charts!
   listen (~> 3.0.5)
   puma (~> 3.0)
   quiet_assets

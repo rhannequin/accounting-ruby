@@ -1,0 +1,7 @@
+.page-header
+  = link_to @tag, class: 'btn btn-primary' do
+    %span.glyphicon.glyphicon-info-sign
+    = t :'scaffold.show'
+  %h1= t :'.title'
+
+= high_chart("chart-#{@chart.object_id}", @chart)
