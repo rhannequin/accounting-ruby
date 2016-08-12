@@ -65,6 +65,8 @@ GEM
     erubis (2.7.0)
     execjs (2.7.0)
     ffi (1.9.14)
+    friendly_id (5.1.0)
+      activerecord (>= 4.0.0)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     haml (4.0.7)
@@ -227,6 +229,7 @@ DEPENDENCIES
   bootstrap-sass
   byebug
   coffee-rails
+  friendly_id
   haml-rails
   jbuilder
   jquery-rails
