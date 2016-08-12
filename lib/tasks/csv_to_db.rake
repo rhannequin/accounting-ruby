@@ -8,8 +8,11 @@ task csv_to_db: :environment do
   Tag.delete_all
   puts '... done.'
   expenses_file = 'tmp/data.csv'
+  config_file = 'tmp/config.yml'
   expenses = []
   tags = []
+
+  config = YAML.load_file config_file
 
   SmarterCSV.process(expenses_file, {
     chunk_size: 10000,
@@ -35,7 +38,7 @@ task csv_to_db: :environment do
     end
   end
 
-  puts 'Inserting expenses...'
+  puts 'Inserting tags...'
   Tag.import tags.map { |t| Tag.new t }
   puts "... done. (#{Tag.count})"
   puts
@@ -52,8 +55,15 @@ task csv_to_db: :environment do
   puts "... done. (#{Expense.count})"
   puts
 
+  puts 'Inserting start amount...'
+  start_amount = config['start_amount']
+  first_expense = Expense.order(:date).first
+  Expense.create(reason: 'Start amount', date: first_expense.date, price: start_amount, way: '')
+  puts "... done."
+  puts
+
   puts 'Inserting debits...'
-  debits = YAML.load_file('tmp/config.yml')['debits']
+  debits = config['debits']
   debits.each do |debit|
     unless debit['categories'].nil?
       debit_tags = debit['categories'].split(&:strip).map { |c| Tag.find_or_create_by(name: c) }

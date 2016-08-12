@@ -13,6 +13,8 @@ class ExpensesController < ApplicationController
     range = expenses_pagination(@paginate[:current_page], months_per_page)
 
     @expenses = Expense.all_ordered.where(date: range)
+    ignored_tags = Tag.select(:id).ignored
+    expenses_to_ignore = Expense.with_these_tags ignored_tags
 
     # Order expenses by month
     tmp = {}
@@ -20,23 +22,22 @@ class ExpensesController < ApplicationController
       date = expense.date.beginning_of_month
       tmp[date] ||= { expenses: [], total: 0 }
       tmp[date][:expenses] << expense
-      tmp[date][:total] += expense.price if expense.price > 0
+      tmp[date][:total] += expense.price unless expenses_to_ignore.include?(expense)
     end
     @expenses = tmp
 
-    # Add debits to each month and calculate currnt_amount
+    # Add debits to each month and calculate current_amount
     @current_amount = Expense.select(:price).map(&:price).sum
     all_months = (first_date..Date.today).to_a.map { |d| d.beginning_of_month }.uniq
-    Debit.with_tags.find_each do |debit|
+    debits_to_ignore = Debit.with_these_tags ignored_tags
+    Debit.include_tags.find_each do |debit|
       all_months.each do |month|
         beginning_of_month = month.beginning_of_month
-        cond = (
-          (beginning_of_month..month.end_of_month).cover?(debit.start_date) ||
-          (beginning_of_month..month.end_of_month).cover?(debit.end_date)
-        ) || (debit.start_date < month && (debit.end_date ? debit.end_date > month : true))
-        if cond
+        if debit.applies_this_month(month)
           @current_amount += debit.price
           if range.cover?(month)
+            @expenses[beginning_of_month] ||= { expenses: [], total: 0 }
+            @expenses[beginning_of_month][:total] += debit.price unless debits_to_ignore.include?(debit)
             new_values = debit.attributes
                               .slice('reason', 'price', 'way')
                               .merge({ date: month.change(day: debit.day), tags: debit.tags })
@@ -57,7 +58,7 @@ class ExpensesController < ApplicationController
   # GET /expenses/1
   # GET /expenses/1.json
   def show
-    @expense = Expense.with_tags.find(params[:id])
+    @expense = Expense.include_tags.find(params[:id])
   end
 
   # GET /expenses/new

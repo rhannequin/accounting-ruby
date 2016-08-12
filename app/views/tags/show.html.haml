@@ -2,11 +2,18 @@
   = link_to edit_tag_path(@tag), class: 'btn btn-primary' do
     %span.glyphicon.glyphicon-pencil
     = t :'scaffold.edit'
+  = link_to chart_tag_path(@tag), class: 'btn btn-primary' do
+    %span.glyphicon.glyphicon-stats
+    = t :'activerecord.attributes.tag.chart'
   %h1= t :'.title'
 
-%h3= t :'activerecord.attributes.tag.name'
+%h3= Tag.human_attribute_name(:name)
 
 %h4= @tag.name
+
+%h3= Tag.human_attribute_name(:ignored)
+
+%h4= t(@tag.ignored?.to_s).capitalize
 
 %h3= t :'.use'
 

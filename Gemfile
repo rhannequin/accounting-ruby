@@ -39,6 +39,7 @@ gem 'smarter_csv'
 gem 'activerecord-import'
 gem 'bootstrap-datepicker-rails'
 gem 'seed_dump'
+gem 'lazy_high_charts', github: 'michelson/lazy_high_charts'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
