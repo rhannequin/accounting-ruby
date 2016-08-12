@@ -113,61 +113,6 @@ class ExpensesController < ApplicationController
     end
   end
 
-  def test
-    @charts = []
-
-    ignore_tag_ids = Tag.select(:id).ignored
-    lunch_tag_id = Tag.select(:id).find_by(name: 'lunch').id
-
-    charts = [
-      {
-        lines: [
-          { type: :curve, name: 'Dépenses mensuelles', covers: 6 },
-          { type: :average, name: 'Moyenne sur 6 mois', covers: 6 },
-          { type: :average, name: 'Moyenne sur 1 an', covers: 12 },
-        ],
-        name: 'Dépenses mensuelles',
-        months: 6,
-        expenses_lb: -> (u) { Expense.where(['date > ?', u])
-                                     .where.not(
-                                        id: Expense.with_these_tags(ignore_tag_ids)
-                                      ) },
-        debits_lb: -> (u) { Debit.where(['end_date > ?', u])
-                                 .or(Debit.where(end_date: nil))
-                                 .where(['start_date < ?', Date.today])
-                                 .where.not(
-                                    id: Debit.with_these_tags(ignore_tag_ids)
-                                 ) }
-      }, {
-        lines: [
-          { type: :curve, name: 'Dépenses mensuelles', covers: 6 },
-          { type: :average, name: 'Moyenne sur 6 mois', covers: 6 },
-          { type: :average, name: 'Moyenne sur 1 an', covers: 12 },
-        ],
-        name: 'Dépenses déjeuner',
-        months: 6,
-        expenses_lb: -> (u) { Expense.includes(:taggings)
-                                     .where(['date > ?', u])
-                                     .where(taggings: { tag_id: lunch_tag_id })
-                                     .where.not(
-                                        id: Expense.joins(:taggings)
-                                                   .where(taggings: { tag_id: ignore_tag_ids })
-                                      ) },
-        debits_lb: -> (u) { Debit.where(['end_date > ?', u])
-                                 .or(Debit.where(end_date: nil))
-                                 .where(['start_date < ?', Date.today])
-                                 .where(
-                                    id: Debit.joins(:taggings)
-                                             .where(taggings: { tag_id: lunch_tag_id })
-                                  ) }
-      }
-    ]
-
-    @charts = charts.map do |chart|
-      ChartsService.new(chart).build_chart
-    end
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_expense
