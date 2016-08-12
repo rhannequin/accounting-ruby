@@ -8,7 +8,7 @@ class Debit < ApplicationRecord
 
   validates :reason, :price, :day, :start_date, presence: true
 
-  def applies_this_month(month)
+  def applies_this_month?(month)
     beginning_of_month = month.beginning_of_month
     end_of_month = month.end_of_month
     cond = (

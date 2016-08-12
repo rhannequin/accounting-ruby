@@ -33,7 +33,7 @@ class ExpensesController < ApplicationController
     Debit.include_tags.find_each do |debit|
       all_months.each do |month|
         beginning_of_month = month.beginning_of_month
-        if debit.applies_this_month(month)
+        if debit.applies_this_month?(month)
           @current_amount += debit.price
           if range.cover?(month)
             @expenses[beginning_of_month] ||= { expenses: [], total: 0 }
