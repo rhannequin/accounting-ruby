@@ -4,7 +4,7 @@ This app is meant to help you with accounting, giving you the possibility to add
 
 ## How to use it
 
-Be sure to the requirements, install and launch paragraphs.
+Be sure to read the [requirements](#requirements), [install](#install) and [launch](#launch) paragraphs.
 
 ### Expenses
 
@@ -12,11 +12,13 @@ Add every expense you make, with a title, a price, a way of paiement and a date.
 
 ### Debits
 
-Tired of repeating some same expenses every month? Try making a debit. With a start date and eventually an end date, it will automatically be added to your expenses list. You can ever say what day of the month the debit will be done.
+Tired of repeating some same expenses every month? Try making a debit. With a start date and eventually an end date, it will automatically be added to your expenses list. You can even say what day of the month the debit will be done.
 
 ### Tags
 
 Add tags to your expenses and debits to see charts showing you how much you spend each month, for each tag.
+
+Some tags can be ignored from the monthly spent money amount. You can edit a tag and mark it as " to be ignored".
 
 ## Requirements
 
@@ -26,7 +28,7 @@ Add tags to your expenses and debits to see charts showing you how much you spen
 
 ## Install
 
-```
+```bash
 $ git clone https://github.com/rhannequin/accounting-ruby.git
 $ cd accounting-ruby
 $ bundle install
@@ -36,9 +38,13 @@ $ bundle exec rails db:migrate
 ## Launch
 
 ```
-$ bundle exec rails s  # Visit http://localhost:3000
+$ bundle exec rails server  # Visit http://localhost:3000
 ```
 
-# Test
+## Test
 
-Work in progress...
+Still work in progress.
+
+```bash
+$ bundle exec rspec
+```
