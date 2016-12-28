@@ -1,9 +1,11 @@
+include Util
+
 class ExpensesService
   attr_accessor :expenses
 
   def initialize(expenses, debits, categories)
-    tmp = order_by_month expenses
-    tmp = fill_empty_months tmp, categories
+    tmp = Util.order_by_month expenses
+    tmp = Util.fill_empty_months tmp, categories
     @expenses = add_debits_to_expenses tmp, debits
   end
 
@@ -16,24 +18,6 @@ class ExpensesService
   end
 
   private
-
-  def order_by_month(list)
-    tmp = {}
-    list.each do |item|
-      date = item.date.beginning_of_month
-      tmp[date] ||= []
-      tmp[date] << item.price.to_f
-    end
-    tmp
-  end
-
-  def fill_empty_months(expenses, categories)
-    tmp = {}
-    categories.each do |month|
-      tmp[month] = expenses.key?(month) ? expenses[month] : [0]
-    end
-    tmp
-  end
 
   def add_debits_to_expenses(expenses, debits)
     today = Date.today
