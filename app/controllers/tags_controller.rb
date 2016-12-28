@@ -33,20 +33,14 @@ class TagsController < ApplicationController
       ],
       name: I18n.t(:'tags.chart.chart_title', tag: @tag.name),
       months: 6,
-      expenses_lb: -> (u) { Expense.includes(:taggings)
-                                   .where(['date > ?', u])
+      expenses_lb: -> (u) { Expense.include_taggings
+                                   .date_after(u)
                                    .where(taggings: { tag_id: tag_id })
-                                   .where.not(
-                                      id: Expense.joins(:taggings)
-                                                 .where(taggings: { tag_id: ignore_tag_ids })
-                                    ) },
-      debits_lb: -> (u) { Debit.where(['end_date > ?', u])
+                                   .where.not( id: Expense.with_these_tags(ignore_tag_ids) ) },
+      debits_lb: -> (u) { Debit.end_date_after(u)
                                .or(Debit.where(end_date: nil))
-                               .where(['start_date < ?', Date.today])
-                               .where(
-                                  id: Debit.joins(:taggings)
-                                           .where(taggings: { tag_id: tag_id })
-                                ) }
+                               .start_date_before(Date.today)
+                               .where( id: Debit.with_these_tags(tag_id) ) }
     }
 
     @chart = ChartsService.new(settings).build_chart
