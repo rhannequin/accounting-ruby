@@ -33,6 +33,7 @@ $ git clone https://github.com/rhannequin/accounting-ruby.git
 $ cd accounting-ruby
 $ bundle install
 $ bundle exec rails db:migrate
+$ cp config/application.example.yml config/application.yml
 ```
 
 ## Launch

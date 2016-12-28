@@ -1,0 +1,10 @@
+ACCOUNT_NAME: My account
+
+development:
+  SECRET_KEY_BASE: abc123
+
+test:
+  SECRET_KEY_BASE: abc123
+
+production:
+  SECRET_KEY_BASE: abc123

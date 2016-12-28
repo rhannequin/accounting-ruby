@@ -110,7 +110,7 @@ fr:
   layouts:
     flash:
       close: Fermer
-    project: Comptes
+    project: "Comptes - %{account_name}"
     toggle_navigation: Basculer la navigation
   scaffold:
     are_you_sure: Êtes-vous sûr(e) ?
