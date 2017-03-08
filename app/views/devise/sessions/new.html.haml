@@ -1,0 +1,17 @@
+.panel.panel-default
+
+  .panel-heading
+    %h4= t(:'.sign_in')
+
+  .panel-body
+    = simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: { role: "form" }) do |f|
+      .form-group
+        = f.input :email, autofocus: true, class: 'form-control'
+      .form-group
+        = f.input :password, autocomplete: "off", class: 'form-control'
+      - if devise_mapping.rememberable?
+        .checkbox
+          = f.input :remember_me, as: :boolean, label: false, inline_label: true if devise_mapping.rememberable?
+      = f.submit t(:'.sign_in'), class: 'btn btn-primary'
+
+= render 'devise/shared/links'

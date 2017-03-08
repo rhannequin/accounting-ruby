@@ -1,0 +1,10 @@
+.panel.panel-default
+
+  .panel-heading
+    %h4= t(:'.change_my_account')
+
+  .panel-body
+    - if resource.provider
+      = render partial: 'provider', locals: { resource: resource }
+    - else
+      = render partial: 'form', locals: { resource: resource }

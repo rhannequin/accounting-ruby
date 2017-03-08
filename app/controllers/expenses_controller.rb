@@ -8,6 +8,14 @@ class ExpensesController < ApplicationController
   def index
     # Initiate params to get expenses
     months_per_page = 2
+    ### [TODO] Temporary fix
+    unless Expense.exists?
+      @expenses = []
+      @current_amount = 0
+      @paginate = { current_page: 1, total_pages: 0 }
+      return
+    end
+    ### Temporary fix
     first_date = Expense.select(:date).order(:date).first.date
     @paginate = paginate_params(params[:page], first_date, months_per_page)
     range = expenses_pagination(@paginate[:current_page], months_per_page)

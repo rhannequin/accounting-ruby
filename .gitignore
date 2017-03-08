@@ -17,5 +17,26 @@
 !/log/.keep
 !/tmp/.keep
 
-# Ignore Byebug command history file.
-.byebug_history
+# Ignore generated test coverage files
+/coverage
+
+# Ignore application configuration
+/config/application.yml
+
+# Ignore generated documentation
+/doc
+
+# Ignore IDEA files
+/.idea
+
+# Nginx
+/config/nginx.conf
+/config/nginx_ssl.conf
+
+# Deployment
+/config/deploy.rb
+/config/deploy/production.rb
+/config/deploy/staging.rb
+
+# Uploads
+/public/system

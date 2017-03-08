@@ -1,0 +1,44 @@
+APP_EMAIL_SENDER: "you.email@domain.com"
+COOKIE_STORE_KEY: abc123
+DEVISE_PEPPER: abc123
+DEVISE_SECRET_KEY: abc123
+FACEBOOK_KEY: xxx
+FACEBOOK_SECRET: xxx
+SECRET_KEY_BASE: abc123
+TWITTER_KEY: xxx
+TWITTER_SECRET: xxx
+
+development:
+  DB_HOST: localhost
+  DB_DATABASE: accounting_development
+  DB_SCHEMA: public
+  DB_USERNAME: xxx
+  DB_PASSWORD: xxx
+  DB_PORT: "5432"
+
+test:
+  DB_HOST: localhost
+  DB_DATABASE: accounting_test
+  DB_SCHEMA: public
+  DB_USERNAME: xxx
+  DB_PASSWORD: xxx
+  DB_PORT: "5432"
+
+production:
+  APP_EMAIL_SENDER: "you.email@domain.com"
+  COOKIE_STORE_KEY: abc123_prod
+  DB_HOST: xxx
+  DB_DATABASE: xxx
+  DB_SCHEMA: xxx
+  DB_USERNAME: xxx
+  DB_PASSWORD: xxx
+  DB_PORT: xxx
+  DEVISE_PEPPER: abc123_prod
+  DEVISE_SECRET_KEY: abc123_prod
+  FACEBOOK_KEY: KEY
+  FACEBOOK_SECRET: SECRET
+  HOST: "example.com"
+  REPLY_EMAIL_ADDRESS: "no-reply@example.com"
+  SECRET_KEY_BASE: abc123_prod
+  TWITTER_KEY: KEY
+  TWITTER_SECRET: SECRET

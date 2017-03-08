@@ -1,0 +1,16 @@
+language: ruby
+cache: bundler
+rvm:
+  - 2.2.6
+  - 2.3.1
+bundler_args: --without production
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - cp config/database.yml.travis config/database.yml
+script:
+  - RAILS_ENV=test bundle exec rake db:migrate --trace
+  - bundle exec rake spec
+env:
+  - APP_EMAIL_SENDER="test@example.com" COOKIE_STORE_KEY=abc123_test DEVISE_PEPPER=abc123_test DEVISE_SECRET_KEY=abc123_test SECRET_KEY_BASE=abc123_test

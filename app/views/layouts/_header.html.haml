@@ -1,0 +1,27 @@
+%nav.navbar.navbar-default
+  .container-fluid
+
+    .navbar-header
+      %button.navbar-toggle.collapsed{'aria-controls' => 'navbar', 'aria-expanded' => 'false', 'data-target' => '#navbar', 'data-toggle' => 'collapse', type: 'button'}
+        %span.sr-only Toggle navigation
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      = link_to t(:'layouts.application_name'), root_path, class: 'navbar-brand'
+
+    #navbar.navbar-collapse.collapse
+      %ul.nav.navbar-nav
+        %li{class: active_class(root_path)}
+          = link_to t(:'layouts.navbar.home'), root_path
+        - if user_signed_in?
+          = render 'layouts/admin_navbar'
+      %ul.nav.navbar-nav.navbar-right
+        - if user_signed_in?
+          = render 'layouts/user_navbar'
+          %li
+            = link_to t(:'devise.sessions.destroy.sign_out'), destroy_user_session_path, method: :delete
+        - else
+          %li{class: active_class(new_session_path(User))}
+            = link_to t(:'devise.sessions.new.sign_in'), new_session_path(User)
+          %li{class: active_class(new_registration_path(User))}
+            = link_to t(:'devise.registrations.new.sign_up'), new_registration_path(User)

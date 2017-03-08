@@ -1,0 +1,14 @@
+%p
+  = t :'.provider_account'
+
+.row
+  .col-md-6
+    %p
+      %strong= t :'activerecord.attributes.user.name'
+      %br/
+      = resource.name
+  .col-md-6
+    %p
+      %strong= t :'activerecord.attributes.user.provider'
+      %br/
+      = provider_profile_link resource.provider, resource.uid

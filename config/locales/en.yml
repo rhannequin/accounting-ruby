@@ -1,23 +1,135 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
+---
 en:
-  hello: "Hello world"
+  activerecord:
+    attributes:
+      user:
+        created_at: Signed up
+        current_password: Current password
+        email: Email
+        id: Id
+        last_sign_in_at: Last sign in date
+        last_sign_in_ip: Last sign in IP
+        locked_at: Locked at
+        name: Name
+        password: Password
+        password_confirmation: Password confirmation
+        provider: Provider
+        remember_me: Remember me
+        roles: Roles
+        sign_in_count: Sign in count
+        updated_at: Updated
+    models:
+      user:
+        one: user
+        other: users
+  admin:
+    home:
+      index:
+        sub_title: Welcome to your Administration Dashboard.
+        title: Administration
+    users:
+      index:
+        cant_delete_yourself: You can't delete yourself
+        title: Users
+      show:
+        activity: Activity
+        general: General
+        title: User %{name}
+  devise:
+    confirmations:
+      new:
+        resend_confirmation_instructions: Resend confirmation instructions
+    mailer:
+      confirmation_instructions:
+        action: Confirm my account
+        greeting: "Bienvenue %{recipient} !"
+        instruction: "You can confirm your account email through the link below:"
+        subject: Instructions de confirmation
+      password_change:
+        greeting: "Hello %{recipient}!"
+        message: "We're contacting you to notify you that your password has been changed."
+        subject: Password changed
+      reset_password_instructions:
+        action: Change my password
+        greeting: "Hello %{recipient}!"
+        instruction: "Someone has requested a link to change your password. You can do this through the link below."
+        instruction_2: "If you didn't request this, please ignore this email."
+        instruction_3: "Your password won't change until you access the link above and create a new one."
+        subject: Reset password instructions
+      unlock_instructions:
+        action: Unlock my account
+        greeting: "Hello %{recipient}!"
+        instruction: 'Click the link below to unlock your account:'
+        message: Your account has been locked due to an excessive number of unsuccessful sign in attempts.
+        subject: Unlock instructions
+    passwords:
+      edit:
+        change_my_password: Change my password
+        change_your_password: Change your password
+        confirm_new_password: Confirm new password
+        new_password: New password
+      new:
+        forgot_your_password: Forgot your password
+        send_me_reset_password_instructions: Send me reset password instructions
+    registrations:
+      edit:
+        change_my_account: Change my personal information
+      form:
+        confirm_hint: we need your current password to confirm your changes
+        leave_blank_hint: leave it blank if you don't want to change it
+        update: Update
+      new:
+        sign_up: Sign up
+      provider:
+        provider_account: "Your account is linked to a social network, you don't have credentials to change."
+    sessions:
+      destroy:
+        sign_out: Sign out
+      new:
+        sign_in: Sign in
+    shared:
+      links:
+        didn_t_receive_confirmation_instructions: Didn't receive confirmation instructions
+        didn_t_receive_unlock_instructions: Didn't receive unlock instructions
+        forgot_your_password: Forgot your password
+        sign_in: Sign in
+        sign_in_with_provider: Sign in with provider
+        sign_up: Sign up
+    unlocks:
+      new:
+        resend_unlock_instructions: Resend unlock instructions
+  flash:
+    admin:
+      users:
+        destroy:
+          success: User deleted.
+  home:
+    index:
+      title: Home page
+  layouts:
+    admin_panel_title: Admin
+    application_name: Accounting
+    navbar:
+      account:
+        settings: Settings
+      admin:
+        home: Dashboard
+        name: Admin
+      home: Accueil
+  scaffold:
+    actions: Actions
+    back: Back
+    confirm: Are you sure you want to delete?
+    delete: Delete
+  unauthorized:
+    default: You are not authorized to access this page.
+    destroy:
+      user: Impossible to delete this user.
+  user_mailer:
+    email_changed_email:
+      bye: "Have good day."
+      email_changed: "Your email has been changed on %{app_name}. This email was sent to both your previous and current email addresses, in order to prevent you from unwanted actions."
+      email_was: "Your email was: %{email_was}. Now it is: %{email_is}."
+      greeting: "Hello %{name},"
+      subject: "[%{app_name}] Your email address has changed"
+      team: "The %{app_name} Team"
