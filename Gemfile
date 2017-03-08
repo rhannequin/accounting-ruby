@@ -41,6 +41,7 @@ gem 'bootstrap-datepicker-rails'
 gem 'seed_dump'
 gem 'lazy_high_charts'
 gem 'friendly_id'
+gem 'yaml_db'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
