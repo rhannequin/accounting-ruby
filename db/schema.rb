@@ -16,24 +16,36 @@ ActiveRecord::Schema.define(version: 20170308170507) do
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
-  create_table "debits", force: :cascade do |t|
+  create_table "accounts", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "name"
+    t.uuid     "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_accounts_on_user_id", using: :btree
+  end
+
+  create_table "debits", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "reason"
     t.decimal  "price"
     t.integer  "day"
     t.string   "way"
     t.date     "start_date"
     t.date     "end_date"
+    t.uuid     "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_debits_on_account_id", using: :btree
   end
 
-  create_table "expenses", force: :cascade do |t|
+  create_table "expenses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.date     "date"
     t.string   "reason"
     t.decimal  "price"
     t.string   "way"
+    t.uuid     "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_expenses_on_account_id", using: :btree
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -58,17 +70,17 @@ ActiveRecord::Schema.define(version: 20170308170507) do
     t.index ["name"], name: "index_roles_on_name", using: :btree
   end
 
-  create_table "taggings", force: :cascade do |t|
-    t.integer  "tag_id"
+  create_table "taggings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "tag_id"
     t.string   "taggable_type"
-    t.integer  "taggable_id"
+    t.uuid     "taggable_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.index ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
     t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id", using: :btree
   end
 
-  create_table "tags", force: :cascade do |t|
+  create_table "tags", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
@@ -110,4 +122,7 @@ ActiveRecord::Schema.define(version: 20170308170507) do
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
   end
 
+  add_foreign_key "accounts", "users"
+  add_foreign_key "debits", "accounts"
+  add_foreign_key "expenses", "accounts"
 end

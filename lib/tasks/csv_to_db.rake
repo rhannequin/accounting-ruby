@@ -1,12 +1,23 @@
 require 'yaml'
 
 task csv_to_db: :environment do
+  puts
+  puts 'Getting last user...'
+  user = User.last
+  puts '... done.'
+  puts
+  puts 'Adding account to user...'
+  user.accounts << Account.create(name: 'Initial account', user: user)
+  account_id = user.accounts.last.id
+  puts '... done.'
+  puts
   puts 'Emptying database...'
   Expense.delete_all
   Debit.delete_all
   Tagging.delete_all
   Tag.delete_all
   puts '... done.'
+  puts
   expenses_file = 'tmp/data.csv'
   config_file = 'tmp/config.yml'
   expenses = []
@@ -26,6 +37,7 @@ task csv_to_db: :environment do
     array.each do |hash|
       hash[:date] = Date.strptime hash[:date], '%d/%m/%y'
       hash[:tags] ||= ''
+      hash[:account_id] = account_id
       expense_tags = hash[:tags].split(',').map do |t|
         tag = { name: t.strip }
         tags << tag unless tags.include? tag
@@ -65,6 +77,7 @@ task csv_to_db: :environment do
   puts 'Inserting debits...'
   debits = config['debits']
   debits.each do |debit|
+    debit[:account_id] = account_id
     unless debit['categories'].nil?
       debit_tags = debit['categories'].split(&:strip).map { |c| Tag.find_or_create_by(name: c) }
     end

@@ -11,6 +11,8 @@ class User < ApplicationRecord
 
   friendly_id :slug_candidates, use: [:slugged, :finders]
 
+  has_many :accounts
+
   validates :name, presence: true, uniqueness: true
 
   after_update :notify_email_change, if: -> { email_changed? }
