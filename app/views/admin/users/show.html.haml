@@ -1,0 +1,49 @@
+%h2= t :'.title', name: @user.name
+
+%h3= t :'.general'
+
+.row
+  .col-md-3
+    %h4= User.human_attribute_name(:id)
+    %p= @user.id
+  .col-md-3
+    %h4= User.human_attribute_name(:name)
+    %p= h @user.name
+  .col-md-3
+    %h4= User.human_attribute_name(:email)
+    %p=  h(@user.email.nil? ? empty_char : @user.email)
+  .col-md-3
+    %h4= User.human_attribute_name(:provider)
+    %p= provider_profile_link @user.provider, @user.uid
+
+%h3= User.human_attribute_name(:roles)
+
+%p= roles_list @user.roles
+
+%h3= t :'.activity'
+
+.row
+  .col-md-3
+    %h4= User.human_attribute_name(:created_at)
+    %p= l @user.created_at, format: :short
+  .col-md-3
+    %h4= User.human_attribute_name(:updated_at)
+    %p= l @user.updated_at, format: :short
+  .col-md-3
+    %h4= User.human_attribute_name(:last_sign_in_at)
+    %p= l @user.last_sign_in_at, format: :short
+  .col-md-3
+    %h4= User.human_attribute_name(:last_sign_in_ip)
+    %p= link_to @user.last_sign_in_ip, "http://#{@user.last_sign_in_ip}"
+.row
+  .col-md-3
+    %h4= User.human_attribute_name(:sign_in_count)
+    %p= @user.sign_in_count
+  .col-md-3
+    %h4= User.human_attribute_name(:locked_at)
+    %p= @user.locked_at.nil? ? '&empty;'.html_safe : l(@user.locked_at, format: :short)
+
+%hr/
+
+%p
+  = link_to t(:'scaffold.back'), admin_users_path, class: 'btn btn-default'

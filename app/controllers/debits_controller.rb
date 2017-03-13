@@ -46,7 +46,7 @@ class DebitsController < ApplicationController
   def update
     respond_to do |format|
       if @debit.update(debit_params)
-        format.html { redirect_to @debit, notice: t(:'debits.create.flash.success') }
+        format.html { redirect_to @debit, notice: t(:'debits.update.flash.success') }
         format.json { render :show, status: :ok, location: @debit }
       else
         format.html { render :edit }
@@ -60,7 +60,7 @@ class DebitsController < ApplicationController
   def destroy
     @debit.destroy
     respond_to do |format|
-      format.html { redirect_to debits_url, notice: t(:'debits.create.flash.success') }
+      format.html { redirect_to debits_url, notice: t(:'debits.destroy.flash.success') }
       format.json { head :no_content }
     end
   end

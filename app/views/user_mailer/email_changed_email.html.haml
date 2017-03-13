@@ -1,0 +1,10 @@
+%p= t :'.greeting', name: @user.name
+
+%p= t :'.email_changed', app_name: @app_name
+
+%p= t :'.email_was', email_was: @email_was, email_is: @user.email
+
+%p= t :'.bye'
+
+%p
+  %em= t :'.team', app_name: @app_name

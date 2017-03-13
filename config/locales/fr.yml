@@ -1,24 +1,4 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
+---
 fr:
   activerecord:
     attributes:
@@ -36,6 +16,22 @@ fr:
         price: Prix
         tags: Catégories
         way: Moyen
+      user:
+        created_at: Date d'inscription
+        current_password: Mot de passe actuel
+        email: Adresse e-mail
+        id: Identifiant
+        last_sign_in_at: Date dernière connexion
+        last_sign_in_ip: IP dernière connexion
+        locked_at: Date de verrouillage de compte
+        name: Nom d'utilisateur
+        password: Mot de passe
+        password_confirmation: Confirmez le mot de passe
+        provider: Fournisseur
+        remember_me: Se souvenir de moi
+        roles: Rôles
+        sign_in_count: Nombre de connexions
+        updated_at: Date de mise à jour
       tag:
         chart: Graphique
         ignored: À ignorer
@@ -49,9 +45,25 @@ fr:
         zero: dépense
         one: dépense
         other: dépenses
+      user:
+        one: utilisateur
+        other: utilisateurs
       tags:
-        one: patégorie
-        other: patégories
+        one: catégorie
+        other: catégories
+  admin:
+    home:
+      index:
+        sub_title: Bienvenue sur votre tableau de bord d'administration.
+        title: Administration
+    users:
+      index:
+        cant_delete_yourself: Vous ne pouvez pas vous supprimer vous-même
+        title: Utilisateurs
+      show:
+        activity: Activité
+        general: Général
+        title: Utilisateur %{name}
   date:
     formats:
       year_and_month: "%B %Y"
@@ -74,6 +86,69 @@ fr:
     update:
       flash:
         success: Le prélèvement a bien été mis à jour.
+  devise:
+    confirmations:
+      new:
+        resend_confirmation_instructions: Renvoyer les instructions de confirmation
+    mailer:
+      confirmation_instructions:
+        action: Confirmer mon adresse e-mail
+        greeting: "Bienvenue %{recipient} !"
+        instruction: "Vous pouvez confirmer votre courriel grâce au lien ci-dessous :"
+        subject: Instructions de confirmation
+      password_change:
+        greeting: "Bonjour %{recipient} !"
+        message: Nous vous contactons pour vous notifier que votre mot de passe a été modifié.
+        subject: Mot de passe modifié.
+      reset_password_instructions:
+        action: Changer mon mot de passe
+        greeting: "Bonjour %{recipient} !"
+        instruction: "Quelqu'un a demandé un lien pour changer votre mot de passe, le voici :"
+        instruction_2: "Si vous n'avez pas émis cette demande, merci d'ignorer ce courriel."
+        instruction_3: "Votre mot de passe ne changera pas tant que vous n'aurez pas cliqué sur ce lien et renseigné un nouveau mot de passe."
+        subject: Instructions pour changer le mot de passe
+      unlock_instructions:
+        action: Débloquer mon compte
+        greeting: "Bonjour %{recipient} !"
+        instruction: 'Suivez ce lien pour débloquer votre compte :'
+        message: Votre compte a été bloqué suite à un nombre d'essais de connexions manquées trop important
+        subject: Instructions pour déverrouiller le compte
+    passwords:
+      edit:
+        change_my_password: Changer mon mot de passe
+        change_your_password: Changez votre mot de passe
+        confirm_new_password: Confirmez le nouveau mot de passe
+        new_password: Nouveau mot de passe
+      new:
+        forgot_your_password: Mot de passe oublié ?
+        send_me_reset_password_instructions: Envoyez-moi les instructions pour réinitialiser mon mot de passe
+    registrations:
+      edit:
+        change_my_account: Modifier mes informations personnelles
+      form:
+        confirm_hint: nous avons besoin de votre mot de passe actuel pour confirmer les changements
+        leave_blank_hint: laissez vide si vous ne souhaitez pas modifier
+        update: Mettre à jour
+      new:
+        sign_up: Inscription
+      provider:
+        provider_account: Votre compte est associé à un réseau social, vous n'avez pas d'identifiant à changer.
+    sessions:
+      destroy:
+        sign_out: Déconnexion
+      new:
+        sign_in: Connexion
+    shared:
+      links:
+        didn_t_receive_confirmation_instructions: Vous n'avez pas reçu le mail de confirmation ?
+        didn_t_receive_unlock_instructions: Vous n'avez pas reçu le mail de débloquage ?
+        forgot_your_password: Mot de passe oublié ?
+        sign_in: Connexion
+        sign_in_with_provider: Connexion avec %{provider}
+        sign_up: Inscription
+    unlocks:
+      new:
+        resend_unlock_instructions: Renvoyer les instructions de déblocage
   expenses:
     create:
       flash:
@@ -96,6 +171,11 @@ fr:
       flash:
         success: La dépense a bien été mise à jour.
   'false': non
+  flash:
+    admin:
+      users:
+        destroy:
+          success: Utilisateur supprimé.
   helpers:
     placeholder:
       debit:
@@ -108,20 +188,32 @@ fr:
       create: Ajouter
       update: Mettre à jour
   layouts:
+    admin_panel_title: Admin
+    application_name: Comptes
     flash:
       close: Fermer
-    project: "Comptes - %{account_name}"
+    navbar:
+      account:
+        settings: Paramètres
+      admin:
+        home: Tableau de bord
+        name: Admin
+      home: Accueil
+    project: Comptes
     toggle_navigation: Basculer la navigation
   scaffold:
+    actions: Actions
     are_you_sure: Êtes-vous sûr(e) ?
     back: Retour
+    confirm: "Êtes-vous sûr(e) de vouloir supprimer ?"
+    delete: Supprimer
     destroy: Supprimer
     edit: Modifier
-    show: Afficher
     form:
       errors:
         one: "1 erreur empêche d'enregistrer cet objet :"
         other: "%{count} erreurs empêchent d'enregistrer cet objet :"
+    show: Afficher
   tags:
     chart:
       chart_title: "Dépenses %{tag}"
@@ -139,3 +231,15 @@ fr:
       flash:
         success: La catégorie a bien été mise à jour.
   'true': oui
+  unauthorized:
+    default: Vous n'êtes pas autorisé(e) à accéder à cette page.
+    destroy:
+      user: Impossible de supprimer cet utilisateur.
+  user_mailer:
+    email_changed_email:
+      bye: "Bonne journée."
+      email_changed: "Votre e-mail a été changé sur %{app_name}. Cet e-mail a été envoyé à la fois à votre ancienne et nouvelle adresse afin d'éviter toute action non souhaitée."
+      email_was: "Votre adresse e-mail était : %{email_was}. Désormais votre adresse est : %{email_is}."
+      greeting: "Bonjour %{name},"
+      subject: "[%{app_name}] Votre adresse e-mail a changé"
+      team: "L'équipe %{app_name}"

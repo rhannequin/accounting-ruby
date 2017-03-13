@@ -1,0 +1,24 @@
+%h2= t :'.title'
+
+%table.table
+  %thead
+    %tr
+      %th #
+      - %i( name email provider roles created_at ).each do |att|
+        %th= User.human_attribute_name(att)
+      %th= t :'scaffold.actions'
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= link_to user.id, admin_user_path(user)
+        %td= h user.name
+        %td= h(user.email.nil? ? empty_char : user.email)
+        %td= provider_profile_link user.provider, user.uid
+        %td= roles_list(user.roles)
+        %td= l user.created_at, format: :short
+        %td
+          - if can? :destroy, user
+            = link_to t(:'scaffold.delete'), admin_user_path(user), method: :delete, class: 'btn btn-danger', data: { confirm: t(:'scaffold.confirm') }
+          - else
+            %button.btn.btn-danger{disabled: true, title: t(:'.cant_delete_yourself')}
+              = t :'scaffold.delete'
