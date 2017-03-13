@@ -2,6 +2,20 @@
 en:
   activerecord:
     attributes:
+      debit:
+        day: Day
+        end_date: End date
+        price: Price
+        reason: Reason
+        start_date: Start date
+        tags: Tags
+        way: Way
+      expense:
+        date: Date
+        reason: Reason
+        price: Price
+        tags: Tags
+        way: Way
       user:
         created_at: Signed up
         current_password: Current password
@@ -18,10 +32,25 @@ en:
         roles: Roles
         sign_in_count: Sign in count
         updated_at: Updated
+      tag:
+        chart: Chart
+        ignored: Ignored
+        name: Name
     models:
+      debit:
+        zero: debit
+        one: debit
+        other: debits
+      expense:
+        zero: expense
+        one: expense
+        other: expenses
       user:
         one: user
         other: users
+      tags:
+        one: tag
+        other: tags
   admin:
     home:
       index:
@@ -35,6 +64,28 @@ en:
         activity: Activity
         general: General
         title: User %{name}
+  date:
+    formats:
+      year_and_month: "%B %Y"
+  debits:
+    create:
+      flash:
+        success: Debit has been added.
+    destroy:
+      flash:
+        success: Debit has been deleted.
+    edit:
+      title: Debit update
+    index:
+      new_debit: Add a debit
+      title: List of debits
+    new:
+      title: Add a debit
+    show:
+      title: Show a debit
+    update:
+      flash:
+        success: Debit has been updated.
   devise:
     confirmations:
       new:
@@ -98,17 +149,49 @@ en:
     unlocks:
       new:
         resend_unlock_instructions: Resend unlock instructions
+  expenses:
+    create:
+      flash:
+        success: Expense has been created.
+    destroy:
+      flash:
+        success: Expense has been deleted.
+    edit:
+      title: Expense update
+    index:
+      current_amount: 'Current amount: %{amount}'
+      new_expense: Add an expense
+      title: List of expenses
+      spent: "%{spent} spent"
+    new:
+      title: "Add an expense"
+    show:
+      title: "Show an expense"
+    update:
+      flash:
+        success: Expense has been updated.
+  'false': no
   flash:
     admin:
       users:
         destroy:
           success: User deleted.
-  home:
-    index:
-      title: Home page
+  helpers:
+    placeholder:
+      debit:
+        price: '230.50'
+        reason: Monthly debit
+      expense:
+        price: 10.24
+        reason: Shopping
+    submit:
+      create: Add
+      update: Update
   layouts:
     admin_panel_title: Admin
     application_name: Accounting
+    flash:
+      close: Close
     navbar:
       account:
         settings: Settings
@@ -118,9 +201,34 @@ en:
       home: Accueil
   scaffold:
     actions: Actions
+    are_you_sure: Are you sure?
     back: Back
     confirm: Are you sure you want to delete?
     delete: Delete
+    destroy: Destroy
+    edit: Edit
+    form:
+      errors:
+        one: "1 error prevent from saving:"
+        other: "%{count} errors prevent from saving:"
+    show: Afficher
+  tags:
+    chart:
+      chart_title: "Expenses %{tag}"
+      monthly: Monthly expenses
+      monthly_average: Mean on 6 months
+      title: Chart
+      yearly_average: Mean on 1 year
+    edit:
+      title: "Tag update"
+    show:
+      title: "Tag showing"
+      use: Use
+      use_count: "%{count} times (%{expenses} %{expense_model}, %{debits} %{debit_model})."
+    update:
+      flash:
+        success: Tag has been updated.
+  'true': yes
   unauthorized:
     default: You are not authorized to access this page.
     destroy:

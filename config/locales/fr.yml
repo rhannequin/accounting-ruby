@@ -187,9 +187,6 @@ fr:
     submit:
       create: Ajouter
       update: Mettre à jour
-  home:
-    index:
-      title: Page d'accueil
   layouts:
     admin_panel_title: Admin
     application_name: Comptes
@@ -202,8 +199,6 @@ fr:
         home: Tableau de bord
         name: Admin
       home: Accueil
-    project: Comptes
-    toggle_navigation: Basculer la navigation
   scaffold:
     actions: Actions
     are_you_sure: Êtes-vous sûr(e) ?
