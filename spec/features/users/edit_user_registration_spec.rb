@@ -7,7 +7,7 @@ feature 'User edit registration' do
     background do
       login_with(user)
       visit root_path
-      click_link I18n.t(:'layouts.navbar.account.settings')
+      click_link I18n.t(:'layouts.navbar.user_account.settings')
     end
 
     scenario 'a user can see the edit registration form' do

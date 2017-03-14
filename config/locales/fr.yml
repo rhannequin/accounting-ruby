@@ -1,7 +1,13 @@
 ---
 fr:
+  accounts:
+    index:
+      title: Liste de mes comptes
   activerecord:
     attributes:
+      account:
+        current_amount: Montant actuel
+        name: Nom
       debit:
         day: Jour
         end_date: Date de fin
@@ -37,6 +43,9 @@ fr:
         ignored: À ignorer
         name: Nom
     models:
+      account:
+        one: compte
+        other: comptes
       debit:
         zero: prélèvement
         one: prélèvement
@@ -193,12 +202,13 @@ fr:
     flash:
       close: Fermer
     navbar:
-      account:
-        settings: Paramètres
+      accounts: Mes comptes
       admin:
         home: Tableau de bord
         name: Admin
       home: Accueil
+      user_account:
+        settings: Paramètres
     project: Comptes
     toggle_navigation: Basculer la navigation
   scaffold:

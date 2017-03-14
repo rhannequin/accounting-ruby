@@ -1,7 +1,13 @@
 ---
 en:
+  accounts:
+    index:
+      title: My accounts
   activerecord:
     attributes:
+      account:
+        current_amount: Current amount
+        name: Name
       debit:
         day: Day
         end_date: End date
@@ -37,6 +43,9 @@ en:
         ignored: Ignored
         name: Name
     models:
+      account:
+        one: account
+        other: accounts
       debit:
         zero: debit
         one: debit
@@ -193,12 +202,13 @@ en:
     flash:
       close: Close
     navbar:
-      account:
-        settings: Settings
+      accounts: My accounts
       admin:
         home: Dashboard
         name: Admin
       home: Accueil
+      user_account:
+        settings: Settings
     project: Accounting
     toggle_navigation: Toggle navigation
   scaffold:

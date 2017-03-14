@@ -14,6 +14,8 @@
         %li{class: active_class(root_path)}
           = link_to t(:'layouts.navbar.home'), root_path
         - if user_signed_in?
+          %li{class: active_class(accounts_path)}
+            = link_to t(:'layouts.navbar.accounts'), accounts_path
           = render 'layouts/admin_navbar'
       %ul.nav.navbar-nav.navbar-right
         - if user_signed_in?
