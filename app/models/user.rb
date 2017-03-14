@@ -11,7 +11,8 @@ class User < ApplicationRecord
 
   friendly_id :slug_candidates, use: [:slugged, :finders]
 
-  has_many :accounts
+  has_many :account_users, dependent: :destroy
+  has_many :accounts, through: :account_users
 
   validates :name, presence: true, uniqueness: true
 

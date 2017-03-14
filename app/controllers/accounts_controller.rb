@@ -3,8 +3,7 @@ class AccountsController < ApplicationController
   before_action :set_account, only: %i( edit update destroy )
 
   def index
-    @accounts = Account.includes(:expenses, :debits)
-                       .from_user(current_user)
+    @accounts = current_user.accounts.includes(:expenses, :debits)
   end
 
   def new
@@ -16,7 +15,7 @@ class AccountsController < ApplicationController
 
   def create
     @account = Account.new(account_params)
-    @account.user = current_user
+    @account.users << current_user
     if @account.save
       redirect_to accounts_path, notice: t(:'accounts.create.flash.success')
     else

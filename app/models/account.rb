@@ -1,10 +1,9 @@
 class Account < ApplicationRecord
-  belongs_to :user
   has_many :debits
   has_many :expenses
   has_many :tags
-
-  scope :from_user, -> (user) { where(user: user) }
+  has_many :account_users, dependent: :destroy
+  has_many :users, through: :account_users
 
   def current_amount
     return 0 unless expenses.any?

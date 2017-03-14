@@ -1,7 +1,13 @@
-admin = User.create(
+me = User.create(
   name: 'rhannequin',
   email: 'hello@rhannequ.in',
   password: 'password'
 )
 
-admin.add_role(:admin)
+me.add_role(:admin)
+
+her = User.create(
+  name: 'zuzu',
+  email: 'her@rhannequ.in',
+  password: 'password'
+)

@@ -7,7 +7,7 @@ task csv_to_db: :environment do
   puts '... done.'
   puts
   puts 'Adding account to user...'
-  user.accounts << Account.create(name: 'Initial account', user: user)
+  user.accounts << Account.create(name: 'Initial account')
   account_id = user.accounts.last.id
   puts '... done.'
   puts

@@ -16,12 +16,19 @@ ActiveRecord::Schema.define(version: 20170308170507) do
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
-  create_table "accounts", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.string   "name"
+  create_table "account_users", force: :cascade do |t|
+    t.uuid     "account_id"
     t.uuid     "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_accounts_on_user_id", using: :btree
+    t.index ["account_id"], name: "index_account_users_on_account_id", using: :btree
+    t.index ["user_id"], name: "index_account_users_on_user_id", using: :btree
+  end
+
+  create_table "accounts", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "debits", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -122,7 +129,8 @@ ActiveRecord::Schema.define(version: 20170308170507) do
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
   end
 
-  add_foreign_key "accounts", "users"
+  add_foreign_key "account_users", "accounts"
+  add_foreign_key "account_users", "users"
   add_foreign_key "debits", "accounts"
   add_foreign_key "expenses", "accounts"
 end

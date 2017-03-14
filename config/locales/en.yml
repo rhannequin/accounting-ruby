@@ -22,6 +22,7 @@ en:
       account:
         current_amount: Current amount
         name: Name
+        users: Users
       debit:
         day: Day
         end_date: End date
