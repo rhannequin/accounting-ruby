@@ -1,0 +1,8 @@
+= simple_form_for(@account, html: { class: 'form-horizontal', role: 'form' }, wrapper: :horizontal_form) do |f|
+
+  = f.error_notification
+
+  = f.input :name
+
+  .form-group.text-right
+    = f.submit class: 'btn btn-primary'

@@ -1,8 +1,22 @@
 ---
 en:
   accounts:
+    create:
+      flash:
+        success: Account created.
+    destroy:
+      flash:
+        success: Account deleted.
+    edit:
+      title: Account update
     index:
+      new_account: Add account
       title: My accounts
+    new:
+      title: New account
+    update:
+      flash:
+        success: Account updated.
   activerecord:
     attributes:
       account:

@@ -1,8 +1,22 @@
 ---
 fr:
   accounts:
+    create:
+      flash:
+        success: Le compte a bien été ajouté.
+    destroy:
+      flash:
+        success: Le compte a bien été supprimé.
+    edit:
+      title: Édition du compte
     index:
+      new_account: Ajouter un compte
       title: Liste de mes comptes
+    new:
+      title: "Ajout d'un compte"
+    update:
+      flash:
+        success: Le compte a bien été mis à jour.
   activerecord:
     attributes:
       account:
