@@ -6,6 +6,14 @@ class AccountsController < ApplicationController
     @accounts = current_user.accounts.includes(:expenses, :debits)
   end
 
+  def show
+    @account = Account.includes(:expenses, :debits)
+                      .order('expenses.date DESC')
+                      .find(params[:id])
+    @expenses = @account.expenses.to_ary
+    @debits = @account.debits.to_ary
+  end
+
   def new
     @account = Account.new
   end

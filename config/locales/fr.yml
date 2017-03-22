@@ -14,6 +14,8 @@ fr:
       title: Liste de mes comptes
     new:
       title: "Ajout d'un compte"
+    show:
+      title: "Affichage d'un compte"
     update:
       flash:
         success: Le compte a bien été mis à jour.

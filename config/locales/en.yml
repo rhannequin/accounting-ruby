@@ -14,6 +14,8 @@ en:
       title: My accounts
     new:
       title: New account
+    show:
+      title: Show account
     update:
       flash:
         success: Account updated.

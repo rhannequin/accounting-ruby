@@ -3,7 +3,7 @@ require 'yaml'
 task csv_to_db: :environment do
   puts
   puts 'Getting last user...'
-  user = User.last
+  user = User.first
   puts '... done.'
   puts
   puts 'Adding account to user...'

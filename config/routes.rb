@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :tags, only: %i( show edit update ) do
     get 'chart', on: :member
   end
-  resources :accounts, except: :show
+  resources :accounts
 
   namespace :admin do
     get '', to: 'home#index'
