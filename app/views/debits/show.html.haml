@@ -11,7 +11,7 @@
   %dt= t :'activerecord.attributes.debit.reason'
   %dd= @debit.reason
   %dt= t :'activerecord.attributes.debit.price'
-  %dd= currency @debit.price
+  %dd= number_to_currency @debit.price
   %dt= t :'activerecord.attributes.debit.way'
   %dd= @debit.way
   %dt= t :'activerecord.attributes.debit.start_date'

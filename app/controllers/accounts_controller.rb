@@ -3,7 +3,8 @@ class AccountsController < ApplicationController
   before_action :set_account, only: %i( edit update destroy )
 
   def index
-    @accounts = current_user.accounts.includes(:expenses, :debits)
+    @accounts = current_user.accounts
+                            .includes(:users, :expenses, :debits)
   end
 
   def show

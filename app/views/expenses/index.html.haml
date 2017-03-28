@@ -6,7 +6,7 @@
 
 .row
   .col-md-6
-    %h2= t :'.current_amount', amount: currency(@current_amount)
+    %h2= t :'.current_amount', amount: number_to_currency(@current_amount)
   .col-md-6
     = render partial: 'layouts/paginate', locals: { paginate: @paginate }
 
@@ -14,7 +14,7 @@
   - month = month_expenses.first
   - expenses = month_expenses.last
   %h2= l(month, format: :year_and_month).capitalize
-  %h3= t :'.spent', spent: currency(month_expenses.last[:total] * -1)
+  %h3= t :'.spent', spent: number_to_currency(month_expenses.last[:total] * -1)
 
   .table-responsive
     %table.table.table-striped.table-bordered.table-hover
@@ -31,7 +31,7 @@
           %tr{ class: ('success' if expense.price > 0) }
             %td= l expense.date
             %td= expense.reason
-            %td= currency expense.price
+            %td= number_to_currency expense.price
             %td= expense.way
             %td= render partial: 'tags/list', locals: { tags: expense.tags }
             - if expense.id

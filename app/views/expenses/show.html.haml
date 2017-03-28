@@ -13,7 +13,7 @@
   %dt= t :'activerecord.attributes.expense.reason'
   %dd= @expense.reason
   %dt= t :'activerecord.attributes.expense.price'
-  %dd= currency @expense.price
+  %dd= number_to_currency @expense.price
   %dt= t :'activerecord.attributes.expense.way'
   %dd= @expense.way
   %dt= t :'activerecord.attributes.expense.tags'

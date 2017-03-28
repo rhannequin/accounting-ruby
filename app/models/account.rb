@@ -11,14 +11,19 @@ class Account < ApplicationRecord
     all_months = (first_date..Date.today).to_a.map { |d| d.beginning_of_month }.uniq
     total_expenses_amount = self.expenses.map(&:price).sum
     current_amount = total_expenses_amount
+    current_amount += debits_amount(all_months)
+  end
+
+  def debits_amount(months)
+    amount = 0
     debits.each do |debit|
-      all_months.each do |month|
+      months.each do |month|
         beginning_of_month = month.beginning_of_month
         if debit.applies_this_month?(month)
-          current_amount += debit.price
+          amount += debit.price
         end
       end
     end
-    current_amount
+    amount
   end
 end

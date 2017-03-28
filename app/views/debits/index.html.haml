@@ -20,7 +20,7 @@
       - @debits.each do |debit|
         %tr
           %td= debit.reason
-          %td= currency debit.price
+          %td= number_to_currency debit.price
           %td= debit.day
           %td= debit.way
           %td= render partial: 'tags/list', locals: { tags: debit.tags }

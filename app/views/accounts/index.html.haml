@@ -16,7 +16,7 @@
       - @accounts.each do |account|
         %tr
           %td= account.name
-          %td= currency account.current_amount
+          %td= number_to_currency account.current_amount
           %td= account.users.map(&:name).join(', ')
           %td.action= link_to t(:'scaffold.show'), account, class: 'btn btn-info'
           %td.action= link_to t(:'scaffold.edit'), edit_account_path(account), class: 'btn btn-warning'

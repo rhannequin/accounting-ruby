@@ -22,7 +22,7 @@
         %tr{ class: ('success' if expense.price > 0) }
           %td= l expense.date
           %td= expense.reason
-          %td= currency expense.price
+          %td= number_to_currency expense.price
           %td= expense.way
           -# %td= render partial: 'tags/list', locals: { tags: expense.tags }
           -# - if expense.id
