@@ -1,6 +1,6 @@
 class AccountsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_account, only: %i( edit update destroy )
+  before_action :set_account, only: %i(edit update destroy)
 
   def index
     @accounts = current_user.accounts
@@ -8,19 +8,38 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @account = Account.includes(:expenses, :debits)
+    @account = Account.includes({ expenses: [:taggings, :tags] }, :debits)
                       .order('expenses.date DESC')
                       .find(params[:id])
-    @expenses = @account.expenses.to_ary
+    expenses = @account.expenses.to_ary
     @debits = @account.debits.to_ary
+    end_date = Expense.select(:date).order('date DESC').first.date
+    @expenses = {}
+    expenses.each do |expense|
+      date = expense.date.beginning_of_month
+      @expenses[date] ||= []
+      @expenses[date] << expense
+    end
+    @debits.each do |debit|
+      (debit.start_date..(debit.end_date || end_date)).to_a.map(&:beginning_of_month).uniq.each do |date|
+        new_values = debit.attributes
+                          .slice('reason', 'price', 'way')
+                          .merge(date: date.change(day: debit.day, tags: debit.tags))
+        @expenses[date] << Expense.new(new_values)
+      end
+    end
+
+    # Sort expenses by date
+    @expenses.each do |_, arr|
+      arr.sort_by!(&:date).reverse!
+    end
   end
 
   def new
     @account = Account.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @account = Account.new(account_params)

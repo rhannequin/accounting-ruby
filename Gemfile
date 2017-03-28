@@ -95,6 +95,7 @@ group :test do
   gem 'factory_girl_rails'                    # Factories
   gem 'faker'                                 # Use real values to fake for factories
   gem 'i18n-tasks'                            # Finds and manage missing and unused translations
+  gem 'nyan-cat-formatter'
   gem 'rails-controller-testing'              # Support for assigns and assert_template
   gem 'rspec-rails'                           # RSpec test framework
   gem 'simplecov', require: false             # Test coverage
