@@ -12,10 +12,8 @@ class AccountsController < ApplicationController
     @account = Account.includes({ expenses: [:taggings, :tags] }, :debits)
                       .order('expenses.date DESC')
                       .find(params[:id])
-    expenses = @account.expenses.to_ary
-    debits = @account.debits.to_ary
-    @expenses = calculate_expenses(expenses, @expenses_to_ignore)
-    @expenses = calculate_debits(debits, @expenses, @end_date, @debits_to_ignore)
+    @expenses = calculate_expenses(@account.expenses, @expenses_to_ignore)
+    @expenses = calculate_debits(@account.debits, @expenses, @end_date, @debits_to_ignore)
     @expenses = sort_by_month(@expenses)
   end
 
