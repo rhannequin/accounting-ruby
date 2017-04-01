@@ -7,10 +7,11 @@
     = t :'scaffold.edit'
   %h1= t :'.title'
 
-%h2= number_to_currency(@account.current_amount)
+%h2= t :'.current_amount', amount: number_to_currency(@account.current_amount)
 
-- @expenses.each do |month, expenses|
+- @expenses.each do |month, h|
   %h2= l(month, format: :year_and_month).capitalize
+  %h3= t :'.spent', spent: number_to_currency(h[:total] * -1)
 
   .table-responsive
     %table.table.table-striped.table-bordered.table-hover
@@ -20,10 +21,10 @@
           %th= t :'activerecord.attributes.expense.reason'
           %th= t :'activerecord.attributes.expense.price'
           %th= t :'activerecord.attributes.expense.way'
-          -# %th= t :'activerecord.attributes.expense.tags'
+          %th= t :'activerecord.attributes.expense.tags'
           -# %th{colspan: 3}
       %tbody
-        - expenses.each do |expense|
+        - h[:expenses].each do |expense|
           %tr{ class: ('success' if expense.price > 0) }
             %td= l expense.date
             %td= expense.reason

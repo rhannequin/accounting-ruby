@@ -1,6 +1,7 @@
 class AccountsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_account, only: %i(edit update destroy)
+  before_action :set_ignored_entities, only: :show
 
   def index
     @accounts = current_user.accounts
@@ -17,21 +18,23 @@ class AccountsController < ApplicationController
     @expenses = {}
     expenses.each do |expense|
       date = expense.date.beginning_of_month
-      @expenses[date] ||= []
-      @expenses[date] << expense
+      @expenses[date] ||= { expenses: [], total: 0 }
+      @expenses[date][:expenses] << expense
+      @expenses[date][:total] += expense.price unless @expenses_to_ignore.include?(expense)
     end
     @debits.each do |debit|
       (debit.start_date..(debit.end_date || end_date)).to_a.map(&:beginning_of_month).uniq.each do |date|
         new_values = debit.attributes
                           .slice('reason', 'price', 'way')
                           .merge(date: date.change(day: debit.day, tags: debit.tags))
-        @expenses[date] << Expense.new(new_values)
+        @expenses[date][:expenses] << Expense.new(new_values)
+        @expenses[date][:total] += debit.price unless @debits_to_ignore.include?(debit)
       end
     end
 
     # Sort expenses by date
     @expenses.each do |_, arr|
-      arr.sort_by!(&:date).reverse!
+      arr[:expenses].sort_by!(&:date).reverse!
     end
   end
 
@@ -72,5 +75,11 @@ class AccountsController < ApplicationController
 
   def account_params
     params.require(:account).permit(:name)
+  end
+
+  def set_ignored_entities
+    ignored_tags = Tag.select(:id).ignored
+    @expenses_to_ignore = Expense.with_these_tags(ignored_tags)
+    @debits_to_ignore = Debit.with_these_tags(ignored_tags)
   end
 end

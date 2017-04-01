@@ -6,9 +6,9 @@ RSpec.describe Account, type: :model do
 
     before(:each) do
       today = Date.today
-      account.expenses << Expense.create(reason: 'Init', date: (today - 2.month), price: 40)
-      account.expenses << Expense.create(date: today, price: -15)
-      account.debits << Debit.create(start_date: (today - 45.day), price: -10)
+      account.expenses << Expense.create(reason: 'Init', date: (today - 2.month).beginning_of_month, price: 40)
+      account.expenses << Expense.create(date: today.beginning_of_month, price: -15)
+      account.debits << Debit.create(start_date: (today - 1.month).beginning_of_month, price: -10)
     end
 
     it 'returns the correct amount' do
