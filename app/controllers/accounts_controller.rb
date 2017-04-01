@@ -1,7 +1,7 @@
 class AccountsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_account, only: %i(edit update destroy)
-  before_action :set_ignored_entities, only: :show
+  before_action :set_ignored_entities, :set_end_date, only: :show
 
   def index
     @accounts = current_user.accounts
@@ -13,29 +13,10 @@ class AccountsController < ApplicationController
                       .order('expenses.date DESC')
                       .find(params[:id])
     expenses = @account.expenses.to_ary
-    @debits = @account.debits.to_ary
-    end_date = Expense.select(:date).order('date DESC').first.date
-    @expenses = {}
-    expenses.each do |expense|
-      date = expense.date.beginning_of_month
-      @expenses[date] ||= { expenses: [], total: 0 }
-      @expenses[date][:expenses] << expense
-      @expenses[date][:total] += expense.price unless @expenses_to_ignore.include?(expense)
-    end
-    @debits.each do |debit|
-      (debit.start_date..(debit.end_date || end_date)).to_a.map(&:beginning_of_month).uniq.each do |date|
-        new_values = debit.attributes
-                          .slice('reason', 'price', 'way')
-                          .merge(date: date.change(day: debit.day, tags: debit.tags))
-        @expenses[date][:expenses] << Expense.new(new_values)
-        @expenses[date][:total] += debit.price unless @debits_to_ignore.include?(debit)
-      end
-    end
-
-    # Sort expenses by date
-    @expenses.each do |_, arr|
-      arr[:expenses].sort_by!(&:date).reverse!
-    end
+    debits = @account.debits.to_ary
+    @expenses = calculate_expenses(expenses, @expenses_to_ignore)
+    @expenses = calculate_debits(debits, @expenses, @end_date, @debits_to_ignore)
+    @expenses = sort_by_month(@expenses)
   end
 
   def new
@@ -81,5 +62,41 @@ class AccountsController < ApplicationController
     ignored_tags = Tag.select(:id).ignored
     @expenses_to_ignore = Expense.with_these_tags(ignored_tags)
     @debits_to_ignore = Debit.with_these_tags(ignored_tags)
+  end
+
+  def set_end_date
+    @end_date = Expense.select(:date).order('date DESC').first.date
+  end
+
+  def calculate_expenses(arr, expenses_to_ignore)
+    expenses = {}
+    arr.each do |expense|
+      date = expense.date.beginning_of_month
+      expenses[date] ||= { expenses: [], total: 0 }
+      expenses[date][:expenses] << expense
+      expenses[date][:total] += expense.price unless @expenses_to_ignore.include?(expense)
+    end
+    expenses
+  end
+
+  def calculate_debits(debits, expenses, end_date, debits_to_ignore)
+    debits.each do |debit|
+      (debit.start_date..(debit.end_date || end_date)).to_a.map(&:beginning_of_month).uniq.each do |date|
+        new_values = debit.attributes
+                          .slice('reason', 'price', 'way')
+                          .merge(date: date.change(day: debit.day, tags: debit.tags))
+        expenses[date] ||= { expenses: [], total: 0 }
+        expenses[date][:expenses] << Expense.new(new_values)
+        expenses[date][:total] += debit.price unless debits_to_ignore.include?(debit)
+      end
+    end
+    expenses
+  end
+
+  def sort_by_month(expenses)
+    expenses.each do |_, arr|
+      arr[:expenses].sort_by!(&:date).reverse!
+    end
+    expenses
   end
 end
