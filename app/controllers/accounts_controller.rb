@@ -1,4 +1,7 @@
 class AccountsController < ApplicationController
+  include ApplicationHelper
+  include ExpensesHelper
+
   before_action :authenticate_user!
   before_action :set_account, only: %i(edit update destroy)
   before_action :set_ignored_entities, :set_end_date, only: :show
@@ -9,11 +12,21 @@ class AccountsController < ApplicationController
   end
 
   def show
+    months_per_page = 2
+    first_date = Expense.select(:date).order(:date).first.date
+    @paginate = paginate_params(params[:page], first_date, months_per_page)
+    end_day = get_end_day(@paginate[:current_page], months_per_page)
+    start_day = get_start_day(end_day, @paginate[:current_page], months_per_page)
+    range = expenses_pagination(start_day, end_day)
+
     @account = Account.includes({ expenses: [:taggings, :tags] }, :debits)
                       .order('expenses.date DESC')
                       .find(params[:id])
-    @expenses = calculate_expenses(@account.expenses, @expenses_to_ignore)
-    @expenses = calculate_debits(@account.debits, @expenses, @end_date, @debits_to_ignore)
+
+    debits = get_debits(@account, start_day, end_day)
+
+    @expenses = calculate_expenses(@account.expenses.where(date: range), @expenses_to_ignore)
+    @expenses = calculate_debits(debits, @expenses, @end_date, @debits_to_ignore)
     @expenses = sort_by_month(@expenses)
   end
 
@@ -79,7 +92,8 @@ class AccountsController < ApplicationController
 
   def calculate_debits(debits, expenses, end_date, debits_to_ignore)
     debits.each do |debit|
-      (debit.start_date..(debit.end_date || end_date)).to_a.map(&:beginning_of_month).uniq.each do |date|
+      range = (debit.start_date..(debit.end_date || end_date))
+      range.to_a.map(&:beginning_of_month).uniq.each do |date|
         new_values = debit.attributes
                           .slice('reason', 'price', 'way')
                           .merge(date: date.change(day: debit.day, tags: debit.tags))
@@ -96,5 +110,15 @@ class AccountsController < ApplicationController
       arr[:expenses].sort_by!(&:date).reverse!
     end
     expenses
+  end
+
+  def get_debits(account, first_day, end_day)
+    start = first_day.beginning_of_month.to_date
+    stop = end_day.end_of_month.to_date
+
+    account.debits.end_date_after(start)
+                  .start_date_before(stop)
+                  .or(account.debits.end_date_nil
+                                    .start_date_before(stop))
   end
 end
