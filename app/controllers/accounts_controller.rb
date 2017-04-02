@@ -15,15 +15,15 @@ class AccountsController < ApplicationController
     months_per_page = 2
     first_date = Expense.select(:date).order(:date).first.date
     @paginate = paginate_params(params[:page], first_date, months_per_page)
-    end_day = get_end_day(@paginate[:current_page], months_per_page)
-    start_day = get_start_day(end_day, @paginate[:current_page], months_per_page)
-    range = expenses_pagination(start_day, end_day)
+    end_date = get_end_day(@paginate[:current_page], months_per_page)
+    start_date = get_start_day(end_date, @paginate[:current_page], months_per_page)
+    range = start_date..end_date
 
     @account = Account.includes({ expenses: [:taggings, :tags] }, :debits)
                       .order('expenses.date DESC')
                       .find(params[:id])
 
-    debits = get_debits(@account, start_day, end_day)
+    debits = get_debits(@account, start_date, end_date)
 
     @expenses = calculate_expenses(@account.expenses.where(date: range), @expenses_to_ignore)
     @expenses = calculate_debits(debits, @expenses, @end_date, @debits_to_ignore)
@@ -112,10 +112,7 @@ class AccountsController < ApplicationController
     expenses
   end
 
-  def get_debits(account, first_day, end_day)
-    start = first_day.beginning_of_month.to_date
-    stop = end_day.end_of_month.to_date
-
+  def get_debits(account, start, stop)
     account.debits.end_date_after(start)
                   .start_date_before(stop)
                   .or(account.debits.end_date_nil

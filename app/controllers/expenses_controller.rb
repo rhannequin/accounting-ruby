@@ -18,9 +18,9 @@ class ExpensesController < ApplicationController
     ### Temporary fix
     first_date = Expense.select(:date).order(:date).first.date
     @paginate = paginate_params(params[:page], first_date, months_per_page)
-    end_day = get_end_day(@paginate[:current_page], months_per_page)
-    start_day = get_start_day(end_day, @paginate[:current_page], months_per_page)
-    range = expenses_pagination(start_day, end_day)
+    end_date = get_end_day(@paginate[:current_page], months_per_page)
+    start_date = get_start_day(end_date, @paginate[:current_page], months_per_page)
+    range = start_date..end_date
 
     @expenses = Expense.all_ordered.where(date: range)
     ignored_tags = Tag.select(:id).ignored
