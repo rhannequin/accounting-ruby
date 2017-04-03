@@ -19,14 +19,13 @@ class AccountsController < ApplicationController
     start_date = get_start_day(end_date, @paginate[:current_page], months_per_page)
     range = start_date..end_date
 
-    @account = Account.includes({ expenses: [:taggings, :tags] }, :debits)
-                      .order('expenses.date DESC')
-                      .find(params[:id])
+    @account = Account.find(params[:id])
 
+    expenses = @account.expenses.include_tags.where(date: range)
     debits = get_debits(@account, start_date, end_date)
 
-    @expenses = calculate_expenses(@account.expenses.where(date: range), @expenses_to_ignore)
-    @expenses = calculate_debits(debits, @expenses, @end_date, @debits_to_ignore)
+    @expenses = calculate_expenses(expenses, @expenses_to_ignore)
+    @expenses = calculate_debits(debits, @expenses, range, @debits_to_ignore)
     @expenses = sort_by_month(@expenses)
   end
 
@@ -90,13 +89,12 @@ class AccountsController < ApplicationController
     expenses
   end
 
-  def calculate_debits(debits, expenses, end_date, debits_to_ignore)
+  def calculate_debits(debits, expenses, range, debits_to_ignore)
     debits.each do |debit|
-      range = (debit.start_date..(debit.end_date || end_date))
       range.to_a.map(&:beginning_of_month).uniq.each do |date|
         new_values = debit.attributes
                           .slice('reason', 'price', 'way')
-                          .merge(date: date.change(day: debit.day, tags: debit.tags))
+                          .merge(date: date.change(day: debit.day), tags: debit.tags)
         expenses[date] ||= { expenses: [], total: 0 }
         expenses[date][:expenses] << Expense.new(new_values)
         expenses[date][:total] += debit.price unless debits_to_ignore.include?(debit)
@@ -113,9 +111,13 @@ class AccountsController < ApplicationController
   end
 
   def get_debits(account, start, stop)
-    account.debits.end_date_after(start)
-                  .start_date_before(stop)
-                  .or(account.debits.end_date_nil
-                                    .start_date_before(stop))
+    account.debits
+           .include_tags
+           .end_date_after(start)
+           .start_date_before(stop)
+           .or(account.debits
+                      .include_tags
+                      .end_date_nil
+                      .start_date_before(stop))
   end
 end

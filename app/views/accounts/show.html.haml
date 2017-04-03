@@ -7,9 +7,13 @@
     = t :'scaffold.edit'
   %h1= t :'.title'
 
-%h2= t :'.current_amount', amount: number_to_currency(@account.current_amount)
+.row
+  .col-md-6
+    %h2= t :'.current_amount', amount: number_to_currency(@account.current_amount)
+  .col-md-6
+    = render partial: 'layouts/paginate', locals: { paginate: @paginate }
 
-- @expenses.each do |month, h|
+- @expenses.reverse_each do |month, h|
   %h2= l(month, format: :year_and_month).capitalize
   %h3= t :'.spent', spent: number_to_currency(h[:total] * -1)
 
