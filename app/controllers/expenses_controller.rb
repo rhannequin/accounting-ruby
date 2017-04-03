@@ -17,9 +17,11 @@ class ExpensesController < ApplicationController
     end
     ### Temporary fix
     first_date = Expense.select(:date).order(:date).first.date
-    @paginate = paginate_params(params[:page], first_date, months_per_page)
-    end_date = get_end_day(@paginate[:current_page], months_per_page)
-    start_date = get_start_day(end_date, @paginate[:current_page], months_per_page)
+    page = params[:page]
+    current_page = page && page.to_i > 0 ? page.to_i : 1
+    @paginate = paginate_params(current_page, first_date, months_per_page)
+    end_date = get_end_day(current_page, months_per_page)
+    start_date = get_start_day(end_date, current_page, months_per_page)
     range = start_date..end_date
 
     @expenses = Expense.all_ordered.where(date: range)

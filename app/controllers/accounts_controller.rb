@@ -4,7 +4,10 @@ class AccountsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_account, only: %i(edit update destroy)
-  before_action :set_ignored_entities, :set_end_date, only: :show
+  before_action :set_current_page,
+                :set_ignored_entities,
+                :set_end_date,
+                only: :show
 
   def index
     @accounts = current_user.accounts
@@ -14,9 +17,9 @@ class AccountsController < ApplicationController
   def show
     months_per_page = 2
     first_date = Expense.select(:date).order(:date).first.date
-    @paginate = paginate_params(params[:page], first_date, months_per_page)
-    end_date = get_end_day(@paginate[:current_page], months_per_page)
-    start_date = get_start_day(end_date, @paginate[:current_page], months_per_page)
+    @paginate = paginate_params(@current_page, first_date, months_per_page)
+    end_date = get_end_day(@current_page, months_per_page)
+    start_date = get_start_day(end_date, @current_page, months_per_page)
     range = start_date..end_date
 
     @account = Account.find(params[:id])
@@ -68,6 +71,11 @@ class AccountsController < ApplicationController
     params.require(:account).permit(:name)
   end
 
+  def set_current_page
+    page = params[:page]
+    @current_page = page && page.to_i > 0 ? page.to_i : 1
+  end
+
   def set_ignored_entities
     ignored_tags = Tag.select(:id).ignored
     @expenses_to_ignore = Expense.with_these_tags(ignored_tags)
@@ -84,7 +92,7 @@ class AccountsController < ApplicationController
       date = expense.date.beginning_of_month
       expenses[date] ||= { expenses: [], total: 0 }
       expenses[date][:expenses] << expense
-      expenses[date][:total] += expense.price unless @expenses_to_ignore.include?(expense)
+      expenses[date][:total] += expense.price unless expenses_to_ignore.include?(expense)
     end
     expenses
   end
