@@ -19,19 +19,14 @@ class DebitsController < ApplicationController
   end
 
   # GET /debits/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /debits
   # POST /debits.json
   def create
-    params = debit_params
-    tags = params['tag_ids']
-    params.delete('tag_ids')
-    @debit = Debit.new(params)
-
+    @debit = Debit.new(debit_params)
     respond_to do |format|
-      if @debit.save && (@debit.tag_ids = tags)
+      if @debit.save
         format.html { redirect_to @debit, notice: t(:'debits.create.flash.success') }
         format.json { render :show, status: :created, location: @debit }
       else
@@ -66,13 +61,14 @@ class DebitsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_debit
-      @debit = Debit.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def debit_params
-      params.require(:debit).permit(:reason, :price, :day, :way, :start_date, :end_date, tag_ids: [])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_debit
+    @debit = Debit.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def debit_params
+    params.require(:debit).permit(:reason, :price, :day, :way, :start_date, :end_date, tag_ids: [])
+  end
 end
