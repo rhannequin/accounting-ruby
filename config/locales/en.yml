@@ -16,6 +16,7 @@ en:
       title: New account
     show:
       current_amount: 'Current amount: %{amount}'
+      new_expense: New expense
       spent: "%{spent} spent"
       title: Show account
     update:

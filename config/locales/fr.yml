@@ -16,8 +16,8 @@ fr:
       title: "Ajout d'un compte"
     show:
       current_amount: 'Montant actuel : %{amount}'
+      new_expense: Ajouter une dépense
       spent: "%{spent} dépensés"
-      title: "Affichage d'un compte"
     update:
       flash:
         success: Le compte a bien été mis à jour.

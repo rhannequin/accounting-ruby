@@ -1,4 +1,4 @@
-= simple_form_for(@expense, html: { class: 'form-horizontal', role: 'form' }, wrapper: :horizontal_form) do |f|
+= simple_form_for([@account, @expense], html: { class: 'form-horizontal', role: 'form' }, wrapper: :horizontal_form) do |f|
 
   = f.error_notification
 
