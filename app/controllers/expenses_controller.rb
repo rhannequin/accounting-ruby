@@ -2,7 +2,7 @@
 
 class ExpensesController < ApplicationController
   before_action :set_account_id
-  before_action :set_account, only: %i[new edit]
+  before_action :set_account, :set_tags, only: %i[new edit]
   before_action :set_expense, only: %i[edit update destroy]
 
   def show
@@ -50,6 +50,10 @@ class ExpensesController < ApplicationController
 
   def set_account
     @account = Account.new(id: @account_id)
+  end
+
+  def set_tags
+    @tags = current_user.tags
   end
 
   def set_expense

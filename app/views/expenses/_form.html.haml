@@ -19,7 +19,8 @@
 
   = f.input :way
 
-  = f.association :tags, as: :check_boxes,
+  = f.association :tags, collection: @tags,
+                         as: :check_boxes,
                          wrapper: :horizontal_radio_and_checkboxes,
                          item_wrapper_class: 'col-sm-3'
 

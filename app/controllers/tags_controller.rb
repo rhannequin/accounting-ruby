@@ -1,11 +1,19 @@
 # frozen_string_literal: true
 
 class TagsController < ApplicationController
-  before_action :set_tag
+  before_action :set_tag, except: %i[index new]
+
+  def index
+    @tags = current_user.tags
+  end
 
   def show
     @expenses_count = Tagging.where(taggable_type: 'Expense', tag_id: @tag.id).count
     @debits_count = Tagging.where(taggable_type: 'Debit', tag_id: @tag.id).count
+  end
+
+  def new
+    @tag = Tag.new
   end
 
   def edit
@@ -21,6 +29,11 @@ class TagsController < ApplicationController
         format.json { render json: @tag.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def destroy
+    @tag.destroy
+    redirect_to tags_url, notice: t(:'tags.destroy.flash.success')
   end
 
   def chart

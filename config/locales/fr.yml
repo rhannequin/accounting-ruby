@@ -223,6 +223,7 @@ fr:
         home: Tableau de bord
         name: Admin
       home: Accueil
+      tags: Mes catégories
       user_account:
         settings: Paramètres
     project: Comptes
@@ -247,8 +248,16 @@ fr:
       monthly_average: Moyenne sur 6 mois
       title: Graphique
       yearly_average: Moyenne sur 1 an
+    destroy:
+      flash:
+        success: La catégorie a bien été supprimée.
     edit:
       title: "Édition d'une catégorie"
+    index:
+      title: Mes catégories
+      new_tag: Ajouter une catégorie
+    new:
+      title: Ajouter une catégorie
     show:
       title: "Affichage d'une catégorie"
       use: Utilisation

@@ -22,7 +22,8 @@
         %span.glyphicon.glyphicon-calendar{ 'aria-hidden' => true }
       = render partial: 'shared/datepicker_input', locals: { f: f, date_input: date_input }
 
-  = f.association :tags, as: :check_boxes,
+  = f.association :tags, collection: @tags,
+                         as: :check_boxes,
                          wrapper: :horizontal_radio_and_checkboxes,
                          item_wrapper_class: 'col-sm-3'
 

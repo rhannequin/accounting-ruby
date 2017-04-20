@@ -223,6 +223,7 @@ en:
         home: Dashboard
         name: Admin
       home: Accueil
+      tags: My tags
       user_account:
         settings: Settings
     project: Accounting
@@ -247,8 +248,16 @@ en:
       monthly_average: Mean on 6 months
       title: Chart
       yearly_average: Mean on 1 year
+    destroy:
+      flash:
+        success: Tag has been deleted.
     edit:
       title: "Tag update"
+    index:
+      title: My tags
+      new_tag: Add a tag
+    new:
+      title: Ajouter une catégorie
     show:
       title: "Tag showing"
       use: Use

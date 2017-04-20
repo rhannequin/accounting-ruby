@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'callbacks' }
   root to: 'home#index'
 
-  resources :tags, only: %i(show edit update) do
+  resources :tags do
     get 'chart', on: :member
   end
 
