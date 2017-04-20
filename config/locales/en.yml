@@ -28,6 +28,7 @@ en:
         debits: Debits
         expenses: Expenses
         name: Name
+        tags: Tags
         users: Users
       debit:
         day: Day
@@ -223,7 +224,6 @@ en:
         home: Dashboard
         name: Admin
       home: Accueil
-      tags: My tags
       user_account:
         settings: Settings
     project: Accounting
@@ -254,7 +254,7 @@ en:
     edit:
       title: "Tag update"
     index:
-      title: My tags
+      title: "Account's tags"
       new_tag: Add a tag
     new:
       title: Ajouter une catégorie

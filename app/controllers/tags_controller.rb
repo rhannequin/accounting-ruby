@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 class TagsController < ApplicationController
+  before_action :set_account_id
+  before_action :set_account, only: %i[new edit]
   before_action :set_tag, except: %i[index new]
 
   def index
-    @tags = current_user.tags
+    @tags = Tag.where(account_id: @account_id)
   end
 
   def show
@@ -26,7 +28,7 @@ class TagsController < ApplicationController
 
   def update
     if @tag.update(tag_params)
-      redirect_to @tag, notice: t(:'tags.update.flash.success')
+      redirect_to account_tag_path(@account_id, @tag.id), notice: t(:'tags.update.flash.success')
     else
       render :edit
     end
@@ -34,7 +36,7 @@ class TagsController < ApplicationController
 
   def destroy
     @tag.destroy
-    redirect_to tags_url, notice: t(:'tags.destroy.flash.success')
+    redirect_to account_tags_url(@account_id), notice: t(:'tags.destroy.flash.success')
   end
 
   def chart
@@ -63,6 +65,14 @@ class TagsController < ApplicationController
   end
 
   private
+
+  def set_account_id
+    @account_id = params.require(:account_id)
+  end
+
+  def set_account
+    @account = Account.new(id: @account_id)
+  end
 
   def set_tag
     @tag = Tag.find(params[:id])

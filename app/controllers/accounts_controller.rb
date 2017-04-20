@@ -5,7 +5,7 @@ class AccountsController < ApplicationController
   include ExpensesHelper
 
   before_action :authenticate_user!
-  before_action :set_account, only: %i[edit update destroy]
+  before_action :set_account, only: %i[show edit update destroy]
   before_action :set_current_page,
                 :set_first_date,
                 :set_ignored_entities,
@@ -24,7 +24,6 @@ class AccountsController < ApplicationController
     end_date = get_end_day(@current_page, MONTHS_PER_PAGE)
     start_date = get_start_day(end_date, MONTHS_PER_PAGE)
     range = start_date..end_date
-    @account = Account.find(params.require(:id))
     expenses = @account.expenses.include_tags.where(date: range)
     debits = get_debits(@account, start_date, end_date)
     @expenses = calculate_data(expenses, @expenses_to_ignore, debits, @debits_to_ignore, range)
@@ -62,7 +61,7 @@ class AccountsController < ApplicationController
   private
 
   def set_account
-    @account = Account.find(params[:id])
+    @account = Account.find(params.require(:id))
   end
 
   def account_params
@@ -75,16 +74,24 @@ class AccountsController < ApplicationController
   end
 
   def set_first_date
-    @first_date = Expense.select(:date).order(:date).first.date
+    @first_date = Expense.select(:date)
+                         .where(account_id: @account.id)
+                         .order(:date)
+                         .first
+                         .date
   end
 
   def set_ignored_entities
-    ignored_tags = Tag.select(:id).ignored
-    @expenses_to_ignore = Expense.with_these_tags(ignored_tags)
-    @debits_to_ignore = Debit.with_these_tags(ignored_tags)
+    ignored_tags = Tag.where(account_id: @account.id).select(:id).ignored
+    @expenses_to_ignore = Expense.with_these_tags(ignored_tags).where(account_id: @account.id)
+    @debits_to_ignore = Debit.with_these_tags(ignored_tags).where(account_id: @account.id)
   end
 
   def set_end_date
-    @end_date = Expense.select(:date).order('date DESC').first.date
+    @end_date = Expense.select(:date)
+                       .where(account_id: @account.id)
+                       .order('date DESC')
+                       .first
+                       .date
   end
 end

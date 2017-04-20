@@ -1,8 +1,6 @@
 class User < ApplicationRecord
   extend FriendlyId
 
-  has_many :tags
-
   rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

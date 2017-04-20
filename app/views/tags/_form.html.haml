@@ -1,4 +1,4 @@
-= simple_form_for(@tag, html: { class: 'form-horizontal', role: 'form' }) do |f|
+= simple_form_for([@account, @tag], html: { class: 'form-horizontal', role: 'form' }) do |f|
   - if @tag.errors.any?
     .alert.alert-danger.alert-dismissable{role: 'alert'}
       %button.close{'data-dismiss' => 'alert', type: 'button'}

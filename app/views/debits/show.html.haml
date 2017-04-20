@@ -2,7 +2,7 @@
   = link_to account_debits_path(@account_id), class: 'btn btn-default' do
     %span.glyphicon.glyphicon-list-alt
     = t :'scaffold.back'
-  = link_to edit_account_debit_path(@account_id, @debit), class: 'btn btn-primary' do
+  = link_to edit_account_debit_path(@account_id, @debit), class: 'btn btn-warning' do
     %span.glyphicon.glyphicon-pencil
     = t :'scaffold.edit'
   %h1= t :'.title'
@@ -19,4 +19,4 @@
   %dt= t :'activerecord.attributes.debit.end_date'
   %dd= @debit.end_date ? l(@debit.end_date) : '&empty;'.html_safe
   %dt= t :'activerecord.attributes.debit.tags'
-  %dd= render partial: 'tags/list', locals: { tags: @debit.tags }
+  %dd= render partial: 'tags/list', locals: { account_id: @account_id, tags: @debit.tags }

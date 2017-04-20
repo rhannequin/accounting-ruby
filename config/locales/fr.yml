@@ -28,6 +28,7 @@ fr:
         debits: Prélèvements
         expenses: Dépenses
         name: Nom
+        tags: Catégories
         users: Utilisateurs
       debit:
         day: Jour
@@ -223,7 +224,6 @@ fr:
         home: Tableau de bord
         name: Admin
       home: Accueil
-      tags: Mes catégories
       user_account:
         settings: Paramètres
     project: Comptes
@@ -254,7 +254,7 @@ fr:
     edit:
       title: "Édition d'une catégorie"
     index:
-      title: Mes catégories
+      title: Catégories du compte
       new_tag: Ajouter une catégorie
     new:
       title: Ajouter une catégorie

@@ -1,5 +1,5 @@
 .page-header
-  = link_to new_account_path, class: 'btn btn-primary' do
+  = link_to new_account_path, class: 'btn btn-success' do
     %span.glyphicon.glyphicon-plus
     = t :'.new_account'
   %h1= t :'.title'
@@ -11,7 +11,7 @@
         %th= t :'activerecord.attributes.account.name'
         %th= t :'activerecord.attributes.account.current_amount'
         %th= t :'activerecord.attributes.account.users'
-        %th{colspan: 4}
+        %th{colspan: 5}
     %tbody
       - @accounts.each do |account|
         %tr
@@ -35,4 +35,8 @@
           %td.action
             = link_to t(:'activerecord.attributes.account.debits'),
                       account_debits_path(account),
+                      class: 'btn btn-info'
+          %td.action
+            = link_to t(:'activerecord.attributes.account.tags'),
+                      account_tags_path(account),
                       class: 'btn btn-info'

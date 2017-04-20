@@ -93,8 +93,8 @@ ActiveRecord::Schema.define(version: 20170420201755) do
     t.datetime "updated_at", null: false
     t.boolean "ignored", default: false, null: false
     t.string "slug"
-    t.uuid "user_id"
-    t.index ["user_id"], name: "index_tags_on_user_id"
+    t.uuid "account_id"
+    t.index ["account_id"], name: "index_tags_on_account_id"
   end
 
   create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -135,5 +135,5 @@ ActiveRecord::Schema.define(version: 20170420201755) do
   add_foreign_key "account_users", "users"
   add_foreign_key "debits", "accounts"
   add_foreign_key "expenses", "accounts"
-  add_foreign_key "tags", "users"
+  add_foreign_key "tags", "accounts"
 end
