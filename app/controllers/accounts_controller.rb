@@ -24,7 +24,7 @@ class AccountsController < ApplicationController
     end_date = get_end_day(@current_page, MONTHS_PER_PAGE)
     start_date = get_start_day(end_date, MONTHS_PER_PAGE)
     range = start_date..end_date
-    @account = Account.find(params[:id])
+    @account = Account.find(params.require(:id))
     expenses = @account.expenses.include_tags.where(date: range)
     debits = get_debits(@account, start_date, end_date)
     @expenses = calculate_data(expenses, @expenses_to_ignore, debits, @debits_to_ignore, range)
