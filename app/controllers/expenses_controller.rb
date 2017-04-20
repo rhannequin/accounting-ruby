@@ -6,7 +6,8 @@ class ExpensesController < ApplicationController
   before_action :set_expense, only: %i[edit update destroy]
 
   def show
-    @expense = Expense.include_tags.find(params[:id])
+    @expense = Expense.include_tags
+                      .find(params[:id])
   end
 
   def new
@@ -19,7 +20,8 @@ class ExpensesController < ApplicationController
     @expense = Expense.new(expense_params)
     @expense.account_id = @account_id
     if @expense.save
-      redirect_to account_expense_path(@account_id, @expense.id), notice: t(:'expenses.create.flash.success')
+      flash[:notice] = t(:'expenses.create.flash.success')
+      redirect_to account_expense_path(@account_id, @expense.id)
     else
       render :new
     end
@@ -27,7 +29,8 @@ class ExpensesController < ApplicationController
 
   def update
     if @expense.update(expense_params)
-      redirect_to account_expense_path(@account_id, @expense.id), notice: t(:'expenses.update.flash.success')
+      flash[:notice] = t(:'expenses.update.flash.success')
+      redirect_to account_expense_path(@account_id, @expense.id)
     else
       render :edit
     end
@@ -35,7 +38,8 @@ class ExpensesController < ApplicationController
 
   def destroy
     @expense.destroy
-    redirect_to account_path(@account_id), notice: t(:'expenses.destroy.flash.success')
+    flash[:notice] = t(:'expenses.destroy.flash.success')
+    redirect_to account_path(@account_id)
   end
 
   private
@@ -48,12 +52,10 @@ class ExpensesController < ApplicationController
     @account = Account.new(id: @account_id)
   end
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_expense
     @expense = Expense.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def expense_params
     params.require(:expense).permit(:date, :reason, :price, :way, tag_ids: [])
   end

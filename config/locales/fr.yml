@@ -25,6 +25,8 @@ fr:
     attributes:
       account:
         current_amount: Montant actuel
+        debits: Prélèvements
+        expenses: Dépenses
         name: Nom
         users: Utilisateurs
       debit:

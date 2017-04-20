@@ -2,7 +2,10 @@
   = link_to accounts_path, class: 'btn btn-default' do
     %span.glyphicon.glyphicon-list-alt
     = t :'scaffold.back'
-  = link_to edit_account_path(@account), class: 'btn btn-primary' do
+  = link_to account_debits_path(@account.id), class: 'btn btn-info' do
+    %span.glyphicon.glyphicon-download-alt
+    = t :'activerecord.attributes.account.debits'
+  = link_to edit_account_path(@account.id), class: 'btn btn-primary' do
     %span.glyphicon.glyphicon-pencil
     = t :'scaffold.edit'
   = link_to new_account_expense_path(@account.id), class: 'btn btn-success' do

@@ -25,6 +25,8 @@ en:
     attributes:
       account:
         current_amount: Current amount
+        debits: Debits
+        expenses: Expenses
         name: Name
         users: Users
       debit:
