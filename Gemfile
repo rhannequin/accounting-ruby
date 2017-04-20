@@ -5,6 +5,7 @@ gem 'rails', '~> 5.x'
 
 # Database
 gem 'pg'
+gem 'bcrypt'
 
 # Webserver
 gem 'puma'
@@ -79,11 +80,8 @@ group :development do
   gem 'capistrano-figaro-yml', require: false # Figaro's config/application.yml support for Capistrano
   gem 'capistrano-rails',      require: false # Rails support for Capistrano
   gem 'capistrano-rvm',        require: false # RVM support for Capistrano
-  gem 'capistrano3-puma',      git: 'https://github.com/rhannequin/capistrano-puma.git',
-                               branch: 'daemonize-config',
-                               require: false # Puma support for Capistrano
+  gem 'capistrano3-puma',      require: false # Puma support for Capistrano
   gem 'listen'
-  gem 'quiet_assets'                          # Turns off the Rails asset pipeline log
   gem 'rubocop'                               # Ruby style guide
   gem 'spring'                                # Keeps application running in the background
   gem 'web-console'                           # Web Console
@@ -103,12 +101,3 @@ end
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', group: :doc
-
-# Use ActiveModel has_secure_password
-gem 'bcrypt'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]

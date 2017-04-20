@@ -1,4 +1,4 @@
 - if tags.any?
-  = tags.map { |t| link_to t.name, t }.join(', ').html_safe
+  = safe_unescape tags.map { |t| link_to t.name, t }.join(', ')
 - else
   &empty;

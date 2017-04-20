@@ -11,8 +11,12 @@ module ApplicationHelper
     end
   end
 
+  def safe_unescape(str)
+    safe_join [raw(str)]
+  end
+
   def empty_char
-    safe_join [raw('&#8709;')]
+    safe_unescape '&#8709;'
   end
 
   def provider_profile_link(provider, uid)

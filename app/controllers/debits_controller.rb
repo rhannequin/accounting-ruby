@@ -13,7 +13,7 @@ class DebitsController < ApplicationController
 
   def show
     @debit = Debit.include_tags
-                  .find(params[:id])
+                  .find(params.require(:id))
   end
 
   def new
