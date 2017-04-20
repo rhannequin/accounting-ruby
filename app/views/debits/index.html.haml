@@ -29,6 +29,17 @@
           %td= render partial: 'tags/list', locals: { tags: debit.tags }
           %td= l debit.start_date
           %td= debit.end_date ? l(debit.end_date) : '&empty;'.html_safe
-          %td.action= link_to t(:'scaffold.show'), account_debit_path(@account_id, debit.id), class: 'btn btn-info'
-          %td.action= link_to t(:'scaffold.edit'), edit_account_debit_path(@account_id, debit), class: 'btn btn-warning'
-          %td.action= link_to t(:'scaffold.destroy'), account_debit_path(@account_id, debit.id), method: :delete, data: { confirm: t(:'scaffold.are_you_sure') }, class: 'btn btn-danger'
+          %td.action
+            = link_to t(:'scaffold.show'),
+                      account_debit_path(@account_id, debit.id),
+                      class: 'btn btn-info'
+          %td.action
+            = link_to t(:'scaffold.edit'),
+                      edit_account_debit_path(@account_id, debit),
+                      class: 'btn btn-warning'
+          %td.action
+            = link_to t(:'scaffold.destroy'),
+                      account_debit_path(@account_id, debit.id),
+                      method: :delete,
+                      data: { confirm: t(:'scaffold.are_you_sure') },
+                      class: 'btn btn-danger'
