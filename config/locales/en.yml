@@ -18,7 +18,6 @@ en:
       current_amount: 'Current amount: %{amount}'
       new_expense: New expense
       spent: "%{spent} spent"
-      title: Show account
     update:
       flash:
         success: Account updated.
@@ -187,11 +186,6 @@ en:
         success: Expense has been deleted.
     edit:
       title: Expense update
-    index:
-      current_amount: 'Current amount: %{amount}'
-      new_expense: Add an expense
-      title: List of expenses
-      spent: "%{spent} spent"
     new:
       title: "Add an expense"
     show:

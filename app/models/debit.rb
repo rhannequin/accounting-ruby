@@ -14,13 +14,12 @@ class Debit < ApplicationRecord
   def applies_this_month?(month)
     beginning_of_month = month.beginning_of_month
     end_of_month = month.end_of_month
-    cond = (
-        (beginning_of_month..end_of_month).cover?(start_date) ||
-        (beginning_of_month..end_of_month).cover?(end_date)
-      ) || (
-        start_date < month &&
-        (end_date ? end_date > month : true
-      )
+    (
+      (beginning_of_month..end_of_month).cover?(start_date) ||
+      (beginning_of_month..end_of_month).cover?(end_date)
+    ) || (
+      start_date < month &&
+      (end_date ? end_date > month : true)
     )
   end
 end

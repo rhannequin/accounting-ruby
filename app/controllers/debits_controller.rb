@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class DebitsController < ApplicationController
-  before_action :set_debit, only: [:edit, :update, :destroy]
+  before_action :set_debit, only: %i[edit update destroy]
 
   # GET /debits
   # GET /debits.json

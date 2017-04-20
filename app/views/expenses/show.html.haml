@@ -1,8 +1,8 @@
 .page-header
-  = link_to account_path(@account), class: 'btn btn-default' do
+  = link_to account_path(@account_id), class: 'btn btn-default' do
     %span.glyphicon.glyphicon-list-alt
     = t :'scaffold.back'
-  = link_to edit_account_expense_path(@account.id, @expense.id), class: 'btn btn-primary' do
+  = link_to edit_account_expense_path(@account_id, @expense.id), class: 'btn btn-primary' do
     %span.glyphicon.glyphicon-pencil
     = t :'scaffold.edit'
   %h1= t :'.title'

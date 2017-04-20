@@ -186,11 +186,6 @@ fr:
         success: La dépense a bien été supprimée.
     edit:
       title: "Édition d'une dépense"
-    index:
-      current_amount: 'Montant actuel : %{amount}'
-      new_expense: Ajouter une dépense
-      title: Liste des dépenses
-      spent: "%{spent} dépensés"
     new:
       title: "Ajout d'une dépense"
     show:
