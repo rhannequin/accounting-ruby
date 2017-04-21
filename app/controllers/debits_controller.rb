@@ -59,7 +59,7 @@ class DebitsController < ApplicationController
   end
 
   def set_tags
-    @tags = current_user.tags
+    @tags = Tag.where(account_id: @account_id)
   end
 
   def set_debit

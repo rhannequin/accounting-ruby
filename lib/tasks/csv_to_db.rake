@@ -3,11 +3,11 @@ require 'yaml'
 task csv_to_db: :environment do
   puts
   puts 'Emptying database...'
-  Account.destroy_all
-  Expense.destroy_all
-  Debit.destroy_all
   Tagging.destroy_all
   Tag.destroy_all
+  Expense.destroy_all
+  Debit.destroy_all
+  Account.destroy_all
   puts '... done.'
   puts
 
@@ -65,7 +65,7 @@ task csv_to_db: :environment do
     end
 
     puts 'Inserting tags...'
-    Tag.import tags.map { |t| Tag.new t }
+    Tag.import(tags.map { |t| Tag.new(t) })
     puts "... done. (#{Tag.count})"
     puts
 
@@ -79,7 +79,7 @@ task csv_to_db: :environment do
           price: expense.price,
           way: expense.way
         )
-        e.tags << expense.tags.map { |t| Tag.find_by(name: t.name) }
+        e.tags << expense.tags.map { |t| Tag.find_by(name: t.name, account_id: account_id) }
         e.save
       end
     end
@@ -113,6 +113,7 @@ task csv_to_db: :environment do
       end
     end
     puts "... done. (#{Debit.count})"
+    puts
 
   end
 end
