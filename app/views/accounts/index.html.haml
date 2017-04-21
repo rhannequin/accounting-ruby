@@ -18,25 +18,30 @@
           %td= account.name
           %td= number_to_currency account.current_amount
           %td= account.users.map(&:name).join(', ')
-          %td.action
-            = link_to t(:'scaffold.show'),
-                      account,
-                      class: 'btn btn-info'
-          %td.action
-            = link_to t(:'scaffold.edit'),
-                      edit_account_path(account),
-                      class: 'btn btn-warning'
-          %td.action
-            = link_to t(:'scaffold.destroy'),
-                      account,
-                      method: :delete,
-                      data: { confirm: t(:'scaffold.are_you_sure') },
-                      class: 'btn btn-danger'
-          %td.action
-            = link_to t(:'activerecord.attributes.account.debits'),
-                      account_debits_path(account),
-                      class: 'btn btn-info'
-          %td.action
-            = link_to t(:'activerecord.attributes.account.tags'),
-                      account_tags_path(account),
-                      class: 'btn btn-info'
+          - if can? :read, account
+            %td.action
+              = link_to t(:'scaffold.show'),
+                        account,
+                        class: 'btn btn-info'
+          - if can? :update, account
+            %td.action
+              = link_to t(:'scaffold.edit'),
+                        edit_account_path(account),
+                        class: 'btn btn-warning'
+          - if can? :destroy, account
+            %td.action
+              = link_to t(:'scaffold.destroy'),
+                        account,
+                        method: :delete,
+                        data: { confirm: t(:'scaffold.are_you_sure') },
+                        class: 'btn btn-danger'
+          - if can? :read, account => Debit
+            %td.action
+              = link_to t(:'activerecord.attributes.account.debits'),
+                        account_debits_path(account),
+                        class: 'btn btn-info'
+          - if can? :read, account => Tag
+            %td.action
+              = link_to t(:'activerecord.attributes.account.tags'),
+                        account_tags_path(account),
+                        class: 'btn btn-info'

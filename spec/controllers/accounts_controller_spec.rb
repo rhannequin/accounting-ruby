@@ -9,7 +9,7 @@ describe AccountsController, type: :controller do
     before(:each) do
       @account = create(:account)
       @account.users << user
-      @account.expenses << create(:expense)
+      @account.expenses << create(:expense, account_id: @account.id)
     end
 
     it 'responds successfully with an HTTP 200 status code' do

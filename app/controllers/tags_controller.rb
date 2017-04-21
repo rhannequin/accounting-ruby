@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class TagsController < ApplicationController
+  load_and_authorize_resource
+
   before_action :set_account_id
   before_action :set_account, only: %i[new edit]
   before_action :set_tag, except: %i[index new]

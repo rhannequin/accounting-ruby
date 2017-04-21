@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DebitsController < ApplicationController
+  load_and_authorize_resource
+
   before_action :set_account_id
   before_action :set_account, :set_tags, only: %i[new edit]
   before_action :set_debit, only: %i[edit update destroy]

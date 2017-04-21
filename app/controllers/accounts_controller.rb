@@ -4,8 +4,9 @@ class AccountsController < ApplicationController
   include ApplicationHelper
   include ExpensesHelper
 
+  load_and_authorize_resource
+
   before_action :authenticate_user!
-  before_action :set_account, only: %i[show edit update destroy]
   before_action :set_current_page,
                 :set_first_date,
                 :set_ignored_entities,
@@ -59,10 +60,6 @@ class AccountsController < ApplicationController
   end
 
   private
-
-  def set_account
-    @account = Account.find(params.require(:id))
-  end
 
   def account_params
     params.require(:account).permit(:name)

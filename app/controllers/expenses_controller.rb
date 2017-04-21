@@ -5,14 +5,15 @@ class ExpensesController < ApplicationController
   before_action :set_account, :set_tags, only: %i[new edit]
   before_action :set_expense, only: %i[edit update destroy]
 
+  load_resource :account
+  load_and_authorize_resource :expense, through: :account
+
   def show
     @expense = Expense.include_tags
                       .find(params[:id])
   end
 
-  def new
-    @expense = Expense.new
-  end
+  def new; end
 
   def edit; end
 
