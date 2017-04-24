@@ -27,9 +27,14 @@ task csv_to_db: :environment do
 
   accounts.each do |account|
 
+    puts "Creating account \"#{account[:name]}\"..."
+
     expenses = []
     tags = []
     account_id = Account.create!(name: account[:name], users: account[:users]).id
+
+    puts '... done.'
+    puts
 
     config = YAML.load_file(account[:config_file])
 
@@ -64,12 +69,12 @@ task csv_to_db: :environment do
       end
     end
 
-    puts 'Inserting tags...'
+    puts "Inserting tags in \"#{account[:name]}\"..."
     Tag.import(tags.map { |t| Tag.new(t) })
     puts "... done. (#{Tag.count})"
     puts
 
-    puts 'Inserting expenses...'
+    puts "Inserting expenses in \"#{account[:name]}\"..."
     Expense.import expenses
     ActiveRecord::Base.transaction do
       expenses.each do |expense|
@@ -86,7 +91,7 @@ task csv_to_db: :environment do
     puts "... done. (#{Expense.count})"
     puts
 
-    puts 'Inserting start amount...'
+    puts "Inserting start amount in \"#{account[:name]}\"..."
     start_amount = config['start_amount']
     first_expense = Expense.select(:date).order(:date).first
     Expense.create!(
@@ -98,12 +103,12 @@ task csv_to_db: :environment do
     puts '... done.'
     puts
 
-    puts 'Inserting debits...'
+    puts "Inserting debits in \"#{account[:name]}\"..."
     debits = config['debits']
     debits.each do |debit|
       debit[:account_id] = account_id
       unless debit['categories'].nil?
-        debit_tags = debit['categories'].split(&:strip).map { |c| Tag.find_or_create_by(name: c) }
+        debit_tags = debit['categories'].split(&:strip).map { |c| Tag.find_or_create_by(name: c, account_id: account_id) }
       end
       debit.delete('categories')
       d = Debit.create!(debit)

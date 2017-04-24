@@ -68,3 +68,6 @@
                             class: 'btn btn-danger'
             - else
               %td.action{colspan: 3} &empty;
+
+%div.align-left
+  = render partial: 'layouts/paginate', locals: { paginate: @paginate }

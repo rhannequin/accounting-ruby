@@ -1,7 +1,7 @@
 class Account < ApplicationRecord
-  has_many :debits
-  has_many :expenses
-  has_many :tags
+  has_many :debits, dependent: :destroy
+  has_many :expenses, dependent: :destroy
+  has_many :tags, dependent: :destroy
   has_many :account_users, dependent: :destroy
   has_many :users, through: :account_users
 
