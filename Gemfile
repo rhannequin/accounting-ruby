@@ -5,6 +5,7 @@ gem 'rails', '~> 5.x'
 
 # Database
 gem 'pg'
+gem 'bcrypt'
 
 # Webserver
 gem 'puma'
@@ -73,16 +74,14 @@ end
 
 group :development do
   gem 'brakeman',              require: false # Vulnerabilities
+  gem 'bullet'                                # N+1 queries
   gem 'capistrano',            require: false # Deployment
   gem 'capistrano-bundler',    require: false # Bundler support for Capistrano
   gem 'capistrano-figaro-yml', require: false # Figaro's config/application.yml support for Capistrano
   gem 'capistrano-rails',      require: false # Rails support for Capistrano
   gem 'capistrano-rvm',        require: false # RVM support for Capistrano
-  gem 'capistrano3-puma',      git: 'https://github.com/rhannequin/capistrano-puma.git',
-                               branch: 'daemonize-config',
-                               require: false # Puma support for Capistrano
+  gem 'capistrano3-puma',      require: false # Puma support for Capistrano
   gem 'listen'
-  gem 'quiet_assets'                          # Turns off the Rails asset pipeline log
   gem 'rubocop'                               # Ruby style guide
   gem 'spring'                                # Keeps application running in the background
   gem 'web-console'                           # Web Console
@@ -94,6 +93,7 @@ group :test do
   gem 'factory_girl_rails'                    # Factories
   gem 'faker'                                 # Use real values to fake for factories
   gem 'i18n-tasks'                            # Finds and manage missing and unused translations
+  gem 'nyan-cat-formatter'
   gem 'rails-controller-testing'              # Support for assigns and assert_template
   gem 'rspec-rails'                           # RSpec test framework
   gem 'simplecov', require: false             # Test coverage
@@ -101,12 +101,3 @@ end
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', group: :doc
-
-# Use ActiveModel has_secure_password
-gem 'bcrypt'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]

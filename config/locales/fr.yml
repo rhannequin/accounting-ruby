@@ -1,7 +1,35 @@
 ---
 fr:
+  accounts:
+    create:
+      flash:
+        success: Le compte a bien été ajouté.
+    destroy:
+      flash:
+        success: Le compte a bien été supprimé.
+    edit:
+      title: Édition du compte
+    index:
+      new_account: Ajouter un compte
+      title: Liste de mes comptes
+    new:
+      title: "Ajout d'un compte"
+    show:
+      current_amount: 'Montant actuel : %{amount}'
+      new_expense: Ajouter une dépense
+      spent: "%{spent} dépensés"
+    update:
+      flash:
+        success: Le compte a bien été mis à jour.
   activerecord:
     attributes:
+      account:
+        current_amount: Montant actuel
+        debits: Prélèvements
+        expenses: Dépenses
+        name: Nom
+        tags: Catégories
+        users: Utilisateurs
       debit:
         day: Jour
         end_date: Date de fin
@@ -37,6 +65,9 @@ fr:
         ignored: À ignorer
         name: Nom
     models:
+      account:
+        one: compte
+        other: comptes
       debit:
         zero: prélèvement
         one: prélèvement
@@ -158,11 +189,6 @@ fr:
         success: La dépense a bien été supprimée.
     edit:
       title: "Édition d'une dépense"
-    index:
-      current_amount: 'Montant actuel : %{amount}'
-      new_expense: Ajouter une dépense
-      title: Liste des dépenses
-      spent: "%{spent} dépensés"
     new:
       title: "Ajout d'une dépense"
     show:
@@ -193,12 +219,13 @@ fr:
     flash:
       close: Fermer
     navbar:
-      account:
-        settings: Paramètres
+      accounts: Mes comptes
       admin:
         home: Tableau de bord
         name: Admin
       home: Accueil
+      user_account:
+        settings: Paramètres
     project: Comptes
     toggle_navigation: Basculer la navigation
   scaffold:
@@ -221,8 +248,16 @@ fr:
       monthly_average: Moyenne sur 6 mois
       title: Graphique
       yearly_average: Moyenne sur 1 an
+    destroy:
+      flash:
+        success: La catégorie a bien été supprimée.
     edit:
       title: "Édition d'une catégorie"
+    index:
+      title: Catégories du compte
+      new_tag: Ajouter une catégorie
+    new:
+      title: Ajouter une catégorie
     show:
       title: "Affichage d'une catégorie"
       use: Utilisation

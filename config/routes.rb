@@ -1,14 +1,17 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'callbacks' }
-  root to: 'expenses#index'
+  root to: 'home#index'
 
-  resources :debits, :expenses
-  resources :tags, only: %i( show edit update ) do
-    get 'chart', on: :member
+    resources :accounts do
+    resources :debits
+    resources :expenses, except: :index
+    resources :tags do
+      get 'chart', on: :member
+    end
   end
 
   namespace :admin do
     get '', to: 'home#index'
-    resources :users, only: [:index, :show, :destroy]
+    resources :users, only: %i(index show destroy)
   end
 end

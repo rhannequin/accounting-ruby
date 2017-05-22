@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def alert_class(name)
     name = name.to_sym
@@ -9,8 +11,12 @@ module ApplicationHelper
     end
   end
 
+  def safe_unescape(str)
+    safe_join [raw(str)]
+  end
+
   def empty_char
-    safe_join [raw('&#8709;')]
+    safe_unescape '&#8709;'
   end
 
   def provider_profile_link(provider, uid)
@@ -37,10 +43,8 @@ module ApplicationHelper
   end
 
   def paginate_params(current_page, first_date, months_per_page)
-    today = Date.today
-    current_page = 1 unless current_page && current_page.to_i > 0
     @paginate = {
-      current_page: current_page.to_i,
+      current_page: current_page,
       total_pages: paginate_total_pages(first_date, months_per_page)
     }
   end

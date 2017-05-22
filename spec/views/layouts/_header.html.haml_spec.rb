@@ -45,7 +45,7 @@ describe 'layouts/_header.html.haml' do
         before(:each) { render }
 
         it 'has a Setting link' do
-          expect(rendered).to include(I18n.t(:'layouts.navbar.account.settings'))
+          expect(rendered).to include(I18n.t(:'layouts.navbar.user_account.settings'))
         end
 
         it 'does not have admin link' do

@@ -1,0 +1,11 @@
+.page-header
+  = link_to accounts_path, class: 'btn btn-default' do
+    %span.glyphicon.glyphicon-list-alt
+    = t :'scaffold.back'
+  - if can? :read, @account
+    = link_to @account, class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-info-sign
+      = t :'scaffold.show'
+  %h1= t :'.title'
+
+= render 'form'

@@ -1,6 +1,7 @@
 class Expense < ApplicationRecord
   has_many :taggings, as: :taggable
   has_many :tags, through: :taggings
+  belongs_to :account
 
   scope :include_tags, -> { includes(:tags) }
   scope :include_taggings, -> { includes(:taggings) }

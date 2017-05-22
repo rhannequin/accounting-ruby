@@ -1,78 +1,82 @@
+# frozen_string_literal: true
+
 class DebitsController < ApplicationController
-  before_action :set_debit, only: [:edit, :update, :destroy]
+  load_and_authorize_resource
 
-  # GET /debits
-  # GET /debits.json
+  before_action :set_account_id
+  before_action :set_account, :set_tags, only: %i[new edit]
+  before_action :set_debit, only: %i[edit update destroy]
+
   def index
-    @debits = Debit.include_tags.order(start_date: :desc)
+    @debits = Debit.include_tags
+                   .where(account_id: @account_id)
+                   .order(start_date: :desc)
   end
 
-  # GET /debits/1
-  # GET /debits/1.json
   def show
-    @debit = Debit.include_tags.find(params[:id])
+    @debit = Debit.include_tags
+                  .find(params.require(:id))
   end
 
-  # GET /debits/new
   def new
     @debit = Debit.new
   end
 
-  # GET /debits/1/edit
-  def edit
-  end
+  def edit; end
 
-  # POST /debits
-  # POST /debits.json
   def create
-    params = debit_params
-    tags = params['tag_ids']
-    params.delete('tag_ids')
-    @debit = Debit.new(params)
-
-    respond_to do |format|
-      if @debit.save && (@debit.tag_ids = tags)
-        format.html { redirect_to @debit, notice: t(:'debits.create.flash.success') }
-        format.json { render :show, status: :created, location: @debit }
-      else
-        format.html { render :new }
-        format.json { render json: @debit.errors, status: :unprocessable_entity }
-      end
+    @debit = Debit.new(debit_params)
+    @debit.account_id = @account_id
+    if @debit.save
+      flash[:notice] = t(:'debits.create.flash.success')
+      redirect_to account_debit_path(@account_id, @debit.id)
+    else
+      render :new
     end
   end
 
-  # PATCH/PUT /debits/1
-  # PATCH/PUT /debits/1.json
   def update
-    respond_to do |format|
-      if @debit.update(debit_params)
-        format.html { redirect_to @debit, notice: t(:'debits.update.flash.success') }
-        format.json { render :show, status: :ok, location: @debit }
-      else
-        format.html { render :edit }
-        format.json { render json: @debit.errors, status: :unprocessable_entity }
-      end
+    if @debit.update(debit_params)
+      flash[:notice] = t(:'debits.update.flash.success')
+      redirect_to account_debit_path(@account_id, @debit.id)
+    else
+      render :edit
     end
   end
 
-  # DELETE /debits/1
-  # DELETE /debits/1.json
   def destroy
     @debit.destroy
-    respond_to do |format|
-      format.html { redirect_to debits_url, notice: t(:'debits.destroy.flash.success') }
-      format.json { head :no_content }
-    end
+    flash[:notice] = t(:'debits.destroy.flash.success')
+    redirect_to account_debits_path(@account_id)
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_debit
-      @debit = Debit.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def debit_params
-      params.require(:debit).permit(:reason, :price, :day, :way, :start_date, :end_date, tag_ids: [])
-    end
+  def set_account_id
+    @account_id = params.require(:account_id)
+  end
+
+  def set_account
+    @account = Account.new(id: @account_id)
+  end
+
+  def set_tags
+    @tags = Tag.where(account_id: @account_id)
+  end
+
+  def set_debit
+    @debit = Debit.find(params[:id])
+  end
+
+  def debit_params
+    params.require(:debit).permit(
+      :reason,
+      :price,
+      :day,
+      :way,
+      :start_date,
+      :end_date,
+      tag_ids: []
+    )
+  end
 end

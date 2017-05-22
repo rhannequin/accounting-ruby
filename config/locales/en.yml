@@ -1,7 +1,35 @@
 ---
 en:
+  accounts:
+    create:
+      flash:
+        success: Account created.
+    destroy:
+      flash:
+        success: Account deleted.
+    edit:
+      title: Account update
+    index:
+      new_account: Add account
+      title: My accounts
+    new:
+      title: New account
+    show:
+      current_amount: 'Current amount: %{amount}'
+      new_expense: New expense
+      spent: "%{spent} spent"
+    update:
+      flash:
+        success: Account updated.
   activerecord:
     attributes:
+      account:
+        current_amount: Current amount
+        debits: Debits
+        expenses: Expenses
+        name: Name
+        tags: Tags
+        users: Users
       debit:
         day: Day
         end_date: End date
@@ -37,6 +65,9 @@ en:
         ignored: Ignored
         name: Name
     models:
+      account:
+        one: account
+        other: accounts
       debit:
         zero: debit
         one: debit
@@ -158,11 +189,6 @@ en:
         success: Expense has been deleted.
     edit:
       title: Expense update
-    index:
-      current_amount: 'Current amount: %{amount}'
-      new_expense: Add an expense
-      title: List of expenses
-      spent: "%{spent} spent"
     new:
       title: "Add an expense"
     show:
@@ -193,12 +219,13 @@ en:
     flash:
       close: Close
     navbar:
-      account:
-        settings: Settings
+      accounts: My accounts
       admin:
         home: Dashboard
         name: Admin
       home: Accueil
+      user_account:
+        settings: Settings
     project: Accounting
     toggle_navigation: Toggle navigation
   scaffold:
@@ -221,8 +248,16 @@ en:
       monthly_average: Mean on 6 months
       title: Chart
       yearly_average: Mean on 1 year
+    destroy:
+      flash:
+        success: Tag has been deleted.
     edit:
       title: "Tag update"
+    index:
+      title: "Account's tags"
+      new_tag: Add a tag
+    new:
+      title: Ajouter une catégorie
     show:
       title: "Tag showing"
       use: Use
