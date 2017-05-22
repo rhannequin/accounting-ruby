@@ -1,24 +1,44 @@
+# frozen_string_literal: true
+
 class TagsController < ApplicationController
-  before_action :set_tag
+  load_and_authorize_resource
+
+  before_action :set_account_id
+  before_action :set_account, only: %i[new edit]
+  before_action :set_tag, except: %i[index new]
+
+  def index
+    @tags = Tag.where(account_id: @account_id)
+  end
 
   def show
-    @expenses_count = Tagging.where(taggable_type: 'Expense', tag_id: @tag.id).count
-    @debits_count = Tagging.where(taggable_type: 'Debit', tag_id: @tag.id).count
+    @expenses_count = Tagging.where(
+      taggable_type: 'Expense',
+      tag_id: @tag.id
+    ).count
+    @debits_count = Tagging.where(
+      taggable_type: 'Debit',
+      tag_id: @tag.id
+    ).count
   end
 
-  def edit
+  def new
+    @tag = Tag.new
   end
+
+  def edit; end
 
   def update
-    respond_to do |format|
-      if @tag.update(tag_params)
-        format.html { redirect_to @tag, notice: t(:'tags.update.flash.success') }
-        format.json { render :show, status: :ok, location: @tag }
-      else
-        format.html { render :edit }
-        format.json { render json: @tag.errors, status: :unprocessable_entity }
-      end
+    if @tag.update(tag_params)
+      redirect_to account_tag_path(@account_id, @tag.id), notice: t(:'tags.update.flash.success')
+    else
+      render :edit
     end
+  end
+
+  def destroy
+    @tag.destroy
+    redirect_to account_tags_url(@account_id), notice: t(:'tags.destroy.flash.success')
   end
 
   def chart
@@ -33,33 +53,34 @@ class TagsController < ApplicationController
       ],
       name: I18n.t(:'tags.chart.chart_title', tag: @tag.name),
       months: 6,
-      expenses_lb: -> (u) { Expense.includes(:taggings)
-                                   .where(['date > ?', u])
+      expenses_lb: -> (u) { Expense.include_taggings
+                                   .date_after(u)
                                    .where(taggings: { tag_id: tag_id })
-                                   .where.not(
-                                      id: Expense.joins(:taggings)
-                                                 .where(taggings: { tag_id: ignore_tag_ids })
-                                    ) },
-      debits_lb: -> (u) { Debit.where(['end_date > ?', u])
+                                   .where.not( id: Expense.with_these_tags(ignore_tag_ids) ) },
+      debits_lb: -> (u) { Debit.end_date_after(u)
                                .or(Debit.where(end_date: nil))
-                               .where(['start_date < ?', Date.today])
-                               .where(
-                                  id: Debit.joins(:taggings)
-                                           .where(taggings: { tag_id: tag_id })
-                                ) }
+                               .start_date_before(Date.today)
+                               .where( id: Debit.with_these_tags(tag_id) ) }
     }
 
     @chart = ChartsService.new(settings).build_chart
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_tag
-      @tag = Tag.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def tag_params
-      params.require(:tag).permit(:name, :ignored)
-    end
+  def set_account_id
+    @account_id = params.require(:account_id)
+  end
+
+  def set_account
+    @account = Account.new(id: @account_id)
+  end
+
+  def set_tag
+    @tag = Tag.find(params[:id])
+  end
+
+  def tag_params
+    params.require(:tag).permit(:name, :ignored)
+  end
 end

@@ -1,0 +1,23 @@
+= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { role: 'form' }) do |f|
+
+  .form-group
+    = f.input :name, autofocus: true, class: 'form-control'
+
+  .form-group
+    = f.input :email, class: 'form-control'
+
+  - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+    .form-group
+      %p
+        Currently waiting confirmation for: #{resource.unconfirmed_email}
+
+  .form-group
+    = f.input :password, input_html: { autocomplete: :off }, hint: t(:'.leave_blank_hint'), required: false, class: 'form-control'
+
+  .form-group
+    = f.input :password_confirmation, input_html: { autocomplete: :off }, required: false, class: 'form-control'
+
+  .form-group
+    = f.input :current_password, input_html: { autocomplete: :off }, hint: t(:'.confirm_hint'), required: true, class: 'form-control'
+
+  = f.submit t(:'.update'), class: 'btn btn-primary'

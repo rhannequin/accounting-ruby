@@ -1,0 +1,31 @@
+.page-header
+  = link_to account_path(@account_id), class: 'btn btn-default' do
+    %span.glyphicon.glyphicon-list-alt
+    = t :'scaffold.back'
+  = link_to new_account_tag_path(@account_id), class: 'btn btn-success' do
+    %span.glyphicon.glyphicon-plus
+    = t :'.new_tag'
+  %h1= t :'.title'
+
+.table-responsive
+  %table.table.table-striped.table-bordered.table-hover
+    %thead
+      %tr
+        %th= t :'activerecord.attributes.tag.name'
+        %th{colspan: 3}
+    %tbody
+      - @tags.each do |tag|
+        %tr
+          %td= tag.name
+          %td.action
+            = link_to t(:'scaffold.show'), account_tag_path(@account_id, tag.id), class: 'btn btn-info'
+          %td.action
+            = link_to t(:'scaffold.edit'),
+                      edit_account_tag_path(@account_id, tag.id),
+                      class: 'btn btn-warning'
+          %td.action
+            = link_to t(:'scaffold.destroy'),
+                      account_tag_path(@account_id, tag.id),
+                      method: :delete,
+                      data: { confirm: t(:'scaffold.are_you_sure') },
+                      class: 'btn btn-danger'

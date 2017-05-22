@@ -10,7 +10,7 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-      = link_to t(:'layouts.project'), root_path, class: 'navbar-brand'
+      = link_to t(:'layouts.project', account_name: ENV['ACCOUNT_NAME']), root_path, class: 'navbar-brand'
     #navbar.collapse.navbar-collapse
       :ruby
         uris = [

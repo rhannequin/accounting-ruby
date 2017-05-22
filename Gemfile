@@ -1,62 +1,103 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.x'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
-# Use Puma as the app server
+
+# Database
+gem 'pg'
+gem 'bcrypt'
+
+# Webserver
 gem 'puma'
-# Use SCSS for stylesheets
+
+# Rack plugins
+gem 'rack-attack'
+
+# Authentication
+gem 'devise'
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
+
+# Templating engine
+gem 'haml-rails'
+
+# Soft-delete
+gem 'paranoia'
+
+# Slugging and permalink
+gem 'friendly_id'
+
+# Authorization
+gem 'cancancan'
+gem 'rolify'
+
+# Environment configuration
+gem 'figaro'
+
+# Assets
+## Use SCSS for stylesheets
 gem 'sass-rails'
-# Use Uglifier as compressor for JavaScript assets
+## Bootstrap
+gem 'bootstrap-sass'
+## Use Uglifier as compressor for JavaScript assets
 gem 'uglifier'
-# Use CoffeeScript for .coffee assets and views
+## Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails'
-# See https://github.com/rails/execjs#readme for more supported runtimes
+## See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby
 
-# Use jquery as the JavaScript library
+# Ajax
+## Use jquery as the JavaScript library
 gem 'jquery-rails'
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
+## Turbolinks makes following links in your web application faster
 gem 'turbolinks'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+## Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+## Use respond_to and respond_with methods
+gem 'responders'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
-gem 'quiet_assets'
-gem 'bootstrap-sass'
+# Simple Form
 gem 'simple_form'
-gem 'bootstrap-generators'
-gem 'haml-rails'
+
 gem 'smarter_csv'
 gem 'activerecord-import'
 gem 'bootstrap-datepicker-rails'
 gem 'seed_dump'
 gem 'lazy_high_charts'
-gem 'friendly_id'
 gem 'yaml_db'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-  gem 'rspec-rails'
 end
 
 group :development do
-  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'web-console'
+  gem 'brakeman',              require: false # Vulnerabilities
+  gem 'bullet'                                # N+1 queries
+  gem 'capistrano',            require: false # Deployment
+  gem 'capistrano-bundler',    require: false # Bundler support for Capistrano
+  gem 'capistrano-figaro-yml', require: false # Figaro's config/application.yml support for Capistrano
+  gem 'capistrano-rails',      require: false # Rails support for Capistrano
+  gem 'capistrano-rvm',        require: false # RVM support for Capistrano
+  gem 'capistrano3-puma',      require: false # Puma support for Capistrano
   gem 'listen'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen'
+  gem 'rubocop'                               # Ruby style guide
+  gem 'spring'                                # Keeps application running in the background
+  gem 'web-console'                           # Web Console
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+group :test do
+  gem 'capybara'                              # Integration tests
+  gem 'database_cleaner'                      # Clean database during tests
+  gem 'factory_girl_rails'                    # Factories
+  gem 'faker'                                 # Use real values to fake for factories
+  gem 'i18n-tasks'                            # Finds and manage missing and unused translations
+  gem 'nyan-cat-formatter'
+  gem 'rails-controller-testing'              # Support for assigns and assert_template
+  gem 'rspec-rails'                           # RSpec test framework
+  gem 'simplecov', require: false             # Test coverage
+end
+
+# bundle exec rake doc:rails generates the API under doc/api.
+gem 'sdoc', group: :doc

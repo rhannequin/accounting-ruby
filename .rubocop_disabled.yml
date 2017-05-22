@@ -1,0 +1,8 @@
+# These are all the cops that are disabled in the default configuration.
+
+Style/Documentation:
+  Description: 'Document classes and non-namespace modules.'
+  Enabled: false
+  Exclude:
+    - 'spec/**/*'
+    - 'test/**/*'

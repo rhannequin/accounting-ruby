@@ -1,0 +1,14 @@
+- resources = [
+-   { label: t(:'layouts.navbar.user_account.settings'), path: edit_user_registration_path }
+- ]
+
+- paths = resources.map { |h| h[:path] }
+
+%li{class: "dropdown #{active_class paths}", role: 'presentation'}
+  %a.dropdown-toggle{'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown', href: '#', role: 'button'}
+    = h current_user.name
+    %span.caret
+  %ul.dropdown-menu
+    - resources.each do |resource|
+      %li{class: active_class(resource[:path])}
+        = link_to resource[:label], resource[:path]

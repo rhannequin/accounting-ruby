@@ -3,14 +3,16 @@
     %li{ class: ('disabled' if paginate[:current_page] == 1) }
       %span
         %span{ 'aria-hidden' => true }= link_to '&laquo;'.html_safe, page: 1
-    - (1..paginate[:total_pages]).to_a.each do |page|
+    - pages = (1..paginate[:total_pages]).to_a
+    - it = pages.first(3) + ['…'] + pages.last(3)
+    - it.each do |page|
       - if page == paginate[:current_page]
         %li.active
           %span
             = page
             %span.sr-only current
       - else
-        %li= link_to page, page: page
+        %li= link_to page, (page.is_a?(String) ? '#' : { page: page })
     %li{ class: ('disabled' if paginate[:current_page] == paginate[:total_pages]) }
       %span
         %span{ 'aria-hidden' => true }= link_to '&raquo;'.html_safe, page: paginate[:total_pages]

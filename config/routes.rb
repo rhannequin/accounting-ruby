@@ -1,8 +1,17 @@
 Rails.application.routes.draw do
-  resources :debits, :expenses
-  resources :tags, only: %i( show edit update ) do
-    get 'chart', on: :member
+  devise_for :users, controllers: { omniauth_callbacks: 'callbacks' }
+  root to: 'home#index'
+
+    resources :accounts do
+    resources :debits
+    resources :expenses, except: :index
+    resources :tags do
+      get 'chart', on: :member
+    end
   end
-  root to: 'expenses#index'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  namespace :admin do
+    get '', to: 'home#index'
+    resources :users, only: %i(index show destroy)
+  end
 end
