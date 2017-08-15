@@ -243,6 +243,7 @@ fr:
     show: Afficher
   tags:
     chart:
+      all_time_average: Moyenne depuis le début
       chart_title: "Dépenses %{tag}"
       monthly: Dépenses mensuelles
       monthly_average: Moyenne sur 6 mois

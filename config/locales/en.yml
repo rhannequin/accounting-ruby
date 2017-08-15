@@ -243,6 +243,7 @@ en:
     show: Afficher
   tags:
     chart:
+      all_time_average: Mean on all time
       chart_title: "Expenses %{tag}"
       monthly: Monthly expenses
       monthly_average: Mean on 6 months

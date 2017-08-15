@@ -44,23 +44,26 @@ class TagsController < ApplicationController
   def chart
     ignore_tag_ids = Tag.select(:id).ignored
     tag_id = @tag.id
+    account = @tag.account
 
     settings = {
       lines: [
         { type: :curve, name: I18n.t(:'tags.chart.monthly'), covers: 6 },
         { type: :average, name: I18n.t(:'tags.chart.monthly_average'), covers: 6 },
         { type: :average, name: I18n.t(:'tags.chart.yearly_average'), covers: 12 },
+        { type: :average, name: I18n.t(:'tags.chart.all_time_average'), covers: nil }
       ],
       name: I18n.t(:'tags.chart.chart_title', tag: @tag.name),
       months: 6,
-      expenses_lb: -> (u) { Expense.include_taggings
+      account: account,
+      expenses_lb: -> (u) { account.expenses.include_taggings
                                    .date_after(u)
                                    .where(taggings: { tag_id: tag_id })
-                                   .where.not( id: Expense.with_these_tags(ignore_tag_ids) ) },
-      debits_lb: -> (u) { Debit.end_date_after(u)
-                               .or(Debit.where(end_date: nil))
+                                   .where.not( id: account.expenses.with_these_tags(ignore_tag_ids) ) },
+      debits_lb: -> (u) { account.debits.end_date_after(u)
+                               .or(account.debits.where(end_date: nil))
                                .start_date_before(Date.today)
-                               .where( id: Debit.with_these_tags(tag_id) ) }
+                               .where( id: account.debits.with_these_tags(tag_id) ) }
     }
 
     @chart = ChartsService.new(settings).build_chart

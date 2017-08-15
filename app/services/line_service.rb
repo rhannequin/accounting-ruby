@@ -2,11 +2,12 @@ class LineService
   attr_accessor :type, :name, :covers, :months, :expenses_lb, :debits_lb,
                 :expenses, :debits, :data, :categories
 
-  def initialize(line, months, expenses_lb, debits_lb)
+  def initialize(line, months, account, expenses_lb, debits_lb)
     @type = line[:type]
     @name = line[:name]
     @covers = line[:covers]
     @months = months
+    @account = account
     @expenses_lb = expenses_lb
     @debits_lb = debits_lb
     init
@@ -31,7 +32,7 @@ class LineService
 
   def init
     today = Date.today
-    past_date = today - covers.month
+    past_date = covers.nil? ? @account.expenses.order(:date).first.date : today - covers.month
     until_date = past_date.beginning_of_month
     @categories = (past_date..today).to_a.map { |d| d.beginning_of_month }.uniq
     @debits = debits_lb.call(until_date)
