@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class ExpensesController < ApplicationController
-  before_action :set_account_id
-  before_action :set_account, :set_tags, only: %i[new edit]
+  before_action :set_account_id, :set_account
+  before_action :set_tags, only: %i[new edit]
   before_action :set_expense, only: %i[edit update destroy]
 
   load_resource :account
@@ -50,7 +50,7 @@ class ExpensesController < ApplicationController
   end
 
   def set_account
-    @account = Account.new(id: @account_id)
+    @account = Account.find(@account_id)
   end
 
   def set_tags

@@ -1,7 +1,12 @@
 class Debit < ApplicationRecord
+  extend FriendlyId
+
   has_many :taggings, as: :taggable
   has_many :tags, through: :taggings
   belongs_to :account
+
+  friendly_id :slug_candidates, use: [:slugged, :finders]
+  after_create :update_slug # Force to regenerate slug with id
 
   scope :include_tags, -> { includes(:tags) }
   scope :with_taggings, -> { joins(:taggings) }
@@ -11,6 +16,24 @@ class Debit < ApplicationRecord
   scope :end_date_nil, -> { where(end_date: nil) }
 
   validates :reason, :price, :day, :start_date, presence: true
+
+  def slug_candidates
+    if id
+      splitted_id = id.split('-').first
+      parameterized_reason = reason.parameterize
+      ["#{splitted_id}-#{parameterized_reason}"]
+    else
+      [:reason]
+    end
+  end
+
+  def should_generate_new_friendly_id?
+    reason_changed? || super
+  end
+
+  def update_slug
+    valid?
+  end
 
   def applies_this_month?(month)
     beginning_of_month = month.beginning_of_month

@@ -1,5 +1,5 @@
 .page-header
-  = link_to account_tag_path(@account_id, @tag.id), class: 'btn btn-primary' do
+  = link_to account_tag_path(@account, @tag), class: 'btn btn-primary' do
     %span.glyphicon.glyphicon-info-sign
     = t :'scaffold.show'
   %h1= t :'.title'

@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'callbacks' }
   root to: 'home#index'
 
-    resources :accounts do
+  resources :accounts do
     resources :debits
     resources :expenses, except: :index
     resources :tags do

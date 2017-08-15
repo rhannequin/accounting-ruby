@@ -1,8 +1,8 @@
 .page-header
-  = link_to account_path(@account_id), class: 'btn btn-default' do
+  = link_to account_path(@account), class: 'btn btn-default' do
     %span.glyphicon.glyphicon-list-alt
     = t :'scaffold.back'
-  = link_to new_account_debit_path(@account_id), class: 'btn btn-success' do
+  = link_to new_account_debit_path(@account), class: 'btn btn-success' do
     %span.glyphicon.glyphicon-plus
     = t :'.new_debit'
   %h1= t :'.title'
@@ -26,20 +26,20 @@
           %td= number_to_currency debit.price
           %td= debit.day
           %td= debit.way
-          %td= render partial: 'tags/list', locals: { account_id: @account_id, tags: debit.tags }
+          %td= render partial: 'tags/list', locals: { account_id: @account, tags: debit.tags }
           %td= l debit.start_date
           %td= debit.end_date ? l(debit.end_date) : '&empty;'.html_safe
           %td.action
             = link_to t(:'scaffold.show'),
-                      account_debit_path(@account_id, debit.id),
+                      account_debit_path(@account, debit),
                       class: 'btn btn-info'
           %td.action
             = link_to t(:'scaffold.edit'),
-                      edit_account_debit_path(@account_id, debit),
+                      edit_account_debit_path(@account, debit),
                       class: 'btn btn-warning'
           %td.action
             = link_to t(:'scaffold.destroy'),
-                      account_debit_path(@account_id, debit.id),
+                      account_debit_path(@account, debit),
                       method: :delete,
                       data: { confirm: t(:'scaffold.are_you_sure') },
                       class: 'btn btn-danger'

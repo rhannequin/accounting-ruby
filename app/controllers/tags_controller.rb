@@ -3,12 +3,11 @@
 class TagsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_account_id
-  before_action :set_account, only: %i[new edit]
+  before_action :set_account_id, :set_account
   before_action :set_tag, except: %i[index new]
 
   def index
-    @tags = Tag.where(account_id: @account_id)
+    @tags = Tag.where(account: @account)
   end
 
   def show
@@ -76,7 +75,7 @@ class TagsController < ApplicationController
   end
 
   def set_account
-    @account = Account.new(id: @account_id)
+    @account = Account.find(@account_id)
   end
 
   def set_tag

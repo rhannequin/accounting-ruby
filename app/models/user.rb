@@ -24,7 +24,7 @@ class User < ApplicationRecord
   end
 
   def should_generate_new_friendly_id?
-    saved_change_to_name? || super
+    name_changed? || super
   end
 
   def self.from_omniauth(auth)
