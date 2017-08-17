@@ -180,6 +180,9 @@ fr:
     unlocks:
       new:
         resend_unlock_instructions: Renvoyer les instructions de déblocage
+  dump_mailer:
+    dump_email:
+      subject: "Sauvegarde de l'application %{app_name}"
   expenses:
     create:
       flash:

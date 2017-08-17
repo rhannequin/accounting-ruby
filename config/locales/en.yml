@@ -180,6 +180,9 @@ en:
     unlocks:
       new:
         resend_unlock_instructions: Resend unlock instructions
+  dump_mailer:
+    dump_email:
+      subject: "%{app_name} application backup"
   expenses:
     create:
       flash:
