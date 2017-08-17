@@ -35,6 +35,9 @@ gem 'rolify'
 # Environment configuration
 gem 'figaro'
 
+# Crontab scheduler
+gem 'whenever', require: false
+
 # Assets
 ## Use SCSS for stylesheets
 gem 'sass-rails'
