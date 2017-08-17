@@ -26,7 +26,7 @@
           %td= number_to_currency debit.price
           %td= debit.day
           %td= debit.way
-          %td= render partial: 'tags/list', locals: { account_id: @account, tags: debit.tags }
+          %td= render partial: 'tags/list', locals: { account: @account, tags: debit.tags }
           %td= l debit.start_date
           %td= debit.end_date ? l(debit.end_date) : '&empty;'.html_safe
           %td.action

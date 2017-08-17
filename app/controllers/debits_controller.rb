@@ -9,7 +9,7 @@ class DebitsController < ApplicationController
 
   def index
     @debits = Debit.include_tags
-                   .where(account_id: @account_id)
+                   .where(account: @account)
                    .order(start_date: :desc)
   end
 
