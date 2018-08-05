@@ -121,4 +121,9 @@ task csv_to_db: :environment do
     puts
 
   end
+
+  puts 'Updating all tags slugs...'
+  Tag.find_each { |t| t.save! }
+  puts "... done. (#{Tag.count})"
+  puts
 end

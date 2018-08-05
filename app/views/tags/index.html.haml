@@ -1,8 +1,8 @@
 .page-header
-  = link_to account_path(@account_id), class: 'btn btn-default' do
+  = link_to account_path(@account), class: 'btn btn-default' do
     %span.glyphicon.glyphicon-list-alt
     = t :'scaffold.back'
-  = link_to new_account_tag_path(@account_id), class: 'btn btn-success' do
+  = link_to new_account_tag_path(@account), class: 'btn btn-success' do
     %span.glyphicon.glyphicon-plus
     = t :'.new_tag'
   %h1= t :'.title'
@@ -18,14 +18,14 @@
         %tr
           %td= tag.name
           %td.action
-            = link_to t(:'scaffold.show'), account_tag_path(@account_id, tag.id), class: 'btn btn-info'
+            = link_to t(:'scaffold.show'), account_tag_path(@account, tag), class: 'btn btn-info'
           %td.action
             = link_to t(:'scaffold.edit'),
-                      edit_account_tag_path(@account_id, tag.id),
+                      edit_account_tag_path(@account, tag),
                       class: 'btn btn-warning'
           %td.action
             = link_to t(:'scaffold.destroy'),
-                      account_tag_path(@account_id, tag.id),
+                      account_tag_path(@account, tag),
                       method: :delete,
                       data: { confirm: t(:'scaffold.are_you_sure') },
                       class: 'btn btn-danger'

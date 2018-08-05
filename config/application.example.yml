@@ -1,9 +1,11 @@
-APP_EMAIL_SENDER: "you.email@domain.com"
+APP_EMAIL_SENDER: you.email@domain.com
 COOKIE_STORE_KEY: abc123
 DEVISE_PEPPER: abc123
 DEVISE_SECRET_KEY: abc123
+DUMP_EMAIL_RECEIVER: you.email@domain.com
 FACEBOOK_KEY: xxx
 FACEBOOK_SECRET: xxx
+REPLY_EMAIL_ADDRESS: no-reply@example.com
 SECRET_KEY_BASE: abc123
 TWITTER_KEY: xxx
 TWITTER_SECRET: xxx
@@ -25,7 +27,7 @@ test:
   DB_PORT: "5432"
 
 production:
-  APP_EMAIL_SENDER: "you.email@domain.com"
+  APP_EMAIL_SENDER: you.email@domain.com
   COOKIE_STORE_KEY: abc123_prod
   DB_HOST: xxx
   DB_DATABASE: xxx
@@ -37,8 +39,7 @@ production:
   DEVISE_SECRET_KEY: abc123_prod
   FACEBOOK_KEY: KEY
   FACEBOOK_SECRET: SECRET
-  HOST: "example.com"
-  REPLY_EMAIL_ADDRESS: "no-reply@example.com"
+  HOST: example.com
   SECRET_KEY_BASE: abc123_prod
   TWITTER_KEY: KEY
   TWITTER_SECRET: SECRET

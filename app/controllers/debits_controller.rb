@@ -3,13 +3,13 @@
 class DebitsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_account_id
-  before_action :set_account, :set_tags, only: %i[new edit]
+  before_action :set_account_id, :set_account
+  before_action :set_tags, only: %i[new edit]
   before_action :set_debit, only: %i[edit update destroy]
 
   def index
     @debits = Debit.include_tags
-                   .where(account_id: @account_id)
+                   .where(account: @account)
                    .order(start_date: :desc)
   end
 
@@ -57,7 +57,7 @@ class DebitsController < ApplicationController
   end
 
   def set_account
-    @account = Account.new(id: @account_id)
+    @account = Account.find(@account_id)
   end
 
   def set_tags

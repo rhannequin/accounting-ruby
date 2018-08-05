@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Macros
   module Omniauth
     def self.provides_mock_for(provider)
       class_eval %(
         def mock_auth_#{provider}
-          OmniAuth.config.add_mock :#{provider}, uid: '12345', info: {
-            name: '#{provider.capitalize} User',
+          OmniAuth.config.add_mock :#{provider}, uid: "12345", info: {
+            name: "#{provider.capitalize} User",
             provider: :#{provider},
             email: "#{provider}-user@example.com"
           }
@@ -12,7 +14,7 @@ module Macros
       )
     end
 
-    %i(twitter facebook).each do |provider|
+    %i[twitter facebook].each do |provider|
       provides_mock_for provider
     end
 

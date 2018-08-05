@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   extend FriendlyId
 
@@ -7,10 +9,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, :lockable
-
   acts_as_paranoid
 
-  friendly_id :slug_candidates, use: [:slugged, :finders]
+  friendly_id :slug_candidates, use: %i[slugged finders]
 
   has_many :account_users, dependent: :destroy
   has_many :accounts, through: :account_users
@@ -20,7 +21,7 @@ class User < ApplicationRecord
   after_update :notify_email_change, if: -> { saved_change_to_email? }
 
   def slug_candidates
-    [:name, [:name, :uid]]
+    [:name, %i[name uid]]
   end
 
   def should_generate_new_friendly_id?
@@ -43,8 +44,8 @@ class User < ApplicationRecord
 
   private
 
-  def notify_email_change
-    UserMailer.email_changed_email(self, email_before_last_save, email_before_last_save).deliver_now
-    UserMailer.email_changed_email(self, email_before_last_save, email).deliver_now
-  end
+    def notify_email_change
+      UserMailer.email_modified_email(self, email_before_last_save, email_before_last_save).deliver_now
+      UserMailer.email_modified_email(self, email_before_last_save, email).deliver_now
+    end
 end

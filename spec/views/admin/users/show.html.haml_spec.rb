@@ -1,14 +1,16 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-describe 'admin/users/show.html.haml' do
-  describe 'usual scenario' do
+require "rails_helper"
+
+describe "admin/users/show.html.haml" do
+  describe "usual scenario" do
     let(:user) { create :user, :already_signed_in }
 
     before(:each) do
       assign :user, user
     end
 
-    it 'displays users attributes' do
+    it "displays users attributes" do
       render
       expect(rendered).to include(user.id.to_s)
       expect(rendered).to include(user.name)
@@ -21,7 +23,7 @@ describe 'admin/users/show.html.haml' do
     end
   end
 
-  describe 'about roles' do
+  describe "about roles" do
     let(:user) { create :user, :already_signed_in }
 
     before(:each) do
@@ -29,14 +31,14 @@ describe 'admin/users/show.html.haml' do
       assign :user, user
     end
 
-    it 'displays users attributes' do
+    it "displays users attributes" do
       render
       expect(rendered).to include(roles_list(user.roles))
     end
   end
 
-  describe 'with OmniAuth accounts' do
-    it 'displays username' do
+  describe "with OmniAuth accounts" do
+    it "displays username" do
       user = create(:user, :already_signed_in, :with_twitter_account)
       assign :user, user
       render

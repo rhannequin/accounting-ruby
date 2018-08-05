@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # FriendlyId Global Configuration
 #
 # Use this to set up shared configuration options for your entire application.
@@ -75,7 +77,7 @@ FriendlyId.defaults do |config|
   #
   # config.use Module.new {
   #   def should_generate_new_friendly_id?
-  #     slug.blank? || saved_change_to_<your_column_name_here>?
+  #     slug.blank? || <your_column_name_here>_changed?
   #   end
   # }
   #

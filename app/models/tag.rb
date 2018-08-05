@@ -1,6 +1,8 @@
 class Tag < ApplicationRecord
   extend FriendlyId
-  friendly_id :name, use: [:slugged, :finders]
+
+  friendly_id :slug_candidates, use: [:slugged, :finders]
+  after_create :update_slug # Force to regenerate slug with id
 
   belongs_to :account
   has_many :taggings, dependent: :destroy
@@ -9,7 +11,21 @@ class Tag < ApplicationRecord
 
   scope :ignored, -> { where(ignored: true) }
 
+  def slug_candidates
+    if id
+      splitted_id = id.split('-').first
+      parameterized_name = name.parameterize
+      ["#{splitted_id}-#{parameterized_name}"]
+    else
+      [:name]
+    end
+  end
+
   def should_generate_new_friendly_id?
-    saved_change_to_name? || super
+    name_changed? || super
+  end
+
+  def update_slug
+    valid?
   end
 end

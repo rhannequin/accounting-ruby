@@ -180,6 +180,9 @@ fr:
     unlocks:
       new:
         resend_unlock_instructions: Renvoyer les instructions de déblocage
+  dump_mailer:
+    dump_email:
+      subject: "Sauvegarde de l'application %{app_name}"
   expenses:
     create:
       flash:
@@ -219,13 +222,13 @@ fr:
     flash:
       close: Fermer
     navbar:
+      account:
+        settings: Paramètres
       accounts: Mes comptes
       admin:
         home: Tableau de bord
         name: Admin
       home: Accueil
-      user_account:
-        settings: Paramètres
     project: Comptes
     toggle_navigation: Basculer la navigation
   scaffold:
@@ -243,6 +246,7 @@ fr:
     show: Afficher
   tags:
     chart:
+      all_time_average: Moyenne depuis le début
       chart_title: "Dépenses %{tag}"
       monthly: Dépenses mensuelles
       monthly_average: Moyenne sur 6 mois
@@ -271,7 +275,7 @@ fr:
     destroy:
       user: Impossible de supprimer cet utilisateur.
   user_mailer:
-    email_changed_email:
+    email_modified_email:
       bye: "Bonne journée."
       email_changed: "Votre e-mail a été changé sur %{app_name}. Cet e-mail a été envoyé à la fois à votre ancienne et nouvelle adresse afin d'éviter toute action non souhaitée."
       email_was: "Votre adresse e-mail était : %{email_was}. Désormais votre adresse est : %{email_is}."

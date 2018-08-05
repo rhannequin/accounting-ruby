@@ -5,6 +5,7 @@ class ChartsService
     @lines = chart[:lines]
     @name = chart[:name]
     @months = chart[:months]
+    @account = chart[:account]
     @expenses_lb = chart[:expenses_lb]
     @debits_lb = chart[:debits_lb]
   end
@@ -12,7 +13,7 @@ class ChartsService
   def build_chart
     lines = []
     @lines.each do |line|
-      line = LineService.new(line, months, expenses_lb, debits_lb)
+      line = LineService.new(line, months, @account, expenses_lb, debits_lb)
       lines << line.build.publish
     end
     new_chart(lines.first[:categories], lines)

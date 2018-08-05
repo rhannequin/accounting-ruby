@@ -3,19 +3,19 @@
     %span.glyphicon.glyphicon-list-alt
     = t :'scaffold.back'
   - if can? :read, @account => Tag
-    = link_to account_tags_path(@account.id), class: 'btn btn-info' do
+    = link_to account_tags_path(@account), class: 'btn btn-info' do
       %span.glyphicon.glyphicon-tags
       = t :'activerecord.attributes.account.tags'
   - if can? :read, @account => Debit
-    = link_to account_debits_path(@account.id), class: 'btn btn-info' do
+    = link_to account_debits_path(@account), class: 'btn btn-info' do
       %span.glyphicon.glyphicon-download-alt
       = t :'activerecord.attributes.account.debits'
   - if can? :update, @account
-    = link_to edit_account_path(@account.id), class: 'btn btn-warning' do
+    = link_to edit_account_path(@account), class: 'btn btn-warning' do
       %span.glyphicon.glyphicon-pencil
       = t :'scaffold.edit'
   - if can? :create, @account => Expense
-    = link_to new_account_expense_path(@account.id), class: 'btn btn-success' do
+    = link_to new_account_expense_path(@account), class: 'btn btn-success' do
       %span.glyphicon.glyphicon-plus
       = t :'.new_expense'
   %h1= @account.name
@@ -47,22 +47,22 @@
             %td= expense.reason
             %td= number_to_currency expense.price
             %td= expense.way
-            %td= render partial: 'tags/list', locals: { account_id: @account.id, tags: expense.tags }
+            %td= render partial: 'tags/list', locals: { account: @account, tags: expense.tags }
             - if expense.id
               - if can? :read, expense
                 %td.action
                   = link_to t(:'scaffold.show'),
-                            account_expense_path(@account.id, expense.id),
+                            account_expense_path(@account, expense),
                             class: 'btn btn-info'
               - if can? :update, expense
                 %td.action
                   = link_to t(:'scaffold.edit'),
-                            edit_account_expense_path(@account.id, expense),
+                            edit_account_expense_path(@account, expense),
                             class: 'btn btn-warning'
               - if can? :destroy, expense
                 %td.action
                   = link_to t(:'scaffold.destroy'),
-                            account_expense_path(@account.id, expense.id),
+                            account_expense_path(@account, expense),
                             method: :delete,
                             data: { confirm: t(:'scaffold.are_you_sure') },
                             class: 'btn btn-danger'
