@@ -1,7 +1,9 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-describe 'layouts/application.html.haml' do
-  describe 'general information' do
+require "rails_helper"
+
+describe "layouts/application.html.haml" do
+  describe "general information" do
     it "shows current user's name" do
       user = create :user
       sign_in user

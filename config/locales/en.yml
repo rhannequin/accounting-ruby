@@ -222,13 +222,13 @@ en:
     flash:
       close: Close
     navbar:
+      account:
+        settings: Settings
       accounts: My accounts
       admin:
         home: Dashboard
         name: Admin
       home: Accueil
-      user_account:
-        settings: Settings
     project: Accounting
     toggle_navigation: Toggle navigation
   scaffold:
@@ -275,7 +275,7 @@ en:
     destroy:
       user: Impossible to delete this user.
   user_mailer:
-    email_changed_email:
+    email_modified_email:
       bye: "Have good day."
       email_changed: "Your email has been changed on %{app_name}. This email was sent to both your previous and current email addresses, in order to prevent you from unwanted actions."
       email_was: "Your email was: %{email_was}. Now it is: %{email_is}."

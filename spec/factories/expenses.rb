@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :expense do
     reason { Faker::Commerce.product_name }
     price { Faker::Commerce.price }

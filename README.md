@@ -22,7 +22,7 @@ Some tags can be ignored from the monthly spent money amount. You can edit a tag
 
 ## Requirements
 
-* Ruby 2.3.x
+* Ruby 2.5.x
 * Rails 5.x
 * Bundler
 

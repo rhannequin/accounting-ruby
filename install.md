@@ -106,6 +106,7 @@ $ psql
 postgres=# CREATE USER app;
 postgres=# CREATE DATABASE app_production OWNER app;
 postgres=# ALTER USER app WITH ENCRYPTED PASSWORD 'xxx';
+postgres=# CREATE EXTENSION "uuid-ossp";
 postgres=# \q
 $ exit
 ```
@@ -148,7 +149,7 @@ From local environment:
 ```sh
 $ bundle exec cap production setup
 $ bundle exec cap production puma:config
-$ bundle exec cap production deploy
+$ bundle exec cap production deploy --trace
 ```
 
 ### Autoloaded `init.d` script
@@ -160,3 +161,56 @@ $ sudo chmod 0755 /etc/init.d/app
 $ systemctl daemon-reload
 $ sudo update-rc.d app defaults
 ```
+
+
+## PG Hero
+
+### Install (Ubuntu 16.04)
+
+```sh
+$ wget -qO - https://deb.packager.io/key | sudo apt-key add -
+$ echo "deb https://deb.packager.io/gh/pghero/pghero xenial master" | sudo tee /etc/apt/sources.list.d/pghero.list
+$ sudo apt-get update
+$ sudo apt-get -y install pghero
+```
+
+### Setup
+
+Set `DATABASE_URL` with the correct `user`, `password`, `hostname`, `port` and `dbname` values.
+
+```sh
+$ sudo pghero config:set DATABASE_URL=postgres://user:password@hostname:port/dbname
+```
+
+Same for `user` and `password`.
+
+```sh
+$ sudo pghero config:set PGHERO_USERNAME=user
+$ sudo pghero config:set PGHERO_PASSWORD=password
+```
+
+#### Launch
+
+```sh
+$ sudo pghero config:set PORT=3001
+$ sudo pghero config:set RAILS_LOG_TO_STDOUT=disabled
+$ sudo pghero scale web=1
+```
+
+#### Nginx
+
+Update nginx configuration with the following code to open to the outside world:
+
+```
+server {
+  listen          80;
+  server_name     "";
+  location / {
+    proxy_pass    http://localhost:3001;
+  }
+}
+```
+
+Then run `$ sudo service nginx restart`.
+
+Also, see the [Github repository](https://github.com/ankane/pghero/blob/master/guides/Linux.md) for management and multiple databases.
