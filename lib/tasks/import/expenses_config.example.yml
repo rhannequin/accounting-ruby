@@ -2,6 +2,8 @@ accounts:
   -
     name: Bank account name
     file: ban-account-file.html
+    owners:
+      - name_of_already_created_user
     ignored:
       - Transfer salary
       - Savings

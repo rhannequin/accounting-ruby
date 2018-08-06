@@ -5,6 +5,8 @@ require "date"
 require "yaml"
 require "pp"
 
+require_relative "expense_parser"
+
 
 namespace :import do
   task expenses: :environment do
@@ -12,6 +14,7 @@ namespace :import do
     puts
     puts "== Start importing task at #{start_time} =="
     puts
+    clean_database
     process_loop
     end_time = Time.now
     puts
@@ -21,28 +24,59 @@ namespace :import do
 end
 
 
+def clean_database
+  start_time = Time.now
+  puts
+  puts "Emptying database..."
+  Account.destroy_all
+  end_time = Time.now
+  puts "... done in (#{(end_time - start_time).round(2)} seconds)."
+  puts
+end
+
+
 def process_loop
   config = YAML.load_file(Rails.root.join("lib", "tasks", "import", "expenses_config.yml"))
-  config.fetch("accounts").each do |account|
-    account_name = account.fetch("name")
+  config.fetch("accounts").each do |data|
+    account = Account.create(name: data.fetch("name"))
+    account_owners = data.fetch("owners").map { |o| User.find_by(name: o) }
+    account.users = account_owners
     puts
-    puts "== Start importing expenses from #{account_name} =="
-    result = process_import(account)
-    puts "== End importing expenses from #{account_name} =="
+    puts "== Start importing expenses from #{account.name} for #{account_owners.map(&:name).join(", ")} =="
+    result = process_import(data, account)
+    puts "== End importing expenses from #{account.name} =="
     puts "== Imported #{result[:imported]} transactions =="
     puts
   end
 end
 
 
-def process_import(account)
-  filename = Rails.root.join("tmp", "expenses", account.fetch("file"))
+def process_import(data, account)
+  filename = Rails.root.join("tmp", "expenses", data.fetch("file"))
   doc = File.open(filename) { |f| Nokogiri::HTML(f, nil, Encoding::UTF_8.to_s) }
   transactions = doc.css("ul.transactionList li")
+  expenses = []
+  tags = []
   transactions.each do |entry|
     next if entry.attr("id").nil?
-    expense = ExpenseParser.new(entry).parse
-    # puts expense.show #if account.fetch("ignored").map { |ign| expense.name.include?(ign) }.include?(true)
+    parsed = ExpenseParser.new(entry).parse
+    tag = {
+      name: parsed[:tag],
+      ignored: false,
+      account: account,
+      expense_bankin_id: parsed[:bankin_id]
+    }
+    if data.fetch("ignored").map { |ign| parsed[:reason].include?(ign) }.include?(true)
+      tags << { name: "ignore", ignored: true, account: account, expense_bankin_id: parsed[:bankin_id] }
+    end
+    tags << tag
+    expenses << Expense.new(parsed.except(:tag).merge(account: account))
+  end
+  Expense.import(expenses)
+  tags.each do |tag|
+    t = Tag.find_or_initialize_by(tag.except(:expense_bankin_id))
+    t.expenses << Expense.find_by(bankin_id: tag[:expense_bankin_id])
+    t.save
   end
   { status: :success, imported: transactions.size }
 end
@@ -51,107 +85,5 @@ end
 class String
   def trim
     self.split("\n").map(&:strip).join("")
-  end
-end
-
-class FrenchDateParser
-  attr_accessor :french_date
-
-  def initialize(str)
-    @french_date = str
-  end
-
-  def parse
-    remove_day_name
-    replace_month_name
-    to_date
-  end
-
-  private
-
-    def remove_day_name
-      french_date.gsub!("lundi", "")
-      french_date.gsub!("mardi", "")
-      french_date.gsub!("mercredi", "")
-      french_date.gsub!("jeudi", "")
-      french_date.gsub!("vendredi", "")
-      french_date.gsub!("samedi", "")
-      french_date.gsub!("dimanche", "")
-      french_date
-    end
-
-    def replace_month_name
-      french_date.gsub!("janv.", "january")
-      french_date.gsub!("févr.", "february")
-      french_date.gsub!("mars", "march")
-      french_date.gsub!("avr.", "april")
-      french_date.gsub!("mai", "may")
-      french_date.gsub!("juin", "june")
-      french_date.gsub!("juil.", "july")
-      french_date.gsub!("août", "august")
-      french_date.gsub!("sept.", "september")
-      french_date.gsub!("oct.", "october")
-      french_date.gsub!("nov.", "november")
-      french_date.gsub!("déc.", "december")
-      french_date
-    end
-
-    def to_date
-      return Date.today if french_date == "Aujourd'hui"
-      Date.parse(french_date.strip)
-    end
-end
-
-class ExpenseParser
-  attr_accessor :entry, :attr
-
-  def initialize(entry)
-    @entry = entry
-    @attr = {}
-  end
-
-  def parse
-    parse_bankin_id
-    parse_date
-    parse_name
-    parse_category
-    parse_price
-    Expense.new(attr)
-  end
-
-  private
-
-    def parse_bankin_id
-      @attr[:bankin_id] = entry.attr("id").split("_").last
-    end
-
-    def parse_date
-      @attr[:date] = FrenchDateParser.new(entry.css("div.headerDate").last.text.trim).parse
-    end
-
-    def parse_name
-      @attr[:name] = entry.css("div.dtb").last.css(".dbl")[1].text.trim
-    end
-
-    def parse_category
-      @attr[:category] = entry.css("div.dtb").last.css(".dbl").last.text.trim
-    end
-
-    def parse_price
-      @attr[:price] = entry.css("div.dtc").last.content.trim
-    end
-end
-
-class Expense
-  attr_accessor :bankin_id, :date, :name, :category, :price
-
-  def initialize(args)
-    args.each do |k, v|
-      instance_variable_set("@#{k}", v) unless v.nil?
-    end
-  end
-
-  def show
-    "#{bankin_id}: #{date.strftime("%d/%m/%Y")} #{name} (#{category}) > #{price}"
   end
 end

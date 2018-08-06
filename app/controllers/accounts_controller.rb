@@ -13,7 +13,7 @@ class AccountsController < ApplicationController
                 :set_end_date,
                 only: :show
 
-  MONTHS_PER_PAGE = 2
+  MONTHS_PER_PAGE = 6
 
   def index
     @accounts = current_user.accounts
