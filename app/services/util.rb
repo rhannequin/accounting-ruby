@@ -1,5 +1,6 @@
-module Util
+# frozen_string_literal: true
 
+module Util
   # Parameters
   #   list: #<ActiveRecord::Relation [#<Expense>]>
   # Returns
@@ -26,5 +27,4 @@ module Util
     end
     tmp
   end
-
 end

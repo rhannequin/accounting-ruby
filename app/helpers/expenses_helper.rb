@@ -36,7 +36,7 @@ module ExpensesHelper
 
   def add_debit(debit, date, debits_to_ignore)
     new_values = debit.attributes
-                      .slice('reason', 'price', 'way')
+                      .slice("reason", "price", "way")
                       .merge(date: date.change(day: debit.day), tags: debit.tags)
     hash = {}
     hash[:expense] = Expense.new(new_values)

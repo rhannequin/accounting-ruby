@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChartsService
   attr_accessor :lines, :name, :months, :expenses_lb, :debits_lb
 
@@ -21,13 +23,13 @@ class ChartsService
 
   private
 
-  def new_chart(categories, series)
-    LazyHighCharts::HighChart.new('graph') do |f|
-      f.title text: name
-      f.options[:xAxis][:categories] = categories
-      series.each do |serie|
-        f.series serie
+    def new_chart(categories, series)
+      LazyHighCharts::HighChart.new("graph") do |f|
+        f.title text: name
+        f.options[:xAxis][:categories] = categories
+        series.each do |serie|
+          f.series serie
+        end
       end
     end
-  end
 end

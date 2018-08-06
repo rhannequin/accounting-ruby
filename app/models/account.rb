@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Account < ApplicationRecord
   extend FriendlyId
 
@@ -12,7 +14,7 @@ class Account < ApplicationRecord
 
   def slug_candidates
     if id
-      splitted_id = id.split('-').first
+      splitted_id = id.split("-").first
       parameterized_name = name.parameterize
       ["#{splitted_id}-#{parameterized_name}"]
     else

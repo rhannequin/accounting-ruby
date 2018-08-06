@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Util
 
 class ExpensesService
@@ -19,17 +21,17 @@ class ExpensesService
 
   private
 
-  def add_debits_to_expenses(expenses, debits)
-    today = Date.today
-    tmp = expenses.clone
-    expenses.map do |k, _|
-      debits.each do |debit|
-        range = (debit.start_date..(debit.end_date || today))
-        if range.include?(k)
-          tmp[k] << debit.price.to_f
+    def add_debits_to_expenses(expenses, debits)
+      today = Date.today
+      tmp = expenses.clone
+      expenses.map do |k, _|
+        debits.each do |debit|
+          range = (debit.start_date..(debit.end_date || today))
+          if range.include?(k)
+            tmp[k] << debit.price.to_f
+          end
         end
       end
+      tmp
     end
-    tmp
-  end
 end

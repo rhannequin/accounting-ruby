@@ -1,48 +1,49 @@
-require 'yaml'
+# frozen_string_literal: true
+
+require "yaml"
 
 task csv_to_db: :environment do
   puts
-  puts 'Emptying database...'
+  puts "Emptying database..."
   Tagging.destroy_all
   Tag.destroy_all
   Expense.destroy_all
   Debit.destroy_all
   Account.destroy_all
-  puts '... done.'
+  puts "... done."
   puts
 
   accounts = [
     {
-      expenses_file: 'tmp/1/data.csv',
-      config_file: 'tmp/1/config.yml',
-      name: 'Account #1',
+      expenses_file: "tmp/1/data.csv",
+      config_file: "tmp/1/config.yml",
+      name: "Account #1",
       users: User.all
     }, {
-      expenses_file: 'tmp/2/data.csv',
-      config_file: 'tmp/2/config.yml',
-      name: 'Account #2',
-      users: [User.find_by(name: 'rhannequin')]
+      expenses_file: "tmp/2/data.csv",
+      config_file: "tmp/2/config.yml",
+      name: "Account #2",
+      users: [User.find_by(name: "rhannequin")]
     }
   ]
 
   accounts.each do |account|
-
     puts "Creating account \"#{account[:name]}\"..."
 
     expenses = []
     tags = []
     account_id = Account.create!(name: account[:name], users: account[:users]).id
 
-    puts '... done.'
+    puts "... done."
     puts
 
     config = YAML.load_file(account[:config_file])
 
-    SmarterCSV.process(account[:expenses_file], {
+    SmarterCSV.process(account[:expenses_file],
         chunk_size: 10000,
         headers_in_file: true,
-        file_encoding: 'utf-8',
-        col_sep: ';',
+        file_encoding: "utf-8",
+        col_sep: ";",
         row_sep: "\n",
         strip_whitespace: true,
         key_mapping: {
@@ -52,12 +53,12 @@ task csv_to_db: :environment do
           moyen: :way,
           catégories: :tags
         }
-    }) do |array|
+    ) do |array|
       array.each do |hash|
-        hash[:date] = Date.strptime(hash[:date], '%d/%m/%y')
-        hash[:tags] ||= ''
+        hash[:date] = Date.strptime(hash[:date], "%d/%m/%y")
+        hash[:tags] ||= ""
         hash[:account_id] = account_id
-        expense_tags = hash[:tags].split(',').map do |t|
+        expense_tags = hash[:tags].split(",").map do |t|
           tag = { name: t.strip, account_id: account_id }
           tags << tag unless tags.include?(tag)
           tag
@@ -92,25 +93,25 @@ task csv_to_db: :environment do
     puts
 
     puts "Inserting start amount in \"#{account[:name]}\"..."
-    start_amount = config['start_amount']
+    start_amount = config["start_amount"]
     first_expense = Expense.select(:date).order(:date).first
     Expense.create!(
-      reason: 'Start amount',
+      reason: "Start amount",
       date: first_expense.date,
-      price: start_amount, way: '',
+      price: start_amount, way: "",
       account_id: account_id
     )
-    puts '... done.'
+    puts "... done."
     puts
 
     puts "Inserting debits in \"#{account[:name]}\"..."
-    debits = config['debits']
+    debits = config["debits"]
     debits.each do |debit|
       debit[:account_id] = account_id
-      unless debit['categories'].nil?
-        debit_tags = debit['categories'].split(&:strip).map { |c| Tag.find_or_create_by(name: c, account_id: account_id) }
+      unless debit["categories"].nil?
+        debit_tags = debit["categories"].split(&:strip).map { |c| Tag.find_or_create_by(name: c, account_id: account_id) }
       end
-      debit.delete('categories')
+      debit.delete("categories")
       d = Debit.create!(debit)
       if debit_tags
         d.tags = debit_tags
@@ -119,10 +120,9 @@ task csv_to_db: :environment do
     end
     puts "... done. (#{Debit.count})"
     puts
-
   end
 
-  puts 'Updating all tags slugs...'
+  puts "Updating all tags slugs..."
   Tag.find_each { |t| t.save! }
   puts "... done. (#{Tag.count})"
   puts

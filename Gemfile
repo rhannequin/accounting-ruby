@@ -42,7 +42,7 @@ gem "rolify"
 gem "figaro"
 
 # Crontab scheduler
-gem 'whenever', require: false
+gem "whenever", require: false
 
 # Assets
 ## Use SCSS for stylesheets
@@ -72,13 +72,13 @@ gem "simple_form"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
 
-gem 'smarter_csv'
-gem 'activerecord-import'
-gem 'bootstrap-datepicker-rails'
-gem 'seed_dump'
-gem 'lazy_high_charts'
-gem 'yaml_db'
-gem 'nokogiri'
+gem "smarter_csv"
+gem "activerecord-import"
+gem "bootstrap-datepicker-rails"
+gem "seed_dump"
+gem "lazy_high_charts"
+gem "yaml_db"
+gem "nokogiri"
 
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
@@ -108,7 +108,7 @@ group :test do
   gem "factory_bot_rails"                     # Factories
   gem "faker"                                 # Use real values to fake for factories
   gem "i18n-tasks"                            # Finds and manage missing and unused translations
-  gem 'nyan-cat-formatter'
+  gem "nyan-cat-formatter"
   gem "rails-controller-testing"              # Support for assigns and assert_template
   gem "rspec-rails"                           # RSpec test framework
   gem "selenium-webdriver"

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 # Use this file to easily define all of your cron jobs.
 #
-# It's helpful, but not entirely necessary to understand cron before proceeding.
+# It"s helpful, but not entirely necessary to understand cron before proceeding.
 # http://en.wikipedia.org/wiki/Cron
 
 # Example:
@@ -19,12 +21,12 @@
 
 # Learn more: http://github.com/javan/whenever
 
-set :output, File.join('log', "cron_#{ENV['RACK_ENV']}.log")
+set :output, File.join("log", "cron_#{ENV["RACK_ENV"]}.log")
 
-every :day, at: '3am' do
-  rake 'db:dump:export'
+every :day, at: "3am" do
+  rake "db:dump:export"
 end
 
-every :day, at: '3:30 am' do
-  rake 'db:dump:email'
+every :day, at: "3:30 am" do
+  rake "db:dump:email"
 end

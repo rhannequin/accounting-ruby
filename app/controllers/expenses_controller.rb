@@ -45,23 +45,23 @@ class ExpensesController < ApplicationController
 
   private
 
-  def set_account_id
-    @account_id = params.require(:account_id)
-  end
+    def set_account_id
+      @account_id = params.require(:account_id)
+    end
 
-  def set_account
-    @account = Account.find(@account_id)
-  end
+    def set_account
+      @account = Account.find(@account_id)
+    end
 
-  def set_tags
-    @tags = Tag.where(account_id: @account_id)
-  end
+    def set_tags
+      @tags = Tag.where(account_id: @account_id)
+    end
 
-  def set_expense
-    @expense = Expense.find(params[:id])
-  end
+    def set_expense
+      @expense = Expense.find(params[:id])
+    end
 
-  def expense_params
-    params.require(:expense).permit(:date, :reason, :price, :way, tag_ids: [])
-  end
+    def expense_params
+      params.require(:expense).permit(:date, :reason, :price, :way, tag_ids: [])
+    end
 end

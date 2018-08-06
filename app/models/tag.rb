@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Tag < ApplicationRecord
   extend FriendlyId
 
@@ -6,14 +8,14 @@ class Tag < ApplicationRecord
 
   belongs_to :account
   has_many :taggings, dependent: :destroy
-  has_many :expenses, through: :taggings, source: :taggable, source_type: 'Expense'
-  has_many :debits, through: :taggings, source: :taggable, source_type: 'Debit'
+  has_many :expenses, through: :taggings, source: :taggable, source_type: "Expense"
+  has_many :debits, through: :taggings, source: :taggable, source_type: "Debit"
 
   scope :ignored, -> { where(ignored: true) }
 
   def slug_candidates
     if id
-      splitted_id = id.split('-').first
+      splitted_id = id.split("-").first
       parameterized_name = name.parameterize
       ["#{splitted_id}-#{parameterized_name}"]
     else

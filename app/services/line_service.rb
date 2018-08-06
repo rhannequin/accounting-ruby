@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LineService
   attr_accessor :type, :name, :covers, :months, :expenses_lb, :debits_lb,
                 :expenses, :debits, :data, :categories
@@ -21,7 +23,7 @@ class LineService
 
   def publish
     {
-      type: 'spline',
+      type: "spline",
       name: name,
       data: data,
       categories: categories
@@ -30,29 +32,29 @@ class LineService
 
   private
 
-  def init
-    today = Date.today
-    past_date = covers.nil? ? @account.expenses.order(:date).first.date : today - covers.month
-    until_date = past_date.beginning_of_month
-    @categories = (past_date..today).to_a.map { |d| d.beginning_of_month }.uniq
-    @debits = debits_lb.call(until_date)
-    @expenses = ExpensesService.new expenses_lb.call(until_date), @debits, @categories
-  end
-
-  def calculate_figures(expenses, type)
-    values = expenses.map { |_, v| v.sum.round(2) * (-1) }
-    case type
-    when :curve then values
-    when :average then array_of_average(values)
+    def init
+      today = Date.today
+      past_date = covers.nil? ? @account.expenses.order(:date).first.date : today - covers.month
+      until_date = past_date.beginning_of_month
+      @categories = (past_date..today).to_a.map { |d| d.beginning_of_month }.uniq
+      @debits = debits_lb.call(until_date)
+      @expenses = ExpensesService.new expenses_lb.call(until_date), @debits, @categories
     end
-  end
 
-  def array_of_average(values)
-    size = values.size
-    Array.new(size, calculate_average(values, size))
-  end
+    def calculate_figures(expenses, type)
+      values = expenses.map { |_, v| v.sum.round(2) * (-1) }
+      case type
+      when :curve then values
+      when :average then array_of_average(values)
+      end
+    end
 
-  def calculate_average(values, size)
-    (values.sum / size).round
-  end
+    def array_of_average(values)
+      size = values.size
+      Array.new(size, calculate_average(values, size))
+    end
+
+    def calculate_average(values, size)
+      (values.sum / size).round
+    end
 end

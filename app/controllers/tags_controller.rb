@@ -12,11 +12,11 @@ class TagsController < ApplicationController
 
   def show
     @expenses_count = Tagging.where(
-      taggable_type: 'Expense',
+      taggable_type: "Expense",
       tag_id: @tag.id
     ).count
     @debits_count = Tagging.where(
-      taggable_type: 'Debit',
+      taggable_type: "Debit",
       tag_id: @tag.id
     ).count
   end
@@ -29,7 +29,7 @@ class TagsController < ApplicationController
 
   def update
     if @tag.update(tag_params)
-      redirect_to account_tag_path(@account_id, @tag.id), notice: t(:'tags.update.flash.success')
+      redirect_to account_tag_path(@account_id, @tag.id), notice: t(:"tags.update.flash.success")
     else
       render :edit
     end
@@ -37,7 +37,7 @@ class TagsController < ApplicationController
 
   def destroy
     @tag.destroy
-    redirect_to account_tags_url(@account_id), notice: t(:'tags.destroy.flash.success')
+    redirect_to account_tags_url(@account_id), notice: t(:"tags.destroy.flash.success")
   end
 
   def chart
@@ -47,22 +47,22 @@ class TagsController < ApplicationController
 
     settings = {
       lines: [
-        { type: :curve, name: I18n.t(:'tags.chart.monthly'), covers: 6 },
-        { type: :average, name: I18n.t(:'tags.chart.monthly_average'), covers: 6 },
-        { type: :average, name: I18n.t(:'tags.chart.yearly_average'), covers: 12 },
-        { type: :average, name: I18n.t(:'tags.chart.all_time_average'), covers: nil }
+        { type: :curve, name: I18n.t(:"tags.chart.monthly"), covers: 6 },
+        { type: :average, name: I18n.t(:"tags.chart.monthly_average"), covers: 6 },
+        { type: :average, name: I18n.t(:"tags.chart.yearly_average"), covers: 12 },
+        { type: :average, name: I18n.t(:"tags.chart.all_time_average"), covers: nil }
       ],
-      name: I18n.t(:'tags.chart.chart_title', tag: @tag.name),
+      name: I18n.t(:"tags.chart.chart_title", tag: @tag.name),
       months: 6,
       account: account,
       expenses_lb: -> (u) { account.expenses.include_taggings
                                    .date_after(u)
                                    .where(taggings: { tag_id: tag_id })
-                                   .where.not( id: account.expenses.with_these_tags(ignore_tag_ids) ) },
+                                   .where.not(id: account.expenses.with_these_tags(ignore_tag_ids)) },
       debits_lb: -> (u) { account.debits.end_date_after(u)
                                .or(account.debits.where(end_date: nil))
                                .start_date_before(Date.today)
-                               .where( id: account.debits.with_these_tags(tag_id) ) }
+                               .where(id: account.debits.with_these_tags(tag_id)) }
     }
 
     @chart = ChartsService.new(settings).build_chart
@@ -70,19 +70,19 @@ class TagsController < ApplicationController
 
   private
 
-  def set_account_id
-    @account_id = params.require(:account_id)
-  end
+    def set_account_id
+      @account_id = params.require(:account_id)
+    end
 
-  def set_account
-    @account = Account.find(@account_id)
-  end
+    def set_account
+      @account = Account.find(@account_id)
+    end
 
-  def set_tag
-    @tag = Tag.find(params[:id])
-  end
+    def set_tag
+      @tag = Tag.find(params[:id])
+    end
 
-  def tag_params
-    params.require(:tag).permit(:name, :ignored)
-  end
+    def tag_params
+      params.require(:tag).permit(:name, :ignored)
+    end
 end

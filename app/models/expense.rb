@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Expense < ApplicationRecord
   extend FriendlyId
 
@@ -14,13 +16,13 @@ class Expense < ApplicationRecord
   scope :date_desc_order, -> { order(date: :desc) }
   scope :all_ordered, -> { include_tags.date_desc_order }
   scope :with_these_tags, -> (ids) { with_taggings.where(taggings: { tag_id: ids }) }
-  scope :date_after, -> (date) { where(['date > ?', date]) }
+  scope :date_after, -> (date) { where(["date > ?", date]) }
 
   validates :reason, :date, :price, presence: true
 
   def slug_candidates
     if id
-      splitted_id = id.split('-').first
+      splitted_id = id.split("-").first
       parameterized_reason = reason.parameterize
       ["#{splitted_id}-#{parameterized_reason}-#{date}"]
     else

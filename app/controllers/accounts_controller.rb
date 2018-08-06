@@ -40,7 +40,7 @@ class AccountsController < ApplicationController
     @account = Account.new(account_params)
     @account.users << current_user
     if @account.save
-      redirect_to accounts_path, notice: t(:'accounts.create.flash.success')
+      redirect_to accounts_path, notice: t(:"accounts.create.flash.success")
     else
       render :new
     end
@@ -48,7 +48,7 @@ class AccountsController < ApplicationController
 
   def update
     if @account.update(account_params)
-      redirect_to accounts_path, notice: t(:'accounts.update.flash.success')
+      redirect_to accounts_path, notice: t(:"accounts.update.flash.success")
     else
       render :edit
     end
@@ -56,39 +56,39 @@ class AccountsController < ApplicationController
 
   def destroy
     @account.destroy
-    redirect_to accounts_url, notice: t(:'accounts.destroy.flash.success')
+    redirect_to accounts_url, notice: t(:"accounts.destroy.flash.success")
   end
 
   private
 
-  def account_params
-    params.require(:account).permit(:name)
-  end
+    def account_params
+      params.require(:account).permit(:name)
+    end
 
-  def set_current_page
-    page = params[:page]
-    @current_page = page && page.to_i.positive? ? page.to_i : 1
-  end
+    def set_current_page
+      page = params[:page]
+      @current_page = page && page.to_i.positive? ? page.to_i : 1
+    end
 
-  def set_first_date
-    @first_date = Expense.select(:date)
+    def set_first_date
+      @first_date = Expense.select(:date)
+                           .where(account_id: @account.id)
+                           .order(:date)
+                           .first
+                           .date
+    end
+
+    def set_ignored_entities
+      ignored_tags = Tag.where(account_id: @account.id).select(:id).ignored
+      @expenses_to_ignore = Expense.with_these_tags(ignored_tags).where(account_id: @account.id)
+      @debits_to_ignore = Debit.with_these_tags(ignored_tags).where(account_id: @account.id)
+    end
+
+    def set_end_date
+      @end_date = Expense.select(:date)
                          .where(account_id: @account.id)
-                         .order(:date)
+                         .order("date DESC")
                          .first
                          .date
-  end
-
-  def set_ignored_entities
-    ignored_tags = Tag.where(account_id: @account.id).select(:id).ignored
-    @expenses_to_ignore = Expense.with_these_tags(ignored_tags).where(account_id: @account.id)
-    @debits_to_ignore = Debit.with_these_tags(ignored_tags).where(account_id: @account.id)
-  end
-
-  def set_end_date
-    @end_date = Expense.select(:date)
-                       .where(account_id: @account.id)
-                       .order('date DESC')
-                       .first
-                       .date
-  end
+    end
 end
