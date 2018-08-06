@@ -47,15 +47,15 @@ class ExpenseParser
                            .last
                            .content
                            .trim
-                           .split('€')
+                           .split("€")
                            .first
                            .strip
-                           .gsub(',', '.')
-                           .gsub(/\A[[:space:]]+/, '')
+                           .gsub(",", ".")
+                           .gsub(/\A[[:space:]]+/, "")
       is_negative = @attr[:price].include?("-")
-      @attr[:price] = @attr[:price].split('.')
-                                   .map { |s| s.tr('^0-9', '') }
-                                   .join('.')
+      @attr[:price] = @attr[:price].split(".")
+                                   .map { |s| s.tr("^0-9", "") }
+                                   .join(".")
                                    .to_f
       @attr[:price] = @attr[:price] * -1 if is_negative
     end

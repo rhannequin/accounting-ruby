@@ -3,7 +3,6 @@
 require "nokogiri"
 require "date"
 require "yaml"
-require "pp"
 
 require_relative "expense_parser"
 
