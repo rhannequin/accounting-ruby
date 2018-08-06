@@ -1,0 +1,7 @@
+accounts:
+  -
+    name: Bank account name
+    file: ban-account-file.html
+    ignored:
+      - Transfer salary
+      - Savings

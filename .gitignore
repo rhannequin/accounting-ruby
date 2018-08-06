@@ -52,3 +52,6 @@
 
 # Uploads
 /public/system
+
+# Import accounts config
+/lib/tasks/import/expenses_config.yml
