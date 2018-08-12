@@ -9,27 +9,25 @@ require_relative "expense_parser"
 
 namespace :import do
   task expenses: :environment do
-    start_time = Time.now
+    log_timer = LogTimer.new
     puts
-    puts "== Start importing task at #{start_time} =="
+    puts "== Start importing task at #{log_timer.start_time} =="
     puts
     clean_database
     process_loop
-    end_time = Time.now
     puts
-    puts "== End importing task at #{end_time} (#{(end_time - start_time).round(2)} seconds) =="
+    puts "== End importing task at #{log_timer.end_time} (#{log_timer.show}) =="
     puts
   end
 end
 
 
 def clean_database
-  start_time = Time.now
+  log_timer = LogTimer.new
   puts
   puts "Emptying database..."
   Account.destroy_all
-  end_time = Time.now
-  puts "... done in (#{(end_time - start_time).round(2)} seconds)."
+  puts "... done in #{log_timer.show}."
   puts
 end
 
@@ -37,6 +35,7 @@ end
 def process_loop
   config = YAML.load_file(Rails.root.join("lib", "tasks", "import", "expenses_config.yml"))
   config.fetch("accounts").each do |data|
+    log_timer = LogTimer.new
     account = Account.create(name: data.fetch("name"))
     account_owners = data.fetch("owners").map { |o| User.find_by(name: o) }
     account.users = account_owners
@@ -44,7 +43,7 @@ def process_loop
     puts "== Start importing expenses from #{account.name} for #{account_owners.map(&:name).join(", ")} =="
     result = process_import(data, account)
     puts "== End importing expenses from #{account.name} =="
-    puts "== Imported #{result[:imported]} transactions =="
+    puts "== Imported #{result[:imported]} transactions in #{log_timer.show} =="
     puts
   end
 end
@@ -84,5 +83,22 @@ end
 class String
   def trim
     self.split("\n").map(&:strip).join("")
+  end
+end
+
+class LogTimer
+  attr_accessor :start_time, :end_time
+
+  def initialize
+    @start_time = Time.zone.now
+  end
+
+  def stop
+    @end_time = Time.zone.now
+  end
+
+  def show
+    self.stop
+    "#{(end_time - start_time).round(2)} seconds"
   end
 end
