@@ -41,7 +41,7 @@ def get_data
   data = {}
   Account.order("expenses.date").find_each do |account|
     account_name = account.name.parameterize
-    data[account_name] = { expenses: [], debits: [] }
+    data[account_name] = { expenses: [] }
     expenses = account.expenses.includes(:tags).order(:date)
     expenses.each do |expense|
       date = expense.date.strftime("%d/%m/%y")

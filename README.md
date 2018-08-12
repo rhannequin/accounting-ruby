@@ -1,6 +1,6 @@
 # Accounting
 
-This app is meant to help you with accounting, giving you the possibility to add expenses, debits, with tags and get some interesting data about your behaviour.
+This app is meant to help you with accounting, giving you the possibility to add expenses, with tags and get some interesting data about your behaviour.
 
 ## How to use it
 
@@ -10,13 +10,9 @@ Be sure to read the [requirements](#requirements), [install](#install) and [laun
 
 Add every expense you make, with a title, a price, a way of paiement and a date. Every expense will be visible on the home page, by month and date.
 
-### Debits
-
-Tired of repeating some same expenses every month? Try making a debit. With a start date and eventually an end date, it will automatically be added to your expenses list. You can even say what day of the month the debit will be done.
-
 ### Tags
 
-Add tags to your expenses and debits to see charts showing you how much you spend each month, for each tag.
+Add tags to your expenses to see charts showing you how much you spend each month, for each tag.
 
 Some tags can be ignored from the monthly spent money amount. You can edit a tag and mark it as " to be ignored".
 

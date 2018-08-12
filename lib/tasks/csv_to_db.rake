@@ -8,7 +8,6 @@ task csv_to_db: :environment do
   Tagging.destroy_all
   Tag.destroy_all
   Expense.destroy_all
-  Debit.destroy_all
   Account.destroy_all
   puts "... done."
   puts
@@ -102,23 +101,6 @@ task csv_to_db: :environment do
       account_id: account_id
     )
     puts "... done."
-    puts
-
-    puts "Inserting debits in \"#{account[:name]}\"..."
-    debits = config["debits"]
-    debits.each do |debit|
-      debit[:account_id] = account_id
-      unless debit["categories"].nil?
-        debit_tags = debit["categories"].split(&:strip).map { |c| Tag.find_or_create_by(name: c, account_id: account_id) }
-      end
-      debit.delete("categories")
-      d = Debit.create!(debit)
-      if debit_tags
-        d.tags = debit_tags
-        d.save
-      end
-    end
-    puts "... done. (#{Debit.count})"
     puts
   end
 

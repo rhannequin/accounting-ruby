@@ -17,7 +17,7 @@ class AccountsController < ApplicationController
 
   def index
     @accounts = current_user.accounts
-                            .includes(:users, :expenses, :debits)
+                            .includes(:users, :expenses)
   end
 
   def show
@@ -26,8 +26,7 @@ class AccountsController < ApplicationController
     start_date = get_start_day(end_date, MONTHS_PER_PAGE)
     range = start_date..end_date
     expenses = @account.expenses.include_tags.where(date: range)
-    debits = get_debits(@account, start_date, end_date)
-    @expenses = calculate_data(expenses, @expenses_to_ignore, debits, @debits_to_ignore, range)
+    @expenses = calculate_data(expenses, @expenses_to_ignore, range)
   end
 
   def new
@@ -81,7 +80,6 @@ class AccountsController < ApplicationController
     def set_ignored_entities
       ignored_tags = Tag.where(account_id: @account.id).select(:id).ignored
       @expenses_to_ignore = Expense.with_these_tags(ignored_tags).where(account_id: @account.id)
-      @debits_to_ignore = Debit.with_these_tags(ignored_tags).where(account_id: @account.id)
     end
 
     def set_end_date

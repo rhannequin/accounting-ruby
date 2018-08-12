@@ -20,9 +20,4 @@
 
 %h3= t :'.use'
 
-%p= t :'.use_count',
-    { count: @expenses_count + @debits_count,
-      expenses: @expenses_count,
-      expense_model: Expense.model_name.human(count: @expenses_count),
-      debits: @debits_count,
-      debit_model: Debit.model_name.human(count: @debits_count) }
+%p= t :'.use_count', { count: @expenses_count }

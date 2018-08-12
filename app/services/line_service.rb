@@ -1,17 +1,15 @@
 # frozen_string_literal: true
 
 class LineService
-  attr_accessor :type, :name, :covers, :months, :expenses_lb, :debits_lb,
-                :expenses, :debits, :data, :categories
+  attr_accessor :type, :name, :covers, :months, :expenses_lb, :expenses, :data, :categories
 
-  def initialize(line, months, account, expenses_lb, debits_lb)
+  def initialize(line, months, account, expenses_lb)
     @type = line[:type]
     @name = line[:name]
     @covers = line[:covers]
     @months = months
     @account = account
     @expenses_lb = expenses_lb
-    @debits_lb = debits_lb
     init
   end
 
@@ -37,8 +35,7 @@ class LineService
       past_date = covers.nil? ? @account.expenses.order(:date).first.date : today - covers.month
       until_date = past_date.beginning_of_month
       @categories = (past_date..today).to_a.map { |d| d.beginning_of_month }.uniq
-      @debits = debits_lb.call(until_date)
-      @expenses = ExpensesService.new expenses_lb.call(until_date), @debits, @categories
+      @expenses = ExpensesService.new expenses_lb.call(until_date), @categories
     end
 
     def calculate_figures(expenses, type)

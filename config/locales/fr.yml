@@ -25,19 +25,10 @@ fr:
     attributes:
       account:
         current_amount: Montant actuel
-        debits: Prélèvements
         expenses: Dépenses
         name: Nom
         tags: Catégories
         users: Utilisateurs
-      debit:
-        day: Jour
-        end_date: Date de fin
-        price: Prix
-        reason: Objet
-        start_date: Date de début
-        tags: Catégories
-        way: Moyen
       expense:
         date: Date
         reason: Objet
@@ -68,10 +59,6 @@ fr:
       account:
         one: compte
         other: comptes
-      debit:
-        zero: prélèvement
-        one: prélèvement
-        other: prélèvements
       expense:
         zero: dépense
         one: dépense
@@ -98,25 +85,6 @@ fr:
   date:
     formats:
       year_and_month: "%B %Y"
-  debits:
-    create:
-      flash:
-        success: Le prélèvement a bien été ajouté.
-    destroy:
-      flash:
-        success: Le prélèvement a bien été supprimé.
-    edit:
-      title: "Édition d'un prélèvement"
-    index:
-      new_debit: Ajouter un prélèvement
-      title: Liste des prélèvements
-    new:
-      title: "Ajout d'un prélèvement"
-    show:
-      title: "Affichage d'un prélèvement"
-    update:
-      flash:
-        success: Le prélèvement a bien été mis à jour.
   devise:
     confirmations:
       new:
@@ -207,9 +175,6 @@ fr:
           success: Utilisateur supprimé.
   helpers:
     placeholder:
-      debit:
-        price: '230.50'
-        reason: Prélèvement mensuel
       expense:
         price: 10.24
         reason: Courses primeur
@@ -265,7 +230,7 @@ fr:
     show:
       title: "Affichage d'une catégorie"
       use: Utilisation
-      use_count: "%{count} fois (%{expenses} %{expense_model}, %{debits} %{debit_model})."
+      use_count: "%{count} fois."
     update:
       flash:
         success: La catégorie a bien été mise à jour.

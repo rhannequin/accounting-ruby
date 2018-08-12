@@ -25,19 +25,10 @@ en:
     attributes:
       account:
         current_amount: Current amount
-        debits: Debits
         expenses: Expenses
         name: Name
         tags: Tags
         users: Users
-      debit:
-        day: Day
-        end_date: End date
-        price: Price
-        reason: Reason
-        start_date: Start date
-        tags: Tags
-        way: Way
       expense:
         date: Date
         reason: Reason
@@ -68,10 +59,6 @@ en:
       account:
         one: account
         other: accounts
-      debit:
-        zero: debit
-        one: debit
-        other: debits
       expense:
         zero: expense
         one: expense
@@ -98,25 +85,6 @@ en:
   date:
     formats:
       year_and_month: "%B %Y"
-  debits:
-    create:
-      flash:
-        success: Debit has been added.
-    destroy:
-      flash:
-        success: Debit has been deleted.
-    edit:
-      title: Debit update
-    index:
-      new_debit: Add a debit
-      title: List of debits
-    new:
-      title: Add a debit
-    show:
-      title: Show a debit
-    update:
-      flash:
-        success: Debit has been updated.
   devise:
     confirmations:
       new:
@@ -207,9 +175,6 @@ en:
           success: User deleted.
   helpers:
     placeholder:
-      debit:
-        price: '230.50'
-        reason: Monthly debit
       expense:
         price: 10.24
         reason: Shopping
@@ -265,7 +230,7 @@ en:
     show:
       title: "Tag showing"
       use: Use
-      use_count: "%{count} times (%{expenses} %{expense_model}, %{debits} %{debit_model})."
+      use_count: "%{count} times."
     update:
       flash:
         success: Tag has been updated.

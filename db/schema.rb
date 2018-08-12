@@ -32,20 +32,6 @@ ActiveRecord::Schema.define(version: 2018_08_06_130008) do
     t.string "slug"
   end
 
-  create_table "debits", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.string "reason"
-    t.decimal "price"
-    t.integer "day"
-    t.string "way"
-    t.date "start_date"
-    t.date "end_date"
-    t.uuid "account_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
-    t.index ["account_id"], name: "index_debits_on_account_id"
-  end
-
   create_table "expenses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.date "date"
     t.string "reason"
@@ -143,7 +129,6 @@ ActiveRecord::Schema.define(version: 2018_08_06_130008) do
 
   add_foreign_key "account_users", "accounts"
   add_foreign_key "account_users", "users"
-  add_foreign_key "debits", "accounts"
   add_foreign_key "expenses", "accounts"
   add_foreign_key "tags", "accounts"
 end

@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   root to: "home#index"
 
   resources :accounts do
-    resources :debits
     resources :expenses, except: :index
     resources :tags do
       get "chart", on: :member

@@ -13,10 +13,7 @@
       = link_to t(:'layouts.project', account_name: ENV['ACCOUNT_NAME']), root_path, class: 'navbar-brand'
     #navbar.collapse.navbar-collapse
       :ruby
-        uris = [
-          { resource: Expense, path: expenses_path, checks: [expenses_path, root_path] },
-          { resource: Debit, path: debits_path, checks: [debits_path] },
-        ]
+        uris = [{ resource: Expense, path: expenses_path, checks: [expenses_path, root_path] }]
       %ul.nav.navbar-nav
         - uris.each do |uri|
           %li{ class: ('active' if uri[:checks].include?(request.fullpath)) }

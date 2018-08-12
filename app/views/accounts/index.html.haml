@@ -35,11 +35,6 @@
                         method: :delete,
                         data: { confirm: t(:'scaffold.are_you_sure') },
                         class: 'btn btn-danger'
-          - if can? :read, account => Debit
-            %td.action
-              = link_to t(:'activerecord.attributes.account.debits'),
-                        account_debits_path(account),
-                        class: 'btn btn-info'
           - if can? :read, account => Tag
             %td.action
               = link_to t(:'activerecord.attributes.account.tags'),

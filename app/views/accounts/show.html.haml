@@ -6,10 +6,6 @@
     = link_to account_tags_path(@account), class: 'btn btn-info' do
       %span.glyphicon.glyphicon-tags
       = t :'activerecord.attributes.account.tags'
-  - if can? :read, @account => Debit
-    = link_to account_debits_path(@account), class: 'btn btn-info' do
-      %span.glyphicon.glyphicon-download-alt
-      = t :'activerecord.attributes.account.debits'
   - if can? :update, @account
     = link_to edit_account_path(@account), class: 'btn btn-warning' do
       %span.glyphicon.glyphicon-pencil

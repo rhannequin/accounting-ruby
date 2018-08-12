@@ -15,10 +15,6 @@ class TagsController < ApplicationController
       taggable_type: "Expense",
       tag_id: @tag.id
     ).count
-    @debits_count = Tagging.where(
-      taggable_type: "Debit",
-      tag_id: @tag.id
-    ).count
   end
 
   def new
@@ -58,11 +54,7 @@ class TagsController < ApplicationController
       expenses_lb: -> (u) { account.expenses.include_taggings
                                    .date_after(u)
                                    .where(taggings: { tag_id: tag_id })
-                                   .where.not(id: account.expenses.with_these_tags(ignore_tag_ids)) },
-      debits_lb: -> (u) { account.debits.end_date_after(u)
-                               .or(account.debits.where(end_date: nil))
-                               .start_date_before(Date.today)
-                               .where(id: account.debits.with_these_tags(tag_id)) }
+                                   .where.not(id: account.expenses.with_these_tags(ignore_tag_ids)) }
     }
 
     @chart = ChartsService.new(settings).build_chart

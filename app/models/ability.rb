@@ -8,7 +8,6 @@ class Ability
 
     can :manage, Account, account_users: { user_id: user.id }
     can :manage, Expense, account: { account_users: { user_id: user.id } }
-    can :manage, Debit, account: { account_users: { user_id: user.id } }
     can :manage, Tag, account: { account_users: { user_id: user.id } }
 
     return unless user.has_role?(:admin)
