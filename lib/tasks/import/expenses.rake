@@ -70,6 +70,12 @@ def process_import(data, account)
     tags << tag
     expenses << Expense.new(parsed.except(:tag).merge(account: account))
   end
+  if data.fetch("initial_amount") != 0
+    id = rand(10**7..(10**8-1))
+    first_date = expenses.map(&:date).uniq.sort.first
+    expenses << Expense.new(account: account, bankin_id: id, date: first_date, reason: "First expense", price: data.fetch("initial_amount"))
+    tags << { name: "ignore", ignored: true, account: account, expense_bankin_id: id }
+  end
   Expense.import(expenses)
   tags.each do |tag|
     t = Tag.find_or_initialize_by(tag.except(:expense_bankin_id))

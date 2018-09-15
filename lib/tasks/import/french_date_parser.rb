@@ -44,6 +44,7 @@ class FrenchDateParser
 
     def to_date
       return Date.today if french_date == "Aujourd'hui"
+      return Date.yesterday if french_date == "Hier"
       Date.parse(french_date.strip)
     end
 end

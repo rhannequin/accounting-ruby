@@ -7,3 +7,4 @@ accounts:
     ignored:
       - Transfer salary
       - Savings
+    initial_amount: 0
