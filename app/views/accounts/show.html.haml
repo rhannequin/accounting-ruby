@@ -22,7 +22,7 @@
   .col-md-6
     = render partial: 'layouts/paginate', locals: { paginate: @paginate }
 
-- @expenses.reverse_each do |month, h|
+- @expenses.each do |month, h|
   %h2= l(month, format: :year_and_month).capitalize
   %h3= t :'.spent', spent: number_to_currency(h[:total] * -1)
 
@@ -33,7 +33,6 @@
           %th= t :'activerecord.attributes.expense.date'
           %th= t :'activerecord.attributes.expense.reason'
           %th= t :'activerecord.attributes.expense.price'
-          %th= t :'activerecord.attributes.expense.way'
           %th= t :'activerecord.attributes.expense.tags'
           %th{colspan: 3}
       %tbody
@@ -42,7 +41,6 @@
             %td= l expense.date
             %td= expense.reason
             %td= number_to_currency expense.price
-            %td= expense.way
             %td= render partial: 'tags/list', locals: { account: @account, tags: expense.tags }
             - if expense.id
               - if can? :read, expense

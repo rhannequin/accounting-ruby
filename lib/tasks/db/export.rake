@@ -47,9 +47,8 @@ def get_data
       date = expense.date.strftime("%d/%m/%y")
       reason = expense.reason
       price = expense.price
-      way = expense.way
       tags = expense.tags.map(&:name).join(",")
-      data[account_name][:expenses] << "#{date};#{reason};#{price};#{way};#{tags}"
+      data[account_name][:expenses] << "#{date};#{reason};#{price};#{tags}"
     end
   end
   data

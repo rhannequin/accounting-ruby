@@ -34,7 +34,6 @@ fr:
         reason: Objet
         price: Prix
         tags: Catégories
-        way: Moyen
       user:
         created_at: Date d'inscription
         current_password: Mot de passe actuel

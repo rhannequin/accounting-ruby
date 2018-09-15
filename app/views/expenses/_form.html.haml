@@ -17,8 +17,6 @@
       %span.glyphicon.glyphicon-euro{ 'aria-hidden' => true }
     = f.text_field :price, as: :string, class: 'form-control', placeholder: true
 
-  = f.input :way
-
   = f.association :tags, collection: @tags,
                          as: :check_boxes,
                          wrapper: :horizontal_radio_and_checkboxes,

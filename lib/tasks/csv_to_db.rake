@@ -49,7 +49,6 @@ task csv_to_db: :environment do
           date: :date,
           objet: :reason,
           prix: :price,
-          moyen: :way,
           catégories: :tags
         }
     ) do |array|
@@ -81,8 +80,7 @@ task csv_to_db: :environment do
         e = Expense.find_by(
           reason: expense.reason,
           date: expense.date,
-          price: expense.price,
-          way: expense.way
+          price: expense.price
         )
         e.tags << expense.tags.map { |t| Tag.find_by(name: t.name, account_id: account_id) }
         e.save
@@ -97,7 +95,7 @@ task csv_to_db: :environment do
     Expense.create!(
       reason: "Start amount",
       date: first_expense.date,
-      price: start_amount, way: "",
+      price: start_amount,
       account_id: account_id
     )
     puts "... done."

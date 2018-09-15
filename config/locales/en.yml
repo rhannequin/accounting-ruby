@@ -34,7 +34,6 @@ en:
         reason: Reason
         price: Price
         tags: Tags
-        way: Way
       user:
         created_at: Signed up
         current_password: Current password
