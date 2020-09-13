@@ -14,8 +14,4 @@
 //= require rails-ujs
 //= require bootstrap-sprockets
 //= require activestorage
-//= require highcharts/highcharts
-//= require highcharts/highcharts-more
-//= require highcharts/highstock
 //= require_tree .
-//= require turbolinks

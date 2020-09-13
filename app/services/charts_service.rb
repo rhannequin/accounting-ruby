@@ -23,12 +23,12 @@ class ChartsService
   private
 
     def new_chart(categories, series)
-      LazyHighCharts::HighChart.new("graph") do |f|
-        f.title text: name
-        f.options[:xAxis][:categories] = categories
-        series.each do |serie|
-          f.series serie
-        end
-      end
+      # LazyHighCharts::HighChart.new("graph") do |f|
+      #   f.title text: name
+      #   f.options[:xAxis][:categories] = categories
+      #   series.each do |serie|
+      #     f.series serie
+      #   end
+      # end
     end
 end

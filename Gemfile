@@ -59,8 +59,6 @@ gem "mini_racer"
 # Ajax
 ## Use jquery as the JavaScript library
 gem "jquery-rails"
-## Turbolinks makes following links in your web application faster
-gem "turbolinks"
 ## Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
 ## Use respond_to and respond_with methods
@@ -76,7 +74,6 @@ gem "smarter_csv"
 gem "activerecord-import"
 gem "bootstrap-datepicker-rails"
 gem "seed_dump"
-gem "lazy_high_charts"
 gem "yaml_db"
 gem "nokogiri"
 

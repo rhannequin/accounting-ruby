@@ -18,8 +18,8 @@ Some tags can be ignored from the monthly spent money amount. You can edit a tag
 
 ## Requirements
 
-* Ruby 2.5.x
-* Rails 5.x
+* Ruby 2.7.x
+* Rails 6.x
 * Bundler
 
 ## Install
